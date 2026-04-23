@@ -3,7 +3,6 @@ import Typography from '@mui/material/Typography';
 import clsx from 'clsx';
 import IconButton from '@mui/material/IconButton';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import PageBreadcrumb from 'src/components/PageBreadcrumb';
 import usePathname from '@fuse/hooks/usePathname';
 import SettingsAppNavigation from '../../lib/constants/SettingsAppNavigation';
 import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
@@ -21,7 +20,7 @@ function SettingsAppHeader(props: SettingsAppHeaderProps) {
 
 	return (
 		<div className={clsx('flex flex-col', className)}>
-			<PageBreadcrumb className="mb-2" />
+			
 			<div className="flex items-center gap-2">
 				{isMobile && (
 					<IconButton

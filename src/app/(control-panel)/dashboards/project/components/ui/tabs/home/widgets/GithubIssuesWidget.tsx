@@ -1,142 +1,269 @@
 import Paper from '@mui/material/Paper';
+import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { memo, useEffect, useState } from 'react';
+import Box from '@mui/material/Box';
+import { ApexOptions } from 'apexcharts';
 import FuseLoading from '@fuse/core/FuseLoading';
+import _ from 'lodash';
 import { Tabs, Tab } from '@mui/material';
 import GithubIssuesDataType from '../../../../../api/types/home/GithubIssuesDataType';
+import ReactApexChart from 'react-apexcharts';
 import { useGetWidget } from '../../../../../api/hooks/widgets/useGetWidget';
 
-const primaryCards = [
-	{ key: 'new-issues', label: 'New Issues', subtitle: 'After bonus & fees' },
-	{ key: 'closed-issues', label: 'Closed', subtitle: 'After bonus & fees' },
-	{ key: 'in-progress', label: 'In Progress', subtitle: 'After bonus & fees' },
-	{ key: 'fixed', label: 'Fixed', subtitle: 'After bonus & fees' }
-] as const;
-
-const secondaryCards = [
-	{ key: 'wont-fix', label: "Won't Fix" },
-	{ key: 're-opened', label: 'Re-opened' },
-	{ key: 'needs-triage', label: 'Needs Triage' },
-	{ key: 'review-pending', label: 'Review Pending' },
-	{ key: 'escalated', label: 'Escalated' },
-	{ key: 'blocked', label: 'Blocked' },
-	{ key: 'resolved', label: 'Resolved' },
-	{ key: 'duplicate', label: 'Duplicate' }
-] as const;
-
-function formatValue(val: number): string {
-	if (val >= 100000) return `₹${(val / 100000).toFixed(1)} L`;
-	if (val >= 1000) return `₹${val.toLocaleString('en-IN')}`;
-	return String(val);
-}
-
-type PrimaryCardProps = {
-	title: string;
-	value: number;
-	subtitle: string;
-	isPositive?: boolean;
-};
-
-function PrimaryCard({ title, value, subtitle, isPositive }: PrimaryCardProps) {
-	return (
-		<div className="flex flex-col items-center justify-center rounded-2xl bg-gray-100 border border-gray-200 shadow-sm px-4 py-6 text-center min-h-[140px] font-[geist]">
-			<span className="text-5xl font-bold text-blue-600 leading-tight mb-1">
-				{formatValue(value)}
-			</span>
-			<span className="text-base font-semibold text-blue-500 mb-2">
-				{title}
-			</span>
-			<span className={`text-xs ${isPositive ? 'text-green-500' : 'text-gray-400'}`}>
-				{subtitle}
-			</span>
-		</div>
-	);
-}
-
-type SecondaryCardProps = {
-	title: string;
-	value: number;
-};
-
-function SecondaryCard({ title, value }: SecondaryCardProps) {
-	return (
-		<div className="flex flex-col items-center justify-center rounded-xl bg-gray-100 border border-gray-200 px-15 py-15 text-center h-[110px] gap-2 font-[geist]">
-			<span className="text-3xl font-bold text-gray-800 leading-tight">
-				{formatValue(value)}
-			</span>
-			<span className="text-sm text-gray-500">
-				{title}
-			</span>
-		</div>
-	);
-}
-
+/**
+ * The GithubIssuesWidget widget.
+ */
 function GithubIssuesWidget() {
+	const theme = useTheme();
 	const [awaitRender, setAwaitRender] = useState(true);
 	const [tabValue, setTabValue] = useState(0);
-
 	const { data: widget, isLoading } = useGetWidget<GithubIssuesDataType>('githubIssues');
+
+	const overview = widget?.overview;
+	const series = widget?.series || [];
+	const ranges = widget?.ranges || [];
+	const labels = widget?.labels;
+	const currentRange = Object.keys(ranges || {})[tabValue];
+
+	const chartOptions: ApexOptions = {
+		chart: {
+			fontFamily: 'inherit',
+			foreColor: 'inherit',
+			height: '100%',
+			type: 'line',
+			toolbar: {
+				show: false
+			},
+			zoom: {
+				enabled: false
+			}
+		},
+		colors: [theme.palette.primary.main, theme.palette.secondary.main],
+		labels,
+		dataLabels: {
+			enabled: true,
+			enabledOnSeries: [0],
+			background: {
+				borderWidth: 0
+			}
+		},
+		grid: {
+			borderColor: theme.palette.divider
+		},
+		legend: {
+			show: false
+		},
+		plotOptions: {
+			bar: {
+				columnWidth: '50%'
+			}
+		},
+		states: {
+			hover: {
+				filter: {
+					type: 'darken'
+				}
+			}
+		},
+		stroke: {
+			width: [3, 0]
+		},
+		tooltip: {
+			followCursor: true,
+			theme: theme.palette.mode
+		},
+		xaxis: {
+			axisBorder: {
+				show: false
+			},
+			axisTicks: {
+				color: theme.palette.divider
+			},
+			labels: {
+				style: {
+					colors: theme.palette.text.secondary
+				}
+			},
+			tooltip: {
+				enabled: false
+			}
+		},
+		yaxis: {
+			labels: {
+				offsetX: -16,
+				style: {
+					colors: theme.palette.text.secondary
+				}
+			}
+		}
+	};
 
 	useEffect(() => {
 		setAwaitRender(false);
 	}, []);
 
-	if (isLoading) return <FuseLoading />;
-	if (!widget || awaitRender) return null;
+	if (isLoading) {
+		return <FuseLoading />;
+	}
 
-	const overview = widget.overview;
-	const ranges = widget.ranges;
-	const currentRange = Object.keys(ranges)[tabValue];
-	const currentOverview = overview[currentRange];
+	if (!widget) {
+		return null;
+	}
+
+	if (awaitRender) {
+		return null;
+	}
 
 	return (
 		<Paper className="flex flex-auto flex-col overflow-hidden rounded-xl p-6 shadow-sm">
-
 			<div className="flex flex-col items-start justify-between sm:flex-row">
-				<Typography className="text-xl font-semibold tracking-tight">
-					Finance
+				<Typography className="truncate text-xl leading-6 font-medium tracking-tight">
+					Github Issues Summary
 				</Typography>
-				<div className="mt-2 sm:mt-0 px-4 py-1.5 rounded-lg border border-gray-200 bg-white text-sm text-gray-600">
-					Live Balance: {currentOverview?.balance?.toLocaleString('en-IN') ?? '—'}
+				<div className="mt-3 sm:mt-0">
+					<Tabs
+						value={tabValue}
+						onChange={(_ev, value: number) => setTabValue(value)}
+					>
+						{Object.entries(ranges).map(([key, label], index) => (
+							<Tab
+								key={key}
+								value={index}
+								label={label}
+							/>
+						))}
+					</Tabs>
 				</div>
 			</div>
-
-			<div className="mt-3">
-				<Tabs
-					value={tabValue}
-					onChange={(_ev, value: number) => setTabValue(value)}
-				>
-					{Object.entries(ranges).map(([key, label], index) => (
-						<Tab key={key} value={index} label={label} />
-					))}
-				</Tabs>
-			</div>
-
-			<Typography className="mt-4 text-sm font-medium text-gray-500">
-				Overview
-			</Typography>
-
-			<div className="mt-4 space-y-3">
-				<div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-					{primaryCards.map((card, index) => (
-						<PrimaryCard
-							key={card.key}
-							title={card.label}
-							value={currentOverview[card.key]}
-							subtitle={card.subtitle}
-							isPositive={index === 0}
+			<div className="mt-8 grid w-full grid-flow-row grid-cols-1 gap-6 sm:mt-4 lg:grid-cols-2">
+				<div className="flex flex-auto flex-col">
+					<Typography
+						className="font-medium"
+						color="text.secondary"
+					>
+						New vs. Closed
+					</Typography>
+					<div className="flex flex-auto flex-col">
+						<ReactApexChart
+							className="w-full flex-auto"
+							options={chartOptions}
+							series={_.cloneDeep(series[currentRange])}
+							height={320}
 						/>
-					))}
+					</div>
 				</div>
-
-				<div className="grid grid-cols-4 gap-6 w-full sm:grid-cols-4 lg:grid-cols-8">
-					{secondaryCards.map((card) => (
-						<SecondaryCard
-							key={card.key}
-							title={card.label}
-							value={currentOverview[card.key]}
-						/>
-					))}
+				<div className="flex flex-col">
+					<Typography
+						className="font-medium"
+						color="text.secondary"
+					>
+						Overview
+					</Typography>
+					<div className="mt-6 grid flex-auto grid-cols-4 gap-3">
+						<Box
+							sx={{ backgroundColor: 'var(--mui-palette-background-default)' }}
+							className="col-span-2 flex flex-col items-center justify-center rounded-xl border px-1 py-8"
+						>
+							<Typography
+								className="text-5xl leading-none font-semibold tracking-tight sm:text-7xl"
+								color="secondary"
+							>
+								{overview[currentRange]['new-issues']}
+							</Typography>
+							<Typography
+								className="mt-1 text-sm font-medium sm:text-lg"
+								color="secondary"
+							>
+								New Issues
+							</Typography>
+						</Box>
+						<Box
+							sx={{ backgroundColor: 'var(--mui-palette-background-default)' }}
+							className="col-span-2 flex flex-col items-center justify-center rounded-xl border px-1 py-8"
+						>
+							<Typography
+								className="text-5xl leading-none font-semibold tracking-tight sm:text-7xl"
+								color="secondary"
+							>
+								{overview[currentRange]['closed-issues']}
+							</Typography>
+							<Typography
+								className="mt-1 text-sm font-medium sm:text-lg"
+								color="secondary"
+							>
+								Closed
+							</Typography>
+						</Box>
+						<Box
+							sx={{ backgroundColor: 'var(--mui-palette-background-default)' }}
+							className="col-span-2 flex flex-col items-center justify-center rounded-xl border px-1 py-8 sm:col-span-1"
+						>
+							<Typography
+								className="text-5xl leading-none font-semibold tracking-tight"
+								color="text.secondary"
+							>
+								{overview[currentRange].fixed}
+							</Typography>
+							<Typography
+								className="mt-1 text-center text-sm font-medium"
+								color="text.secondary"
+							>
+								Fixed
+							</Typography>
+						</Box>
+						<Box
+							sx={{ backgroundColor: 'var(--mui-palette-background-default)' }}
+							className="col-span-2 flex flex-col items-center justify-center rounded-xl border px-1 py-8 sm:col-span-1"
+						>
+							<Typography
+								className="text-5xl leading-none font-semibold tracking-tight"
+								color="text.secondary"
+							>
+								{overview[currentRange]['wont-fix']}
+							</Typography>
+							<Typography
+								className="mt-1 text-center text-sm font-medium"
+								color="text.secondary"
+							>
+								Won't Fix
+							</Typography>
+						</Box>
+						<Box
+							sx={{ backgroundColor: 'var(--mui-palette-background-default)' }}
+							className="col-span-2 flex flex-col items-center justify-center rounded-xl border px-1 py-8 sm:col-span-1"
+						>
+							<Typography
+								className="text-5xl leading-none font-semibold tracking-tight"
+								color="text.secondary"
+							>
+								{overview[currentRange]['re-opened']}
+							</Typography>
+							<Typography
+								className="mt-1 text-center text-sm font-medium"
+								color="text.secondary"
+							>
+								Re-opened
+							</Typography>
+						</Box>
+						<Box
+							sx={{ backgroundColor: 'var(--mui-palette-background-default)' }}
+							className="col-span-2 flex flex-col items-center justify-center rounded-xl border px-1 py-8 sm:col-span-1"
+						>
+							<Typography
+								className="text-5xl leading-none font-semibold tracking-tight"
+								color="text.secondary"
+							>
+								{overview[currentRange]['needs-triage']}
+							</Typography>
+							<Typography
+								className="mt-1 text-center text-sm font-medium"
+								color="text.secondary"
+							>
+								Needs Triage
+							</Typography>
+						</Box>
+					</div>
 				</div>
 			</div>
 		</Paper>

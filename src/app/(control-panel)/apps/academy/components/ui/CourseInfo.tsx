@@ -26,7 +26,7 @@ function CourseInfo(props: CourseInfoProps) {
 				<CourseCategory slug={course.category} />
 
 				{course.progress.completed > 0 && (
-					<FuseSvgIcon className="text-green-600">lucide:badge-check</FuseSvgIcon>
+					<FuseSvgIcon className="text-green-600">lucide:settings</FuseSvgIcon>
 				)}
 			</div>
 

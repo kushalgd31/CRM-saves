@@ -9,6 +9,7 @@ import HomeTab from '../ui/tabs/home/HomeTab';
 import TeamTab from '../ui/tabs/team/TeamTab';
 import BudgetTab from '../ui/tabs/budget/BudgetTab';
 import { useGetWidgets } from '../../api/hooks/widgets/useGetWidgets';
+import ProjectSelector from '../ui/ProjectSelector';
 
 /**
  * The ProjectDashboardApp page.
@@ -51,6 +52,7 @@ function ProjectDashboardAppView() {
 							/>
 						</Tabs>
 
+						<ProjectSelector />
 					</div>
 					{tabValue === 'home' && <HomeTab />}
 					{tabValue === 'budget' && <BudgetTab />}

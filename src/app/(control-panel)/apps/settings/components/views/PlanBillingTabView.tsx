@@ -15,6 +15,7 @@ import { usePlanBillingSettings } from '../../api/hooks/billing/usePlanBillingSe
 import { useUpdatePlanBillingSettings } from '../../api/hooks/billing/useUpdatePlanBillingSettings';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import { FormHelperText } from '@mui/material';
 
 const plans = [
 	{
@@ -42,8 +43,8 @@ const plans = [
  */
 const schema = z.object({
 	id: z.string(),
-	plan: z.string(),
-	cardHolder: z.string(),
+	margin: z.string(),
+	cooldown: z.string(),
 	cardNumber: z.string(),
 	cardExpiration: z.string(),
 	cardCVC: z.string(),
@@ -55,8 +56,8 @@ type FormType = z.infer<typeof schema>;
 
 const defaultValues: FormType = {
 	id: '',
-	plan: 'team',
-	cardHolder: '',
+	margin:'',
+	cooldown: '',
 	cardNumber: '',
 	cardExpiration: '',
 	cardCVC: '',
@@ -88,264 +89,166 @@ function PlanBillingTabView() {
 	}
 
 	return (
-		<div className="w-full max-w-5xl">
+		<div className="w-full max-w-5xl pt-3 pl-5">
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				className="flex w-full flex-col gap-12"
 			>
 				<div className="flex flex-col gap-4">
 					<div className="w-full">
-						<Typography className="text-xl font-medium">Change your plan</Typography>
-						<Typography color="text.secondary">Upgrade or downgrade your current plan.</Typography>
+						<Typography className="text-xl">Cashout Settings</Typography>
+						<Typography className='text-xl text-slate-500'>Configure cashout parameters and margins</Typography>
 					</div>
-					<div className="grid w-full gap-4 sm:grid-cols-3">
-						<div className="sm:col-span-3">
-							<Alert severity="info">
-								Changing the plan will take effect immediately. You will be charged for the rest of the
-								current month.
-							</Alert>
+					<div className="grid grid-cols-3 grid-rows-2 gap-4 sm:grid-cols-3">
+						<div>
+							<Controller
+								control={control}
+								name="margin"
+								render={({ field }) => (
+									<FormControl className="w-full">
+										<FormLabel htmlFor="name" className='text-black text-lg font-semibold' >Default Margin (%)</FormLabel>
+										<TextField
+											{...field}
+											value={5}
+											id="name"
+											className='w-60 bg-slate-300/40'
+											required
+											sx={{"& .MuiOutlinedInput-root": {
+												      backgroundColor: "#f3f4f6",
+												    }
+												  }}
+											
+										/>
+									<FormHelperText>Standard cashout margin</FormHelperText>
+									</FormControl>
+								)}
+							/>
 						</div>
-						<Controller
-							name="plan"
-							control={control}
-							render={({ field }) => (
-								<>
-									{plans.map((plan) => (
-										<Paper
-											sx={(theme) => ({
-												border: `1px solid ${theme.vars.palette.divider}!important`,
-												'&.selected': {
-													border: `1px solid ${theme.vars.palette.secondary.main}!important`
-												}
-											})}
-											className={clsx(
-												'relative flex flex-1 cursor-pointer flex-col items-start justify-start rounded-md border-3 border-transparent p-6',
-												field.value === plan.value ? 'selected' : ''
-											)}
-											onClick={() => field.onChange(plan.value)}
-											key={plan.value}
-										>
-											{field.value === plan.value && (
-												<FuseSvgIcon
-													className="absolute top-0 right-0 mt-3 mr-3"
-													color="secondary"
-												>
-													lucide:circle-check
-												</FuseSvgIcon>
-											)}
-											<Typography className="font-semibold uppercase">{plan.label}</Typography>
-											<Typography
-												className="mt-1"
-												color="text.secondary"
-											>
-												{plan.details}
-											</Typography>
-											<div className="flex-auto" />
-											<div className="mt-2 flex items-end text-lg">
-												<Typography>
-													{plan.price.toLocaleString('en-US', {
-														style: 'currency',
-														currency: 'USD'
-													})}
-												</Typography>
-												<Typography color="text.secondary"> / month</Typography>
-											</div>
-										</Paper>
-									))}
-								</>
-							)}
-						/>
-					</div>
+						<div>
+							<Controller
+								control={control}
+								name="cooldown"
+								render={({ field }) => (
+									<FormControl className="w-full">
+										<FormLabel htmlFor="name" className='text-black text-lg font-semibold' >Cooldown (Minutes)</FormLabel>
+										<TextField
+											{...field}
+											value={15}
+											id="name"
+											required
+											className='w-60 bg-slate-300/40'
+											sx={{ "& .MuiOutlinedInput-root": {
+											      backgroundColor: "#f3f4f6",
+											    }
+											  }}
+										/>
+									<FormHelperText>Time between cashout requests</FormHelperText>
+									</FormControl>
+								)}
+							/>
+						</div>
+						<div>
+							<Controller
+								control={control}
+								name="cooldown"
+								render={({ field }) => (
+									<FormControl className="w-full">
+										<FormLabel htmlFor="name" className='text-black text-lg font-semibold' >Min Odds Movement</FormLabel>
+										<TextField
+											{...field}
+											value={0.1}
+											id="name"
+											required
+											className='w-60 bg-slate-300/40'
+											sx={{"& .MuiOutlinedInput-root": {
+												      backgroundColor: "#f3f4f6", // same as Tailwind bg-gray-100
+												    }
+												  }}
+										/>
+									<FormHelperText>Minimum odds change to activate cashout</FormHelperText>
+									</FormControl>
+								)}
+							/>
+						</div>
+						<div>
+							<Controller
+								control={control}
+								name="cooldown"
+								render={({ field }) => (
+									<FormControl className="w-full">
+										<FormLabel htmlFor="name" className='text-black text-lg font-semibold' >Max cashout per day</FormLabel>
+										<TextField
+											{...field}
+											value={10}
+											id="name"
+											required
+											className='w-60 bg-slate-300/40'
+											sx={{ "& .MuiOutlinedInput-root": {
+											      backgroundColor: "#f3f4f6", 
+											    }
+											  }}
+										/>
+									<FormHelperText>Maximum cashouts allowed per use per day</FormHelperText>
+									</FormControl>
+								)}
+							/>
+						</div>
+						<div>
+							<Controller
+								control={control}
+								name="cooldown"
+								render={({ field }) => (
+									<FormControl className="w-full">
+										<FormLabel htmlFor="name" className='text-black text-lg font-semibold' >Min Stake for Cashout</FormLabel>
+										<TextField
+											{...field}
+											value={500}
+											id="name"
+											required
+											className='w-60 bg-slate-300/40'
+											sx={{ "& .MuiOutlinedInput-root": {
+											      backgroundColor: "#f3f4f6",
+											    }
+											  }}
+										/>
+									<FormHelperText>Minimum bet amount required for cashout</FormHelperText>
+									</FormControl>
+								)}
+							/>
+						</div>
+						
 				</div>
-				<div className="flex flex-col gap-4">
-					<div className="w-full">
-						<Typography className="text-xl">Payment Details</Typography>
-						<Typography color="text.secondary">
-							Update your billing information. Make sure to set your location correctly as it could affect
-							your tax rates.
-						</Typography>
-					</div>
-					<div className="grid w-full grid-cols-4 gap-4">
-						<div className="col-span-4">
-							<Controller
-								control={control}
-								name="cardHolder"
-								render={({ field }) => (
-									<FormControl className="w-full">
-										<FormLabel htmlFor="cardHolder">Card holder</FormLabel>
-										<TextField
-											{...field}
-											id="cardHolder"
-											placeholder="Card holder"
-											error={!!errors.cardHolder}
-											helperText={errors?.cardHolder?.message}
-											variant="outlined"
-											fullWidth
-											slotProps={{
-												input: {
-													startAdornment: (
-														<FuseSvgIcon color="action">lucide:circle-user</FuseSvgIcon>
-													)
-												}
-											}}
-										/>
-									</FormControl>
-								)}
-							/>
-						</div>
-						<div className="col-span-4 sm:col-span-2">
-							<Controller
-								control={control}
-								name="cardNumber"
-								render={({ field }) => (
-									<FormControl className="w-full">
-										<FormLabel htmlFor="cardNumber">Card number</FormLabel>
-										<TextField
-											{...field}
-											id="cardNumber"
-											placeholder="Card number"
-											error={!!errors.cardNumber}
-											helperText={errors?.cardNumber?.message}
-											variant="outlined"
-											fullWidth
-											slotProps={{
-												input: {
-													startAdornment: (
-														<FuseSvgIcon color="action">lucide:credit-card</FuseSvgIcon>
-													)
-												}
-											}}
-										/>
-									</FormControl>
-								)}
-							/>
-						</div>
-						<div className="col-span-2 sm:col-span-1">
-							<Controller
-								control={control}
-								name="cardExpiration"
-								render={({ field }) => (
-									<FormControl className="w-full">
-										<FormLabel htmlFor="cardExpiration">Expiration date</FormLabel>
-										<TextField
-											{...field}
-											id="cardExpiration"
-											placeholder="MM / YY"
-											error={!!errors.cardExpiration}
-											helperText={errors?.cardExpiration?.message}
-											variant="outlined"
-											fullWidth
-											slotProps={{
-												input: {
-													startAdornment: (
-														<FuseSvgIcon color="action">lucide:credit-card</FuseSvgIcon>
-													)
-												}
-											}}
-										/>
-									</FormControl>
-								)}
-							/>
-						</div>
-						<div className="col-span-2 sm:col-span-1">
-							<Controller
-								control={control}
-								name="cardCVC"
-								render={({ field }) => (
-									<FormControl className="w-full">
-										<FormLabel htmlFor="cardCVC">CVC / CVC2</FormLabel>
-										<TextField
-											{...field}
-											id="cardCVC"
-											placeholder="CVC / CVC2"
-											error={!!errors.cardCVC}
-											helperText={errors?.cardCVC?.message}
-											variant="outlined"
-											fullWidth
-											slotProps={{
-												input: {
-													startAdornment: (
-														<FuseSvgIcon color="action">lucide:lock</FuseSvgIcon>
-													)
-												}
-											}}
-										/>
-									</FormControl>
-								)}
-							/>
-						</div>
-						<div className="col-span-4 sm:col-span-2">
-							<Controller
-								control={control}
-								name="country"
-								render={({ field }) => (
-									<FormControl className="w-full">
-										<FormLabel htmlFor="country">Country</FormLabel>
-										<TextField
-											{...field}
-											id="country"
-											placeholder="County"
-											error={!!errors.country}
-											helperText={errors?.country?.message}
-											variant="outlined"
-											fullWidth
-											slotProps={{
-												input: {
-													startAdornment: <FuseSvgIcon color="action">lucide:map</FuseSvgIcon>
-												}
-											}}
-										/>
-									</FormControl>
-								)}
-							/>
-						</div>
-						<div className="col-span-4 sm:col-span-2">
-							<Controller
-								control={control}
-								name="zip"
-								render={({ field }) => (
-									<FormControl className="w-full">
-										<FormLabel htmlFor="zip">ZIP / Postal code</FormLabel>
-										<TextField
-											{...field}
-											id="zip"
-											placeholder="ZIP / Postal code"
-											error={!!errors.zip}
-											helperText={errors?.zip?.message}
-											variant="outlined"
-											fullWidth
-											slotProps={{
-												input: {
-													startAdornment: (
-														<FuseSvgIcon color="action">lucide:hash</FuseSvgIcon>
-													)
-												}
-											}}
-										/>
-									</FormControl>
-								)}
-							/>
-						</div>
-					</div>
+				<Typography className="text-xl font-semibold">Declining Cashout Margin Over Time</Typography>
+				<Typography className='text-xl text-slate-500'>Configure margin based on match progress percentage</Typography>
+				<div className='flex justify-evenly items-start w-full gap-5'>
+					<label className='font-semibold text-lg text-wrap'>Early Match (&lt;30%) - Margin Cut (%) </label>
+					<label className='font-semibold text-lg text-wrap'>Mid Match (30-60%) - Margin Cut(%)</label>
+					<label className='font-semibold text-lg text-wrap'>Late Match(60-80%) - Margin Cut(%)</label>
+					<label className='font-semibold text-lg text-wrap'>Endgame(&gt;80%) - Margin Cut(%)</label>
 				</div>
-
-				<div className="flex items-center justify-end gap-2">
-					<Button
-						variant="outlined"
-						disabled={_.isEmpty(dirtyFields)}
-						onClick={() => reset(planBillingSettings)}
-					>
-						Cancel
-					</Button>
-					<Button
-						variant="contained"
-						color="secondary"
-						disabled={_.isEmpty(dirtyFields) || !isValid}
-						type="submit"
-					>
-						Save
-					</Button>
+				<div className='flex justify-items-start w-full gap-17' style={{}}>
+					<input type="text" value={3}  className='bg-slate-300/40 py-2 pl-2 rounded-lg'/>
+					<input type="text" value={5}  className='bg-slate-300/40 py-2 pl-2 rounded-lg'/>
+					<input type="text" value={10} className='bg-slate-300/40 py-2 pl-2 rounded-lg' />
+					<input type="text" value={15} className='bg-slate-300/40 py-2 pl-2 rounded-lg' />
 				</div>
+				<div className='flex text-slate-400 justify-items-start gap-18'>
+					<p>Generous early game margin</p>
+					<p>Standard mid-match margin</p>
+					<p>Expensive late game margin</p>
+					<p>Very expensive endgame margin</p>
+				</div>
+				<div className='bg-blue-200/50 p-3 rounded-lg'>
+					<h4 className='font-semibold text-indigo-900 mb-2'>Margin Calculation</h4>
+					<ul className='list-disc text-blue-500 list-inside text-md flex flex-col gap-2'>
+						<li>Match progress &lt; 30%: Cashout margin = 97%(3%cut-generous early)</li>
+						<li>Match progress 30-60%: Cashout margin = 95%(5%cut-generous early)</li>
+						<li>Match progress 60-80%; Cashout margin = 90%(10%cut-generous early)</li>
+						<li>Match progress &gt; 80%; Cashout margin = 85%(15%cut-generous early)</li>
+					</ul>
+				</div>
+				</div>
+				
 			</form>
 		</div>
 	);

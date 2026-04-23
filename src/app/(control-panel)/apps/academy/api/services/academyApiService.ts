@@ -1,9 +1,13 @@
 import { api } from '@/utils/api';
-import { Course, CourseStep, CourseStepContent, Category } from '../types';
+import { Course, CourseStep, CourseStepContent, Category, Sales } from '../types';
 
 export const academyApi = {
 	getCourses: async (): Promise<Course[]> => {
 		return api.get('mock/academy/courses').json();
+	},
+
+	getSales: async (): Promise<Sales[]> => {
+		return api.get('mock/academy/sales').json();
 	},
 
 	getCourse: async (courseId: string): Promise<Course> => {

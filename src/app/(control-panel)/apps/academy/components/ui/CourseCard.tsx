@@ -19,23 +19,12 @@ type CourseCardProps = {
 function CourseCard(props: CourseCardProps) {
 	const { course } = props;
 
-	function buttonStatus() {
-		switch (course.activeStep) {
-			case course.totalSteps:
-				return 'Completed';
-			case 0:
-				return 'Start';
-			default:
-				return 'Continue';
-		}
-	}
 
 	return (
 		<Card className="flex h-80 flex-col shadow-sm md:h-96">
 			<CardContent className="flex flex-auto flex-col p-4">
 				<CourseInfo course={course} />
 			</CardContent>
-			<CourseProgress course={course} />
 			<CardActions
 				className="items-center justify-end px-4 py-4"
 				sx={(theme) => ({
@@ -45,17 +34,7 @@ function CourseCard(props: CourseCardProps) {
 					})
 				})}
 			>
-				<Button
-					to={`/apps/academy/courses/${course.id}/${course.slug}`}
-					component={Link}
-					className="px-3"
-					color="secondary"
-					variant="contained"
-					size="small"
-					endIcon={<FuseSvgIcon>lucide:arrow-right</FuseSvgIcon>}
-				>
-					{buttonStatus()}
-				</Button>
+				
 			</CardActions>
 		</Card>
 	);

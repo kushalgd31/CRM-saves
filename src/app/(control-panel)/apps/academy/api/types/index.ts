@@ -37,3 +37,10 @@ export type Category = {
 	slug: string;
 	color: string;
 };
+
+export type Sales={
+	id: number;
+	head: string;
+	val: number;
+	foot: string;
+}

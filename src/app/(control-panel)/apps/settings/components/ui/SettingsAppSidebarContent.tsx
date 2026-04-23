@@ -18,7 +18,8 @@ function SettingsAppSidebarContent(props: SettingsAppSidebarContentProps) {
 	return (
 		<div>
 			<div className={clsx('flex items-center justify-between p-4', className)}>
-				<Typography className="text-4xl leading-none font-extrabold tracking-tight"> Settings</Typography>
+				<Typography className="text-4xl leading-none font-semibold tracking-tight">Sports Settings</Typography>
+				
 				{isMobile && (
 					<IconButton
 						onClick={() => onSetSidebarOpen(false)}
@@ -29,6 +30,7 @@ function SettingsAppSidebarContent(props: SettingsAppSidebarContentProps) {
 					</IconButton>
 				)}
 			</div>
+			<p className='text-slate-500'>Configure features and betting parameters for sports management</p>
 			<FuseNavigation navigation={SettingsAppNavigation.children} />
 		</div>
 	);

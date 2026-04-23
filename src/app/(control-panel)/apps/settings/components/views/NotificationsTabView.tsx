@@ -11,16 +11,16 @@ import _ from 'lodash';
 import { useEffect } from 'react';
 import { useNotificationSettings } from '../../api/hooks/notifications/useNotificationSettings';
 import { useUpdateNotificationSettings } from '../../api/hooks/notifications/useUpdateNotificationSettings';
+import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 
 const defaultValues: FormType = {
 	id: '',
-	communication: false,
-	security: false,
-	meetups: false,
-	comments: false,
-	mention: false,
-	follow: false,
-	inquiry: false
+	Scorecard: true,
+	TV: false,
+	odds: true,
+	CashOut: true,
+	Loss: false,
+	Speed: true
 };
 
 /**
@@ -28,13 +28,12 @@ const defaultValues: FormType = {
  */
 const schema = z.object({
 	id: z.string(),
-	communication: z.boolean(),
-	security: z.boolean(),
-	meetups: z.boolean(),
-	comments: z.boolean(),
-	mention: z.boolean(),
-	follow: z.boolean(),
-	inquiry: z.boolean()
+	Scorecard: z.boolean(),
+	TV: z.boolean(),
+	odds: z.boolean(),
+	CashOut: z.boolean(),
+	Loss: z.boolean(),
+	Speed: z.boolean()
 });
 
 type FormType = z.infer<typeof schema>;
@@ -68,12 +67,13 @@ function NotificationsTabView() {
 				onSubmit={handleSubmit(onSubmit)}
 				className="flex w-full flex-col gap-12"
 			>
-				<div>
-					<Typography className="w-full text-xl font-medium">Alerts</Typography>
-					<div className="grid w-full grid-cols-1 gap-1.5">
+				<div className='pl-4'>
+					<Typography className="w-full text-lg font-medium"><FuseSvgIcon size={24}>heroicons-outline:adjustments</FuseSvgIcon> Features</Typography>
+					<p className='text-slate-500 text-xl'>Enable or disable features for sports betting</p>
+					<div className="grid w-full grid-cols-1 gap-1.5 mt-2">
 						<div className="flex items-center justify-between divide-y">
 							<Controller
-								name="communication"
+								name="Scorecard"
 								control={control}
 								render={({ field: { onChange, value } }) => (
 									<div className="flex w-full flex-col">
@@ -83,7 +83,7 @@ function NotificationsTabView() {
 												label: 'flex flex-1'
 											}}
 											labelPlacement="start"
-											label="Communication"
+											label="Live Score Card"
 											control={
 												<Switch
 													onChange={(ev) => {
@@ -94,14 +94,14 @@ function NotificationsTabView() {
 												/>
 											}
 										/>
-										<FormHelperText>Get news, announcements, and product updates.</FormHelperText>
+										<FormHelperText>Display live scores during matches</FormHelperText>
 									</div>
 								)}
 							/>
 						</div>
 						<div className="flex items-center justify-between">
 							<Controller
-								name="security"
+								name="TV"
 								control={control}
 								render={({ field: { onChange, value } }) => (
 									<div className="flex w-full flex-col">
@@ -111,7 +111,7 @@ function NotificationsTabView() {
 												label: 'flex flex-1'
 											}}
 											labelPlacement="start"
-											label="Security"
+											label="Live TV"
 											control={
 												<Switch
 													onChange={(ev) => {
@@ -123,7 +123,7 @@ function NotificationsTabView() {
 											}
 										/>
 										<FormHelperText>
-											Get important notifications about your account security.
+											Enable live streaming of matches
 										</FormHelperText>
 									</div>
 								)}
@@ -131,7 +131,7 @@ function NotificationsTabView() {
 						</div>
 						<div className="flex items-center justify-between">
 							<Controller
-								name="meetups"
+								name="odds"
 								control={control}
 								render={({ field: { onChange, value } }) => (
 									<div className="flex w-full flex-col">
@@ -141,7 +141,7 @@ function NotificationsTabView() {
 												label: 'flex flex-1'
 											}}
 											labelPlacement="start"
-											label="Meetups"
+											label="Live Odds"
 											control={
 												<Switch
 													onChange={(ev) => {
@@ -153,145 +153,107 @@ function NotificationsTabView() {
 											}
 										/>
 										<FormHelperText>
-											Get an email when a Meetup is posted close to my location.
+											Show real-time odds updates
 										</FormHelperText>
 									</div>
 								)}
 							/>
 						</div>
+						<div className="flex items-center justify-between">
+							<Controller
+								name="CashOut"
+								control={control}
+								render={({ field: { onChange, value } }) => (
+									<div className="flex w-full flex-col">
+										<FormControlLabel
+											classes={{
+												root: 'm-0',
+												label: 'flex flex-1'
+											}}
+											labelPlacement="start"
+											label="CashOut"
+											control={
+												<Switch
+													onChange={(ev) => {
+														onChange(ev.target.checked);
+													}}
+													checked={value}
+													name="meetups"
+												/>
+											}
+										/>
+										<FormHelperText>
+											Allow users to cash out bets early
+										</FormHelperText>
+									</div>
+								)}
+							/>
+						</div>
+						<div className="flex items-center justify-between">
+							<Controller
+								name="Loss"
+								control={control}
+								render={({ field: { onChange, value } }) => (
+									<div className="flex w-full flex-col">
+										<FormControlLabel
+											classes={{
+												root: 'm-0',
+												label: 'flex flex-1'
+											}}
+											labelPlacement="start"
+											label="Loss Cut"
+											control={
+												<Switch
+													onChange={(ev) => {
+														onChange(ev.target.checked);
+													}}
+													checked={value}
+													name="meetups"
+												/>
+											}
+										/>
+										<FormHelperText>
+											Enable automatic loss limitation
+										</FormHelperText>
+									</div>
+								)}
+							/>
+						</div>
+						<div className="flex items-center justify-between">
+							<Controller
+								name="Speed"
+								control={control}
+								render={({ field: { onChange, value } }) => (
+									<div className="flex w-full flex-col">
+										<FormControlLabel
+											classes={{
+												root: 'm-0',
+												label: 'flex flex-1'
+											}}
+											labelPlacement="start"
+											label="Speed Cash"
+											control={
+												<Switch
+													onChange={(ev) => {
+														onChange(ev.target.checked);
+													}}
+													checked={value}
+													name="meetups"
+												/>
+											}
+										/>
+										<FormHelperText>
+											Fast cash settlement option
+										</FormHelperText>
+									</div>
+								)}
+							/>
+						</div>
+					
+						
 					</div>
 				</div>
-				<div>
-					<Typography className="w-full text-xl font-medium">Account Activity</Typography>
-					<Typography className="mt-6 w-full font-medium">Email me when:</Typography>
-					<div className="mt-3 grid w-full grid-cols-1 gap-1">
-						<div className="flex items-center justify-between">
-							<Controller
-								name="comments"
-								control={control}
-								render={({ field: { onChange, value } }) => (
-									<div className="flex w-full flex-col">
-										<FormControlLabel
-											classes={{
-												root: 'm-0',
-												label: 'flex flex-1'
-											}}
-											labelPlacement="start"
-											label="Someone comments on one of my items"
-											control={
-												<Switch
-													onChange={(ev) => {
-														onChange(ev.target.checked);
-													}}
-													checked={value}
-													name="comments"
-												/>
-											}
-										/>
-									</div>
-								)}
-							/>
-						</div>
-						<div className="flex items-center justify-between">
-							<Controller
-								name="mention"
-								control={control}
-								render={({ field: { onChange, value } }) => (
-									<div className="flex w-full flex-col">
-										<FormControlLabel
-											classes={{
-												root: 'm-0',
-												label: 'flex flex-1'
-											}}
-											labelPlacement="start"
-											label="Someone mentions me"
-											control={
-												<Switch
-													onChange={(ev) => {
-														onChange(ev.target.checked);
-													}}
-													checked={value}
-													name="mention"
-												/>
-											}
-										/>
-									</div>
-								)}
-							/>
-						</div>
-						<div className="flex items-center justify-between">
-							<Controller
-								name="follow"
-								control={control}
-								render={({ field: { onChange, value } }) => (
-									<div className="flex w-full flex-col">
-										<FormControlLabel
-											classes={{
-												root: 'm-0',
-												label: 'flex flex-1'
-											}}
-											labelPlacement="start"
-											label="Someone follows me"
-											control={
-												<Switch
-													onChange={(ev) => {
-														onChange(ev.target.checked);
-													}}
-													checked={value}
-													name="follow"
-												/>
-											}
-										/>
-									</div>
-								)}
-							/>
-						</div>
-						<div className="flex items-center justify-between">
-							<Controller
-								name="inquiry"
-								control={control}
-								render={({ field: { onChange, value } }) => (
-									<div className="flex w-full flex-col">
-										<FormControlLabel
-											classes={{
-												root: 'm-0',
-												label: 'flex flex-1'
-											}}
-											labelPlacement="start"
-											label="Someone replies to my job posting"
-											control={
-												<Switch
-													onChange={(ev) => {
-														onChange(ev.target.checked);
-													}}
-													checked={value}
-													name="comments"
-												/>
-											}
-										/>
-									</div>
-								)}
-							/>
-						</div>
-					</div>
-				</div>
-				<div className="flex items-center justify-end gap-2">
-					<Button
-						variant="outlined"
-						disabled={_.isEmpty(dirtyFields)}
-						onClick={() => reset(notificationSettings)}
-					>
-						Cancel
-					</Button>
-					<Button
-						variant="contained"
-						color="secondary"
-						disabled={_.isEmpty(dirtyFields) || !isValid}
-						type="submit"
-					>
-						Save
-					</Button>
-				</div>
+			
 			</form>
 		</div>
 	);
