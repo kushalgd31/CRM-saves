@@ -9,6 +9,7 @@ const sidebarSections = [
       { label: 'Dashboard', icon: 'clipboard', path: 'dashboard' },
       { label: 'Settings', icon: 'badge', path: '/apps/settings' },
     ],
+    
   },
   {
     title: 'Category',
