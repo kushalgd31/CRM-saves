@@ -3,7 +3,6 @@ import { FuseNavItemType } from '@fuse/core/FuseNavigation/types/FuseNavItemType
 import ar from './navigation-i18n/ar';
 import en from './navigation-i18n/en';
 import tr from './navigation-i18n/tr';
-import SettingsAppNavigation from '../app/(control-panel)/apps/settings/lib/constants/SettingsAppNavigation';
 
 i18n.addResourceBundle('en', 'navigation', en);
 i18n.addResourceBundle('tr', 'navigation', tr);
@@ -14,7 +13,7 @@ i18n.addResourceBundle('ar', 'navigation', ar);
  */
 const navigationConfig: FuseNavItemType[] = [
 	// ─────────────────────────────────────────────
-	// DASHBOARDS GROUP  (Dashboard, KYC + Category with Withdraw, Deposit)
+	// DASHBOARDS GROUP  (Dashboard, KYC, Settings + Category with Withdraw, Deposit, Academy)
 	// ─────────────────────────────────────────────
 	{
 		id: 'dashboards',
@@ -30,6 +29,13 @@ const navigationConfig: FuseNavItemType[] = [
 				type: 'item',
 				icon: 'lucide:clipboard-check',
 				url: '/dashboards/project'
+			},
+			{
+				id: 'dashboards.settings',
+				title: 'Settings',
+				type: 'item',
+				icon: 'lucide:settings',
+				url: '/apps/settings'
 			},
 			{
 				id: 'dashboards.kyc',
@@ -56,6 +62,13 @@ const navigationConfig: FuseNavItemType[] = [
 						type: 'item',
 						icon: 'lucide:wallet',
 						url: '/dashboards/deposit'
+					},
+					{
+						id: 'dashboards.academy',
+						title: 'Academy',
+						type: 'item',
+						icon: 'lucide:graduation-cap',
+						url: '/apps/academy/courses'
 					}
 				]
 			}
