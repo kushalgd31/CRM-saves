@@ -38,6 +38,13 @@ const navigationConfig: FuseNavItemType[] = [
 				url: '/apps/settings'
 			},
 			{
+				id: 'dashboards.profile',
+				title: 'Profile',
+				type: 'item',
+				icon: 'lucide:user-circle-2',
+				url: '/apps/profile'
+			},
+			{
 				id: 'dashboards.kyc',
 				title: 'KYC',
 				type: 'item',
