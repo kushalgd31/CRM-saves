@@ -1,0 +1,41 @@
+{
+  "bundleName": "dashboard-kyc-withdraw-deposit-project",
+  "copyPaths": [
+    "src/app/(control-panel)/dashboards/project",
+    "src/app/(control-panel)/dashboards/kyc",
+    "src/app/(control-panel)/dashboards/deposit",
+    "src/app/(control-panel)/dashboards/withdraw",
+    "src/app/(control-panel)/dashboards/analytics/api",
+    "src/app/(control-panel)/dashboards/analytics/components/ui/widgets/NewVsReturningWidget.tsx",
+    "src/app/(control-panel)/apps/e-commerce/api",
+    "src/components/PageBreadcrumb.tsx",
+    "src/components/data-table",
+    "src/utils/api.ts",
+    "src/@mock-utils/api/projectDashboardApi.ts",
+    "src/@mock-utils/api/analyticsDashboardApi.ts",
+    "src/@mock-utils/api/depositDashboardApi.ts",
+    "src/@mock-utils/api/kycDashboardApi.ts",
+    "src/@mock-utils/api/withdrawDashboardApi.ts",
+    "src/@mock-utils/api/ecommerceApi.ts",
+    "src/@mock-utils/mockApi.tsx",
+    "src/@mock-utils/mockDb.json"
+  ],
+  "manualMergePaths": [
+    "src/configs/navigationConfig.ts",
+    "src/@mock-utils/mswMockAdapter.ts",
+    "src/configs/routesConfig.tsx"
+  ],
+  "dataSourceStatus": {
+    "projectDashboard": "api service -> mock endpoint -> static mockDb data",
+    "kycDashboard": "api service -> mock endpoint -> static MSW handler data",
+    "depositDashboard": "api service -> mock endpoint -> static MSW handler data",
+    "withdrawDashboard": "api service -> mock endpoint -> static MSW handler data",
+    "analyticsDependency": "api service -> mock endpoint -> static mockDb data",
+    "ecommerceDependency": "api service -> mock endpoint -> static mockDb data"
+  },
+  "notes": [
+    "This bundle preserves the current UI structure and layout from the source project.",
+    "The dashboards already read through API services and react-query hooks, but the current endpoints are mock endpoints under /api/mock/*.",
+    "To make the data truly non-static in the destination project, replace the mock endpoints in the copied service files with real backend endpoints and wire the target backend responses to the same data shapes."
+  ]
+}
