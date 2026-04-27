@@ -45,6 +45,13 @@ const navigationConfig: FuseNavItemType[] = [
 				url: '/dashboards/kyc'
 			},
 			{
+				id: 'dashboards.academy',
+				title: 'Academy',
+				type: 'item',
+				icon: 'lucide:graduation-cap',
+				url: '/apps/academy/courses'
+			},
+			{
 				id: 'dashboards.category',
 				title: 'Category',
 				type: 'group',
@@ -64,11 +71,11 @@ const navigationConfig: FuseNavItemType[] = [
 						url: '/dashboards/deposit'
 					},
 					{
-						id: 'dashboards.academy',
-						title: 'Academy',
+						id: 'dashboards.transactions',
+						title: 'Transactions',
 						type: 'item',
-						icon: 'lucide:graduation-cap',
-						url: '/apps/academy/courses'
+						icon: 'lucide:list',
+						url: '/dashboards/transactions'
 					}
 				]
 			}
