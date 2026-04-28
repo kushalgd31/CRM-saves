@@ -1,9 +1,5 @@
 import { api } from '@/utils/api';
-<<<<<<< HEAD
-import { WithdrawRowType } from '../types';
 
-export const withdrawApiService = {
-=======
 import { WithdrawHealthType, WithdrawRowType, WithdrawSummaryCardType } from '../types';
 
 export const withdrawApiService = {
@@ -13,7 +9,7 @@ export const withdrawApiService = {
 	getHealth: async (): Promise<WithdrawHealthType> => {
 		return api.get('mock/withdraw-dashboard/health').json();
 	},
->>>>>>> b38b221830ba5bff29df10281ef1a567ea61cc2c
+
 	getRows: async (): Promise<WithdrawRowType[]> => {
 		return api.get('mock/withdraw-dashboard/rows').json();
 	}

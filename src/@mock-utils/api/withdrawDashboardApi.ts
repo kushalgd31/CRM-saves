@@ -119,11 +119,7 @@ const withdrawRows = [
 	}
 ];
 
-<<<<<<< HEAD
-const withdrawDashboardApi = [
-	http.get('/api/mock/withdraw-dashboard/rows', async () => {
-		return HttpResponse.json(withdrawRows);
-=======
+
 const withdrawSummary = [
 	{
 		id: '1',
@@ -166,7 +162,7 @@ const withdrawDashboardApi = [
 	}),
 	http.get('/api/mock/withdraw-dashboard/health', async () => {
 		return HttpResponse.json(withdrawHealth);
->>>>>>> b38b221830ba5bff29df10281ef1a567ea61cc2c
+
 	})
 ];
 

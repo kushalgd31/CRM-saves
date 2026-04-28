@@ -27,8 +27,7 @@ export type WithdrawRowType = {
 	coverImageUrl: string;
 	screenshotUrl: string;
 };
-<<<<<<< HEAD
-=======
+
 
 export type WithdrawSummaryCardType = {
 	id: string;
@@ -53,4 +52,3 @@ export type WithdrawHealthType = {
 	metrics: WithdrawHealthMetricType[];
 	note: string;
 };
->>>>>>> b38b221830ba5bff29df10281ef1a567ea61cc2c

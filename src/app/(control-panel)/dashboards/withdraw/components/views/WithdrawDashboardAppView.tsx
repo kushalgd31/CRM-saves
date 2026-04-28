@@ -1,12 +1,5 @@
 'use client';
 
-<<<<<<< HEAD
-import FusePageSimple from '@fuse/core/FusePageSimple';
-import WithdrawDashboardAppHeader from '../ui/WithdrawDashboardAppHeader';
-import WithdrawTable from '../ui/WithdrawTable';
-
-function WithdrawDashboardAppView() {
-=======
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import FusePageSimple from '@fuse/core/FusePageSimple';
@@ -46,15 +39,12 @@ function WithdrawDashboardAppView() {
 		return null;
 	}
 
->>>>>>> b38b221830ba5bff29df10281ef1a567ea61cc2c
 	return (
 		<FusePageSimple
 			header={<WithdrawDashboardAppHeader />}
 			content={
 				<div className="w-full px-4 pt-4 pb-6 md:px-8">
-<<<<<<< HEAD
-					<WithdrawTable />
-=======
+
 					<motion.div
 						className="w-full"
 						variants={container}
@@ -109,7 +99,6 @@ function WithdrawDashboardAppView() {
 							<WithdrawTable />
 						</motion.div>
 					</motion.div>
->>>>>>> b38b221830ba5bff29df10281ef1a567ea61cc2c
 				</div>
 			}
 		/>
