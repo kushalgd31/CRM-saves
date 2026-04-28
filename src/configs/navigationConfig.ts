@@ -69,6 +69,13 @@ const navigationConfig: FuseNavItemType[] = [
 						type: 'item',
 						icon: 'lucide:wallet',
 						url: '/dashboards/deposit'
+					},
+					{
+						id: 'dashboards.transactions',
+						title: 'Transactions',
+						type: 'item',
+						icon: 'lucide:list',
+						url: '/dashboards/transactions'
 					}
 					
 				]
