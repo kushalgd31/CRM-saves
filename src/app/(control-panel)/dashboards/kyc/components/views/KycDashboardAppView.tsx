@@ -6,8 +6,12 @@ import { motion } from 'motion/react';
 import KycDashboardAppHeader from '../ui/KycDashboardAppHeader';
 import KycSummaryCards from '../ui/KycSummaryCards';
 import KycTable from '../ui/KycTable';
+<<<<<<< HEAD
 import { useGetKycRows } from '../../api/hooks/useGetKycRows';
 import { useMemo } from 'react';
+=======
+import { useGetKycSummary } from '../../api/hooks/useGetKycSummary';
+>>>>>>> b38b221830ba5bff29df10281ef1a567ea61cc2c
 
 const item = {
 	hidden: { opacity: 0, y: 20 },
@@ -15,6 +19,7 @@ const item = {
 };
 
 function KycDashboardAppView() {
+<<<<<<< HEAD
 	const { data: rows, isLoading } = useGetKycRows();
 
 	const summaryCards: import('../../api/types').KycSummaryCardType[] = useMemo(() => {
@@ -76,16 +81,27 @@ function KycDashboardAppView() {
 			}
 		];
 	}, [rows]);
+=======
+	const { data: summaryCards, isLoading } = useGetKycSummary();
+>>>>>>> b38b221830ba5bff29df10281ef1a567ea61cc2c
 
 	if (isLoading) {
 		return <FuseLoading />;
 	}
 
+<<<<<<< HEAD
 	if (!rows) {
 		return null;
 	}
 
 	return (
+=======
+	if (!summaryCards) {
+		return null;
+	}
+
+		return (
+>>>>>>> b38b221830ba5bff29df10281ef1a567ea61cc2c
 		<FusePageSimple
 			header={<KycDashboardAppHeader />}
 			content={
