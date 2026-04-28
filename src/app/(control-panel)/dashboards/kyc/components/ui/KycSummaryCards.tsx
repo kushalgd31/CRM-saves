@@ -23,7 +23,7 @@ function KycSummaryCards({ cards }: KycSummaryCardsProps) {
 					className="flex min-h-[116px] flex-col rounded-[16px] border border-slate-200 bg-white px-4 py-5 shadow-none"
 					elevation={0}
 				>
-					<div className="flex items-center justify-between">
+					<div className="flex items-center justify-between shrink-0 grow-0">
 						<Typography className="text-[15px] font-medium text-slate-600">{card.title}</Typography>
 						<div className={`flex h-9 w-9 items-center justify-center rounded-xl ${statusStyles[card.status]}`}>
 							<FuseSvgIcon size={16}>{card.icon}</FuseSvgIcon>

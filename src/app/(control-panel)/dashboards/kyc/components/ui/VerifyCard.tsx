@@ -19,7 +19,6 @@ onVerify?: () => void;
 
 export default function VerifyCard({
 title,
-status,
 images,
 onApprove,
 onReject,

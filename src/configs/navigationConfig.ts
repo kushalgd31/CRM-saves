@@ -42,14 +42,14 @@ const navigationConfig: FuseNavItemType[] = [
 						title: 'Sales',
 						type: 'item',
 						icon: 'lucide:trending-up',
-						url: '/apps/academy/courses'
+						url: '/dashboards/sales'
 					},
 			{
 				id: 'dashboards.settings',
 				title: 'Settings',
 				type: 'item',
 				icon: 'lucide:settings',
-				url: '/apps/settings'
+				url: '/settings'
 			},
 			{
 				id: 'dashboards.category',
