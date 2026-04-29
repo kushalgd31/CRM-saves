@@ -29,7 +29,26 @@ const navigationConfig: FuseNavItemType[] = [
 				type: 'item',
 				icon: 'lucide:clipboard-check',
 				url: '/dashboards/project'
-			},
+			},	
+					{
+						id: 'dashboards.transactions',
+						title: 'Transactions',
+						type: 'item',
+						icon: 'lucide:list',
+						url: '/dashboards/transactions'
+					}
+					
+				
+		]
+	},
+	{
+		id: 'players',
+		title: 'Players',
+		subtitle: 'Manage your players',
+		type: 'group',
+		icon: 'lucide:feed',
+		translate: 'Players',
+		children: [
 			{
 				id: 'dashboards.kyc',
 				title: 'KYC',
@@ -37,26 +56,18 @@ const navigationConfig: FuseNavItemType[] = [
 				icon: 'lucide:badge-check',
 				url: '/dashboards/kyc'
 			},
+		]
+	},
+	
+	{
+		id: 'finance',
+		title: 'Finance',
+		subtitle: 'Manage all finance here',
+		type: 'group',
+		icon: 'lucide:feed',
+		translate: 'Finance',
+		children: [
 			{
-						id: 'dashboards.sales',
-						title: 'Sales',
-						type: 'item',
-						icon: 'lucide:trending-up',
-						url: '/dashboards/sales'
-					},
-			{
-				id: 'dashboards.settings',
-				title: 'Settings',
-				type: 'item',
-				icon: 'lucide:settings',
-				url: '/settings'
-			},
-			{
-				id: 'dashboards.category',
-				title: 'Category',
-				type: 'group',
-				children: [
-					{
 						id: 'dashboards.withdraw',
 						title: 'Withdraw',
 						type: 'item',
@@ -70,18 +81,123 @@ const navigationConfig: FuseNavItemType[] = [
 						icon: 'lucide:wallet',
 						url: '/dashboards/deposit'
 					},
-					{
-						id: 'dashboards.transactions',
-						title: 'Transactions',
+		]
+	},
+	{
+		id: 'roles',
+		title: 'Role Management',
+		subtitle: 'Create roles, define permissions',
+		type: 'group',
+		icon: 'lucide:feed',
+		translate: 'Roles',
+		children: [
+			{
+						id: 'dashboards.sales',
+						title: 'Sales',
 						type: 'item',
-						icon: 'lucide:list',
-						url: '/dashboards/transactions'
-					}
-					
-				]
+						icon: 'lucide:trending-up',
+						url: '/dashboards/sales'
+					},
+		]},
+		{
+		id: 'Bonus Management',
+		title: 'Report',
+		subtitle: 'Create Bonus, view history',
+		type: 'group',
+		icon: 'lucide:feed',
+		translate: 'Bonus',
+		children: [
+			{
+				id: 'dashboards.project',
+				title: 'Dashboard',
+				type: 'item',
+				icon: 'lucide:clipboard-check',
+				url: '/dashboards/project'
+			},
+		]
+		},
+	{
+		id: 'reports',
+		title: 'Report',
+		subtitle: 'Start from here',
+		type: 'group',
+		icon: 'lucide:feed',
+		translate: 'Reports',
+		children: [
+			{
+				id: 'reports.agent-revenue',
+				title: 'Agent Revenue',
+				type: 'item',
+				icon: 'lucide:file-text',
+				url: '/reports/agent-revenue'
+			},
+			{
+				id: 'reports.player-revenue',
+				title: 'Player Revenue',
+				type: 'item',
+				icon: 'lucide:file-text',
+				url: '/reports/player-revenue'
+			},
+			{
+				id: 'reports.game-transaction',
+				title: 'Game Transaction',
+				type: 'item',
+				icon: 'lucide:file-text',
+				url: '/reports/game-transaction'
+			},
+			{
+				id: 'reports.player',
+				title: 'Player',
+				type: 'item',
+				icon: 'lucide:file-text',
+				url: '/reports/player'
+			},
+			{
+				id: 'reports.unified-transaction',
+				title: 'Unified Transaction',
+				type: 'item',
+				icon: 'lucide:file-text',
+				url: '/reports/unified-transaction'
+			},
+			{
+				id: 'reports.player-financial',
+				title: 'Player Financial',
+				type: 'item',
+				icon: 'lucide:file-text',
+				url: '/reports/player-financial'
+			},
+			{
+				id: 'reports.player-bonus',
+				title: 'Player Bonus',
+				type: 'item',
+				icon: 'lucide:file-text',
+				url: '/reports/player-bonus'
+			},
+			{
+				id: 'reports.bet',
+				title: 'Bet',
+				type: 'item',
+				icon: 'lucide:file-text',
+				url: '/reports/bet'
 			}
 		]
-	}
+	},
+	{
+		id: 'others',
+		title: 'Others',
+		subtitle: 'Other options',
+		type: 'group',
+		icon: 'lucide:feed',
+		translate: 'Others',
+		children: [
+			{
+				id: 'dashboards.settings',
+				title: 'Settings',
+				type: 'item',
+				icon: 'lucide:settings',
+				url: '/settings'
+			},]
+		}
 ];
 
 export default navigationConfig;
