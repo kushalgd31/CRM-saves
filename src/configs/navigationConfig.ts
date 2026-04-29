@@ -3,6 +3,7 @@ import { FuseNavItemType } from '@fuse/core/FuseNavigation/types/FuseNavItemType
 import ar from './navigation-i18n/ar';
 import en from './navigation-i18n/en';
 import tr from './navigation-i18n/tr';
+import person from '@mui/icons-material/Person';
 
 i18n.addResourceBundle('en', 'navigation', en);
 i18n.addResourceBundle('tr', 'navigation', tr);
@@ -51,7 +52,7 @@ const navigationConfig: FuseNavItemType[] = [
 		children: [
 			{
 				id: 'dashboards.kyc',
-				title: 'KYC',
+				title: 'Players KYC',
 				type: 'item',
 				icon: 'lucide:badge-check',
 				url: '/dashboards/kyc'
@@ -196,7 +197,15 @@ const navigationConfig: FuseNavItemType[] = [
 				type: 'item',
 				icon: 'lucide:settings',
 				url: '/settings'
-			},]
+			},
+			{
+				id: 'profile',
+				title: 'Profile',
+				type: 'item',
+				icon: 'person',
+				url: '/apps/profile'
+			},
+		]
 		}
 ];
 
