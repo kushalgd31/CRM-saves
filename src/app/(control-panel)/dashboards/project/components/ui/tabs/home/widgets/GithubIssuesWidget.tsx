@@ -90,9 +90,9 @@ function GithubIssuesWidget() {
 	const currentOverview = overview[currentRange];
 
 	return (
-		<Paper className="flex flex-auto flex-col overflow-hidden rounded-xl p-6 shadow-sm">
+		<Paper className="flex flex-auto flex-col overflow-hidden rounded-xl shadow-sm">
 
-			<div className="flex flex-col items-start justify-between sm:flex-row">
+			<div className="flex flex-col items-start justify-between px-6 pt-6 sm:flex-row">
 				<Typography className="text-xl font-semibold tracking-tight">
 					Finance
 				</Typography>
@@ -101,7 +101,7 @@ function GithubIssuesWidget() {
 				</div>
 			</div>
 
-			<div className="mt-3">
+			<div className="mt-3 px-6">
 				<Tabs
 					value={tabValue}
 					onChange={(_ev, value: number) => setTabValue(value)}
@@ -112,11 +112,11 @@ function GithubIssuesWidget() {
 				</Tabs>
 			</div>
 
-			<Typography className="mt-4 text-sm font-medium text-gray-500">
+			<Typography className="mt-4 text-sm font-medium text-gray-500 px-6">
 				Overview
 			</Typography>
 
-			<div className="mt-4 space-y-3">
+			<div className="mt-4 space-y-3 p-2">
 				<div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
 					{primaryCards.map((card, index) => (
 						<PrimaryCard
@@ -129,7 +129,7 @@ function GithubIssuesWidget() {
 					))}
 				</div>
 
-				<div className="grid grid-cols-4 gap-6 w-full sm:grid-cols-4 lg:grid-cols-8">
+				<div className="grid grid-cols-4 gap-6 sm:grid-cols-4 lg:grid-cols-8 pr-5">
 					{secondaryCards.map((card) => (
 						<SecondaryCard
 							key={card.key}

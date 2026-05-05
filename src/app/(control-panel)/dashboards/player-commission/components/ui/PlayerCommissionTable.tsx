@@ -8,26 +8,28 @@ import { useEffect, useMemo, useState } from 'react';
 import { type MRT_ColumnDef } from 'material-react-table';
 import DataTable from 'src/components/data-table/DataTable';
 import VerifyCard from './VerifyCard';
-import { KycStatusType, KycUserRowType } from '../../api/types';
-import { useGetKycRows } from '../../api/hooks/useGetKycRows';
+import { PlayerCommissionMetricKey, PlayerCommissionRowType, PlayerCommissionStatusType } from '../../api/types';
+import { useGetPlayerCommissionRows } from '../../api/hooks/useGetPlayerCommissionRows';
 
-const statusClassMap: Record<KycStatusType, string> = {
+const statusClassMap: Record<PlayerCommissionStatusType, string> = {
 	pending: 'bg-amber-500',
 	approved: 'bg-emerald-500',
 	rejected: 'bg-red-500'
 };
 
-const statusTextClassMap: Record<KycStatusType, string> = {
+const statusTextClassMap: Record<PlayerCommissionStatusType, string> = {
 	pending: 'bg-amber-100 text-amber-700',
 	approved: 'bg-emerald-100 text-emerald-700',
 	rejected: 'bg-red-100 text-red-700'
 };
 
-const formatStatusLabel = (status: KycStatusType) => status.charAt(0).toUpperCase() + status.slice(1);
+const formatStatusLabel = (status: PlayerCommissionStatusType) => status.charAt(0).toUpperCase() + status.slice(1);
 
-function KycTable() {
-	const { data: rows, isLoading } = useGetKycRows();
-	const [localRows, setLocalRows] = useState<KycUserRowType[] | null>(null);
+const commissionFields: PlayerCommissionMetricKey[] = ['sportsbook', 'casino', 'slots', 'liveCasino'];
+
+function PlayerCommissionTable() {
+	const { data: rows, isLoading } = useGetPlayerCommissionRows();
+	const [localRows, setLocalRows] = useState<PlayerCommissionRowType[] | null>(null);
 	const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
 
 	useEffect(() => {
@@ -39,8 +41,8 @@ function KycTable() {
 	const safeRows = localRows ?? rows ?? [];
 	const selectedRow = safeRows.find((row) => row.id === selectedRowId) ?? null;
 
-	const computeOverallStatus = (row: KycUserRowType): KycStatusType => {
-		const values = [row.panCard, row.idProof, row.selfie, row.bankAccount];
+	const computeOverallStatus = (row: PlayerCommissionRowType): PlayerCommissionStatusType => {
+		const values = commissionFields.map((field) => row[field]);
 
 		if (values.includes('rejected')) {
 			return 'rejected';
@@ -53,11 +55,7 @@ function KycTable() {
 		return 'approved';
 	};
 
-	const updateRowStatus = (
-		rowId: string,
-		field: 'panCard' | 'idProof' | 'selfie' | 'bankAccount',
-		value: KycStatusType
-	) => {
+	const updateRowStatus = (rowId: string, field: PlayerCommissionMetricKey, value: PlayerCommissionStatusType) => {
 		setLocalRows((prevRows) =>
 			prevRows
 				? prevRows.map((row) => {
@@ -65,7 +63,7 @@ function KycTable() {
 							return row;
 						}
 
-						const updatedRow = { ...row, [field]: value } as KycUserRowType;
+						const updatedRow = { ...row, [field]: value } as PlayerCommissionRowType;
 						return {
 							...updatedRow,
 							overallStatus: computeOverallStatus(updatedRow)
@@ -75,7 +73,7 @@ function KycTable() {
 		);
 	};
 
-	const columns = useMemo<MRT_ColumnDef<KycUserRowType>[]>(
+	const columns = useMemo<MRT_ColumnDef<PlayerCommissionRowType>[]>(
 		() => [
 			{
 				accessorKey: 'id',
@@ -106,46 +104,46 @@ function KycTable() {
 				Cell: ({ row }) => <span className="font-semibold text-slate-600">{row.original.phone}</span>
 			},
 			{
-				accessorKey: 'panCard',
-				header: 'PAN Card',
+				accessorKey: 'sportsbook',
+				header: 'Sportsbook',
 				Cell: ({ row }) => (
 					<div
-						className={`inline-flex rounded-md px-2.5 py-1 text-[10px] font-bold text-white ${statusClassMap[row.original.panCard]}`}
+						className={`inline-flex rounded-md px-2.5 py-1 text-[10px] font-bold text-white ${statusClassMap[row.original.sportsbook]}`}
 					>
-						{formatStatusLabel(row.original.panCard)}
+						{formatStatusLabel(row.original.sportsbook)}
 					</div>
 				)
 			},
 			{
-				accessorKey: 'idProof',
-				header: 'ID Proof',
+				accessorKey: 'casino',
+				header: 'Casino',
 				Cell: ({ row }) => (
 					<div
-						className={`inline-flex rounded-md px-2.5 py-1 text-[10px] font-bold text-white ${statusClassMap[row.original.idProof]}`}
+						className={`inline-flex rounded-md px-2.5 py-1 text-[10px] font-bold text-white ${statusClassMap[row.original.casino]}`}
 					>
-						{formatStatusLabel(row.original.idProof)}
+						{formatStatusLabel(row.original.casino)}
 					</div>
 				)
 			},
 			{
-				accessorKey: 'selfie',
-				header: 'Selfie',
+				accessorKey: 'slots',
+				header: 'Slots',
 				Cell: ({ row }) => (
 					<div
-						className={`inline-flex rounded-md px-2.5 py-1 text-[10px] font-bold text-white ${statusClassMap[row.original.selfie]}`}
+						className={`inline-flex rounded-md px-2.5 py-1 text-[10px] font-bold text-white ${statusClassMap[row.original.slots]}`}
 					>
-						{formatStatusLabel(row.original.selfie)}
+						{formatStatusLabel(row.original.slots)}
 					</div>
 				)
 			},
 			{
-				accessorKey: 'bankAccount',
-				header: 'Bank Account',
+				accessorKey: 'liveCasino',
+				header: 'Live Casino',
 				Cell: ({ row }) => (
 					<div
-						className={`inline-flex rounded-md px-2.5 py-1 text-[10px] font-bold text-white ${statusClassMap[row.original.bankAccount]}`}
+						className={`inline-flex rounded-md px-2.5 py-1 text-[10px] font-bold text-white ${statusClassMap[row.original.liveCasino]}`}
 					>
-						{formatStatusLabel(row.original.bankAccount)}
+						{formatStatusLabel(row.original.liveCasino)}
 					</div>
 				)
 			},
@@ -296,7 +294,7 @@ function KycTable() {
 							<div className="rounded-2xl border border-slate-200 bg-white">
 								<div className="border-b border-slate-100 px-5 py-4">
 									<Typography className="text-[15px] font-bold text-slate-900">
-										Submission Details
+										Commission Details
 									</Typography>
 								</div>
 								<div className="px-5 py-2">
@@ -318,42 +316,42 @@ function KycTable() {
 									</div>
 									<div className="flex justify-between border-b border-slate-50 py-3 last:border-b-0">
 										<Typography className="text-[13px] font-medium text-slate-500">
-											PAN Card
+											Sportsbook
 										</Typography>
 										<span
-											className={`inline-flex rounded-full px-3 py-1 text-[12px] font-semibold ${statusTextClassMap[selectedRow.panCard]}`}
+											className={`inline-flex rounded-full px-3 py-1 text-[12px] font-semibold ${statusTextClassMap[selectedRow.sportsbook]}`}
 										>
-											{formatStatusLabel(selectedRow.panCard)}
+											{formatStatusLabel(selectedRow.sportsbook)}
 										</span>
 									</div>
 									<div className="flex justify-between border-b border-slate-50 py-3 last:border-b-0">
 										<Typography className="text-[13px] font-medium text-slate-500">
-											ID Proof
+											Casino
 										</Typography>
 										<span
-											className={`inline-flex rounded-full px-3 py-1 text-[12px] font-semibold ${statusTextClassMap[selectedRow.idProof]}`}
+											className={`inline-flex rounded-full px-3 py-1 text-[12px] font-semibold ${statusTextClassMap[selectedRow.casino]}`}
 										>
-											{formatStatusLabel(selectedRow.idProof)}
+											{formatStatusLabel(selectedRow.casino)}
 										</span>
 									</div>
 									<div className="flex justify-between border-b border-slate-50 py-3 last:border-b-0">
 										<Typography className="text-[13px] font-medium text-slate-500">
-											Selfie
+											Slots
 										</Typography>
 										<span
-											className={`inline-flex rounded-full px-3 py-1 text-[12px] font-semibold ${statusTextClassMap[selectedRow.selfie]}`}
+											className={`inline-flex rounded-full px-3 py-1 text-[12px] font-semibold ${statusTextClassMap[selectedRow.slots]}`}
 										>
-											{formatStatusLabel(selectedRow.selfie)}
+											{formatStatusLabel(selectedRow.slots)}
 										</span>
 									</div>
 									<div className="flex justify-between border-b border-slate-50 py-3 last:border-b-0">
 										<Typography className="text-[13px] font-medium text-slate-500">
-											Bank Account
+											Live Casino
 										</Typography>
 										<span
-											className={`inline-flex rounded-full px-3 py-1 text-[12px] font-semibold ${statusTextClassMap[selectedRow.bankAccount]}`}
+											className={`inline-flex rounded-full px-3 py-1 text-[12px] font-semibold ${statusTextClassMap[selectedRow.liveCasino]}`}
 										>
-											{formatStatusLabel(selectedRow.bankAccount)}
+											{formatStatusLabel(selectedRow.liveCasino)}
 										</span>
 									</div>
 								</div>
@@ -361,36 +359,36 @@ function KycTable() {
 
 							<div className="space-y-4">
 								<VerifyCard
-									title="PAN Card"
-									status={selectedRow.panCard}
-									images={selectedRow.panCardImages}
-									onApprove={() => updateRowStatus(selectedRow.id, 'panCard', 'approved')}
-									onReject={() => updateRowStatus(selectedRow.id, 'panCard', 'rejected')}
-									onVerify={() => updateRowStatus(selectedRow.id, 'panCard', 'pending')}
+									title="Sportsbook Commission"
+									status={selectedRow.sportsbook}
+									images={selectedRow.sportsbookImages}
+									onApprove={() => updateRowStatus(selectedRow.id, 'sportsbook', 'approved')}
+									onReject={() => updateRowStatus(selectedRow.id, 'sportsbook', 'rejected')}
+									onVerify={() => updateRowStatus(selectedRow.id, 'sportsbook', 'pending')}
 								/>
 								<VerifyCard
-									title="ID Proof"
-									status={selectedRow.idProof}
-									images={selectedRow.idProofImages}
-									onApprove={() => updateRowStatus(selectedRow.id, 'idProof', 'approved')}
-									onReject={() => updateRowStatus(selectedRow.id, 'idProof', 'rejected')}
-									onVerify={() => updateRowStatus(selectedRow.id, 'idProof', 'pending')}
+									title="Casino Commission"
+									status={selectedRow.casino}
+									images={selectedRow.casinoImages}
+									onApprove={() => updateRowStatus(selectedRow.id, 'casino', 'approved')}
+									onReject={() => updateRowStatus(selectedRow.id, 'casino', 'rejected')}
+									onVerify={() => updateRowStatus(selectedRow.id, 'casino', 'pending')}
 								/>
 								<VerifyCard
-									title="Selfie"
-									status={selectedRow.selfie}
-									images={selectedRow.selfieImages}
-									onApprove={() => updateRowStatus(selectedRow.id, 'selfie', 'approved')}
-									onReject={() => updateRowStatus(selectedRow.id, 'selfie', 'rejected')}
-									onVerify={() => updateRowStatus(selectedRow.id, 'selfie', 'pending')}
+									title="Slots Commission"
+									status={selectedRow.slots}
+									images={selectedRow.slotsImages}
+									onApprove={() => updateRowStatus(selectedRow.id, 'slots', 'approved')}
+									onReject={() => updateRowStatus(selectedRow.id, 'slots', 'rejected')}
+									onVerify={() => updateRowStatus(selectedRow.id, 'slots', 'pending')}
 								/>
 								<VerifyCard
-									title="Bank Account"
-									status={selectedRow.bankAccount}
-									images={selectedRow.bankAccountImages}
-									onApprove={() => updateRowStatus(selectedRow.id, 'bankAccount', 'approved')}
-									onReject={() => updateRowStatus(selectedRow.id, 'bankAccount', 'rejected')}
-									onVerify={() => updateRowStatus(selectedRow.id, 'bankAccount', 'pending')}
+									title="Live Casino Commission"
+									status={selectedRow.liveCasino}
+									images={selectedRow.liveCasinoImages}
+									onApprove={() => updateRowStatus(selectedRow.id, 'liveCasino', 'approved')}
+									onReject={() => updateRowStatus(selectedRow.id, 'liveCasino', 'rejected')}
+									onVerify={() => updateRowStatus(selectedRow.id, 'liveCasino', 'pending')}
 								/>
 							</div>
 						</div>
@@ -401,4 +399,4 @@ function KycTable() {
 	);
 }
 
-export default KycTable;
+export default PlayerCommissionTable;

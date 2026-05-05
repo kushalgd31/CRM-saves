@@ -4772,36 +4772,29 @@
       "series": {
         "today": [
           {
-            "title": "Group Meeting",
-            "time": "in 32 minutes",
-            "location": "Conference room 1B"
+            "title": "Aviator",
+            "type": "Casino",
+            "GGR": "₹2.4L"
           },
           {
-            "title": "Coffee Break",
-            "time": "10:30 AM"
+            "title": "IPL-CSK vs MI",
+            "type":"Sports",
+            "GGR": "₹1.4L"
           },
           {
-            "title": "Public Beta Release",
-            "time": "11:00 AM"
+            "title": "Lightning Roulette",
+            "type": "Casino",
+            "GGR":"₹1.3L"
           },
           {
-            "title": "Lunch",
-            "time": "12:10 PM"
+            "title": "Sweet Bonanze",
+            "type":"Casino",
+            "GGR":"₹0.9L"
           },
           {
-            "title": "Dinner with David",
-            "time": "05:30 PM",
-            "location": "Magnolia"
-          },
-          {
-            "title": "Jane's Birthday Party",
-            "time": "07:30 PM",
-            "location": "Home"
-          },
-          {
-            "title": "Overseer's Retirement Party",
-            "time": "09:30 PM",
-            "location": "Overseer's room"
+            "title": "EPL-Arsenal vs City",
+            "type":"Sports",
+            "GGR":"₹0.4L"
           }
         ],
         "tomorrow": [

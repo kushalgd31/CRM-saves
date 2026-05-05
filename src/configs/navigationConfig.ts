@@ -3,7 +3,6 @@ import { FuseNavItemType } from '@fuse/core/FuseNavigation/types/FuseNavItemType
 import ar from './navigation-i18n/ar';
 import en from './navigation-i18n/en';
 import tr from './navigation-i18n/tr';
-import person from '@mui/icons-material/Person';
 
 i18n.addResourceBundle('en', 'navigation', en);
 i18n.addResourceBundle('tr', 'navigation', tr);
@@ -30,16 +29,14 @@ const navigationConfig: FuseNavItemType[] = [
 				type: 'item',
 				icon: 'lucide:clipboard-check',
 				url: '/dashboards/project'
-			},	
-					{
-						id: 'dashboards.transactions',
-						title: 'Transactions',
-						type: 'item',
-						icon: 'lucide:list',
-						url: '/dashboards/transactions'
-					}
-					
-				
+			},
+			{
+				id: 'dashboards.transactions',
+				title: 'Transactions',
+				type: 'item',
+				icon: 'lucide:list',
+				url: '/dashboards/transactions'
+			}
 		]
 	},
 	{
@@ -57,9 +54,16 @@ const navigationConfig: FuseNavItemType[] = [
 				icon: 'lucide:badge-check',
 				url: '/dashboards/kyc'
 			},
+			{
+				id: 'dashboards.player-commission',
+				title: 'Player Commission',
+				type: 'item',
+				icon: 'lucide:wallet-cards',
+				url: '/dashboards/player-commission'
+			}
 		]
 	},
-	
+
 	{
 		id: 'finance',
 		title: 'Finance',
@@ -69,19 +73,19 @@ const navigationConfig: FuseNavItemType[] = [
 		translate: 'Finance',
 		children: [
 			{
-						id: 'dashboards.withdraw',
-						title: 'Withdraw',
-						type: 'item',
-						icon: 'lucide:arrow-down-to-line',
-						url: '/dashboards/withdraw'
-					},
-					{
-						id: 'dashboards.deposit',
-						title: 'Deposit',
-						type: 'item',
-						icon: 'lucide:wallet',
-						url: '/dashboards/deposit'
-					},
+				id: 'dashboards.withdraw',
+				title: 'Withdraw',
+				type: 'item',
+				icon: 'lucide:arrow-down-to-line',
+				url: '/dashboards/withdraw'
+			},
+			{
+				id: 'dashboards.deposit',
+				title: 'Deposit',
+				type: 'item',
+				icon: 'lucide:wallet',
+				url: '/dashboards/deposit'
+			}
 		]
 	},
 	{
@@ -93,14 +97,15 @@ const navigationConfig: FuseNavItemType[] = [
 		translate: 'Roles',
 		children: [
 			{
-						id: 'dashboards.sales',
-						title: 'Sales',
-						type: 'item',
-						icon: 'lucide:trending-up',
-						url: '/dashboards/sales'
-					},
-		]},
-		{
+				id: 'sales',
+				title: 'Sales Team',
+				type: 'item',
+				icon: 'lucide:trending-up',
+				url: '/dashboards/sales'
+			}
+		]
+	},
+	{
 		id: 'Bonus Management',
 		title: 'Report',
 		subtitle: 'Create Bonus, view history',
@@ -114,9 +119,9 @@ const navigationConfig: FuseNavItemType[] = [
 				type: 'item',
 				icon: 'lucide:clipboard-check',
 				url: '/dashboards/project'
-			},
+			}
 		]
-		},
+	},
 	{
 		id: 'reports',
 		title: 'Report',
@@ -204,9 +209,9 @@ const navigationConfig: FuseNavItemType[] = [
 				type: 'item',
 				icon: 'person',
 				url: '/apps/profile'
-			},
+			}
 		]
-		}
+	}
 ];
 
 export default navigationConfig;
