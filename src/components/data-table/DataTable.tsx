@@ -132,7 +132,15 @@ function DataTable<TData>(props: MaterialReactTableProps<TData>) {
 					sx: {
 						'& .Mui-TableHeadCell-Content-Labels': {
 							flex: 1,
-							justifyContent: 'space-between'
+							justifyContent: 'space-between',
+							whiteSpace: 'nowrap',
+							overflow: 'hidden',
+							textOverflow: 'ellipsis'
+						},
+						'& .Mui-TableHeadCell-Content-Labels > *': {
+							whiteSpace: 'nowrap',
+							overflow: 'hidden',
+							textOverflow: 'ellipsis'
 						},
 						'& .Mui-TableHeadCell-Content-Actions': {
 							'& > button': {

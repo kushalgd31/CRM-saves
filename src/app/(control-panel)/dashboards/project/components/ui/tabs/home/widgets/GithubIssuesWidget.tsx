@@ -39,7 +39,7 @@ type PrimaryCardProps = {
 
 function PrimaryCard({ title, value, subtitle, isPositive }: PrimaryCardProps) {
 	return (
-		<div className="flex flex-col items-center justify-center rounded-2xl bg-gray-100 border border-gray-200 shadow-sm px-4 py-6 text-center min-h-[140px] font-[geist]">
+		<div className="flex flex-col items-center justify-center rounded-2xl bg-gray-100  shadow-sm px-4 py-6 text-center min-h-[140px] font-[geist]">
 			<span className="text-5xl font-bold text-blue-600 leading-tight mb-1">
 				{formatValue(value)}
 			</span>
