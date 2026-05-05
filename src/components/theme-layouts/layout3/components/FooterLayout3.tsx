@@ -10,9 +10,7 @@ type FooterLayout3Props = {
 	className?: string;
 };
 
-/**
- * The footer layout 3.
- */
+
 function FooterLayout3(props: FooterLayout3Props) {
 	const { className = '' } = props;
 

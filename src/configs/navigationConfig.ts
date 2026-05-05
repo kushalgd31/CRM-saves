@@ -99,20 +99,20 @@ const navigationConfig: FuseNavItemType[] = [
 						url: '/dashboards/sales'
 					},
 		]},
-		{
-		id: 'Bonus Management',
-		title: 'Report',
+	{
+		id: 'bonus-management',
+		title: 'Bonus Management',
 		subtitle: 'Create Bonus, view history',
 		type: 'group',
 		icon: 'lucide:feed',
 		translate: 'Bonus',
 		children: [
 			{
-				id: 'dashboards.project',
-				title: 'Dashboard',
+				id: 'apps.bonus',
+				title: 'Bonus',
 				type: 'item',
-				icon: 'lucide:clipboard-check',
-				url: '/dashboards/project'
+				icon: 'lucide:gift',
+				url: '/apps/bonus'
 			},
 		]
 		},
