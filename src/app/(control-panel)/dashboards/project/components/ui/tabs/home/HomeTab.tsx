@@ -301,15 +301,15 @@ function HomeTab() {
 							</div>
 						) : (
 							<>
-								<p className="text-[11px] font-medium text-slate-500">{card.title}</p>
-								<div className="mt-6">
-									<p className="text-[32px] leading-none font-bold text-center tracking-tight text-slate-800">
+								<p className="text-md font-medium font-[geist]">{card.title}</p>
+								<div className="mt-4">
+									<p className="text-[38px] leading-none font-bold text-center tracking-tight text-slate-800">
 										{typeof card.value === 'number'
 											? card.value.toLocaleString('en-IN')
 											: card.value}
 									</p>
 								</div>
-								<p className={`mt-auto pt-5 text-[11px] font-medium ${card.footnoteTone}`}>
+								<p className={` font-medium pt-5 text-[11px] text-center font-medium ${card.footnoteTone}`}>
 									{card.footnote}
 								</p>
 							</>
@@ -338,7 +338,7 @@ function HomeTab() {
 			>
 				<div className="space-y-4">
 					<div>
-						<h3 className="text-xl font-semibold tracking-tight">Player Activity</h3>
+						<h3 className="text-xl font-[geist] font-semibold tracking-tight mb-1.5">Player Activity</h3>
 						<p className="text-secondary">Recent player wins, losses, withdrawals, and risk signals.</p>
 					</div>
 					<Paper
@@ -350,20 +350,20 @@ function HomeTab() {
 							columns={playerSignalColumns}
 							enableRowActions={false}
 							enableRowSelection={false}
-							enableColumnActions={false}
+							enableColumnActions={true}
 							enableColumnOrdering={false}
 							enableGrouping={false}
 							enableColumnPinning={false}
-							enableTopToolbar={false}
+							enableTopToolbar={true}
 							enableBottomToolbar={false}
 							enablePagination={false}
-							enableSorting={false}
+							enableSorting={true}
 							muiTableHeadCellProps={{
 								sx: {
 									py: 1.75,
 									fontSize: 12,
 									fontWeight: 500,
-									color: '#64748b',
+									color: '#000000',
 									backgroundColor: '#ffffff'
 								}
 							}}
@@ -371,6 +371,7 @@ function HomeTab() {
 								sx: {
 									py: 1.5,
 									fontSize: 13,
+									fontWeight: 650,
 									borderBottom: '1px solid #eef2f7'
 								}
 							}}

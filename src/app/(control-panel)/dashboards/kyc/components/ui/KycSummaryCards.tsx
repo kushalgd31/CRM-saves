@@ -25,7 +25,7 @@ function KycSummaryCards({ cards }: KycSummaryCardsProps) {
 				>
 					<div className="items-center justify-between px-2 pt-2">
 						<Typography
-							className="whitespace-nowrap px-3 text-lg leading-6 font-medium tracking-tight"
+							className="whitespace-nowrap px-2 text-md leading-6 font-medium tracking-tight"
 							color="text.secondary"
 						>
 							{card.title}
