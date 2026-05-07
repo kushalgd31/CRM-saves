@@ -181,7 +181,7 @@ function PlayerCommissionTable() {
 	return (
 		<>
 			<Paper
-				className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
+				className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm mt-[-2%]"
 				elevation={0}
 			>
 				<DataTable
@@ -196,19 +196,7 @@ function PlayerCommissionTable() {
 					enableRowSelection={false}
 					enableExpanding={false}
 					enableRowNumbers={false}
-					renderRowActionMenuItems={() => []}
-					renderRowActions={({ row }) => (
-						<div className="flex cursor-pointer items-center justify-center gap-1 font-semibold text-slate-600 hover:text-slate-900">
-							<button
-								type="button"
-								onClick={() => setSelectedRowId(row.original.id)}
-								className="flex items-center gap-1"
-							>
-								<FuseSvgIcon size={14}>lucide:eye</FuseSvgIcon>
-								<span className="text-[11px]">View</span>
-							</button>
-						</div>
-					)}
+					enableRowActions={false}
 				/>
 			</Paper>
 
@@ -355,41 +343,6 @@ function PlayerCommissionTable() {
 										</span>
 									</div>
 								</div>
-							</div>
-
-							<div className="space-y-4">
-								<VerifyCard
-									title="Sportsbook Commission"
-									status={selectedRow.sportsbook}
-									images={selectedRow.sportsbookImages}
-									onApprove={() => updateRowStatus(selectedRow.id, 'sportsbook', 'approved')}
-									onReject={() => updateRowStatus(selectedRow.id, 'sportsbook', 'rejected')}
-									onVerify={() => updateRowStatus(selectedRow.id, 'sportsbook', 'pending')}
-								/>
-								<VerifyCard
-									title="Casino Commission"
-									status={selectedRow.casino}
-									images={selectedRow.casinoImages}
-									onApprove={() => updateRowStatus(selectedRow.id, 'casino', 'approved')}
-									onReject={() => updateRowStatus(selectedRow.id, 'casino', 'rejected')}
-									onVerify={() => updateRowStatus(selectedRow.id, 'casino', 'pending')}
-								/>
-								<VerifyCard
-									title="Slots Commission"
-									status={selectedRow.slots}
-									images={selectedRow.slotsImages}
-									onApprove={() => updateRowStatus(selectedRow.id, 'slots', 'approved')}
-									onReject={() => updateRowStatus(selectedRow.id, 'slots', 'rejected')}
-									onVerify={() => updateRowStatus(selectedRow.id, 'slots', 'pending')}
-								/>
-								<VerifyCard
-									title="Live Casino Commission"
-									status={selectedRow.liveCasino}
-									images={selectedRow.liveCasinoImages}
-									onApprove={() => updateRowStatus(selectedRow.id, 'liveCasino', 'approved')}
-									onReject={() => updateRowStatus(selectedRow.id, 'liveCasino', 'rejected')}
-									onVerify={() => updateRowStatus(selectedRow.id, 'liveCasino', 'pending')}
-								/>
 							</div>
 						</div>
 					</div>

@@ -22,7 +22,7 @@ type WithdrawGatewayHealthCardProps = {
 function WithdrawGatewayHealthCard({ health }: WithdrawGatewayHealthCardProps) {
 	return (
 		<Paper
-			className="overflow-hidden rounded-2xl border border-slate-200 px-4 py-3 shadow-none"
+			className="overflow-hidden rounded-lg border border-slate-200 px-4 py-3 scale-85 w-160"
 			elevation={0}
 		>
 			<div className="flex h-full flex-col">
@@ -34,7 +34,7 @@ function WithdrawGatewayHealthCard({ health }: WithdrawGatewayHealthCardProps) {
 							key={metric.id}
 							className="grid min-w-0 grid-cols-[56px_minmax(0,1fr)_52px] items-center gap-3"
 						>
-							<Typography className="text-[11px] font-medium text-slate-600">{metric.label}</Typography>
+							<Typography className="text-[11px] font-medium text-slate-600 text-nowrap">{metric.label}</Typography>
 							<div className="h-1.5 overflow-hidden rounded-full bg-slate-200">
 								<div
 									className={`h-full rounded-full ${progressColors[metric.color]}`}

@@ -30,7 +30,7 @@ function PlayerCommissionDashboardAppView() {
 		<FusePageSimple
 			header={<PlayerCommissionDashboardAppHeader />}
 			content={
-				<div className="w-full px-4 pt-3 pb-6 md:px-8">
+				<div className="w-full px-4 pt-3 pb-6 md:px-8 mt-4">
 					<motion.div
 						variants={item}
 						initial="hidden"

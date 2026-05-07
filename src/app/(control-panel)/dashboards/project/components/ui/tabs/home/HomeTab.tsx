@@ -338,8 +338,8 @@ function HomeTab() {
 			>
 				<div className="space-y-4">
 					<div>
-						<h3 className="text-xl font-[geist] font-semibold tracking-tight mb-1.5">Player Activity</h3>
-						<p className="text-secondary">Recent player wins, losses, withdrawals, and risk signals.</p>
+						<h3 className="text-xl font-[geist] font-semibold tracking-tight mb-1.5">Recent Transactions</h3>
+						{/* <p className="text-secondary">Recent player wins, losses, withdrawals, and risk signals.</p> */}
 					</div>
 					<Paper
 						className="flex h-full w-full flex-auto flex-col overflow-hidden rounded-xl shadow-sm"
@@ -371,7 +371,6 @@ function HomeTab() {
 								sx: {
 									py: 1.5,
 									fontSize: 13,
-									fontWeight: 650,
 									borderBottom: '1px solid #eef2f7'
 								}
 							}}

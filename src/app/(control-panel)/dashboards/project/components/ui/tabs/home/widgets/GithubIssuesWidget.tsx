@@ -41,7 +41,7 @@ function PrimaryCard({ title, value, subtitle, isPositive }: PrimaryCardProps) {
 	return (
 		<div className="flex flex-col items-center justify-center rounded-lg bg-[#F6F7F8] py-4 px-4 text-center min-h-[120px] font-[geist] border border">
 			<span className="text-[30px] font-semibold text-[#1565C0] leading-tight">
-				₹{formatValue(value)}
+				₹{formatValue(value)} L
 			</span>
 			<span className="text-sm font-semibold text-[#1565C0] mb-4">
 				{title}

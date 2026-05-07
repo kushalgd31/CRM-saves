@@ -20,7 +20,7 @@ function PlayerCommissionSummaryCards({ cards }: PlayerCommissionSummaryCardsPro
 			{cards.map((card) => (
 				<Paper
 					key={card.id}
-					className="flex min-h-35 flex-auto flex-col overflow-hidden rounded-xl border border-slate-200 shadow-sm"
+					className="flex min-h-35 flex-auto flex-col overflow-hidden rounded-xl border border-slate-200 shadow-sm mb-5"
 					elevation={0}
 				>
 					<div className="flex items-center justify-between px-2 pt-2">
