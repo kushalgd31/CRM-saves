@@ -106,14 +106,7 @@ function Basereport() {
 
 	return (
 		<FusePageSimple
-			header={
-				<ReportsHeader
-					filters={draftFilters}
-					onFilterChange={handleFilterChange}
-					onResetFilters={handleResetFilters}
-					onSearch={handleSearch}
-				/>
-			}
+			header={<ReportsHeader title={reportConfig.title} />}
 			content={
 				<div className="w-full px-4 pt-4 pb-6 md:px-8">
 					<motion.div
