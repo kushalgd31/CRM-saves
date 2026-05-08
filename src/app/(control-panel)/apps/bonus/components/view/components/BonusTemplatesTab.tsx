@@ -132,31 +132,31 @@ const bonusTemplates = [
 
 function BonusTemplatesTab() {
   return (
-    <div className="mt-5 space-y-3">
+    <div className="mt-7 space-y-6">
       {bonusTemplates.map((template) => (
         <div
           key={template.id}
-          className="overflow-hidden rounded-[12px] border border-[#E5E7EB] bg-white"
+          className="overflow-hidden rounded-[12px]  bg-white"
         >
-          <div className="flex flex-wrap border-b border-[#EAECEF] py-3">
+          <div className="flex flex-wrap rounded-t-[12px] border-b border-[#CDCDCD] bg-white py-2">
             {/* LEFT SIDE */}
             <div className="flex min-w-0 items-center gap-2">
-              <span className="flex h-[22px] items-center justify-center rounded-[17px] border border-[#E5E7EB] bg-[#F2F2F2] px-[14px] gap-[10px] px-[14px] py-[2px] ml-4 text-[16px] font-normal text-[#1F232B] tracking-[-0.55px] font-[Geist]">
+              <span className="flex h-[22px] items-center justify-center rounded-[17px] border border-[#E5E7EB] bg-[#F2F2F2] px-[13px] gap-[10px] px-[14px] py-[2px] ml-4 text-[13px] font-normal text-[#1F232B] tracking-[-0.55px] font-[Geist]">
                 {template.category}
               </span>
 
-              <h3 className=" text-[#1F232B] font-geist text-[20px] font-semibold leading-[30.25px] tracking-[-0.55px]">
+              <h3 className=" text-[#1F232B] font-geist text-[15px] font-semibold leading-[30.25px] tracking-[-0.55px]">
                 {template.name}
               </h3>
             </div>
 
             {/* STATUS + PLAYERS (push to right) */}
             <div className="flex items-center gap-3 ml-auto mr-5">
-              <span className="flex h-[22px] items-center rounded-[17px] bg-[#E1FFE0] px-[14px] text-[16px] font-[Geist] font-normal text-[#4B9B48] leading-[24px] tracking-[-0.55px]">
+              <span className="flex h-[22px] items-center rounded-[17px] bg-[#E1FFE0] px-[14px] text-[13px] font-[Geist] font-normal text-[#4B9B48] leading-[24px] tracking-[-0.55px]">
                 {template.status}
               </span>
 
-              <p className="text-[16px] font-normal text-[#1F232B] whitespace-nowrap font-[Geist] leading-[30.25px] tracking-[-0.55px]">
+              <p className="text-[13px] font-normal text-[#1F232B] whitespace-nowrap font-[Geist] leading-[30.25px] tracking-[-0.55px]">
                 {template.playersCount} Players
               </p>
             </div>
@@ -174,39 +174,39 @@ function BonusTemplatesTab() {
             </button>
           </div>
 
-          <div className="flex overflow-x-auto border-b border-[#EAECEF]">
+          <div className="mx-auto flex w-[98%] overflow-x-auto rounded-t-[12px] border-b border-[#CDCDCD] bg-white -pb-2">
             {template.stats.map((stat) => (
               <div
                 key={stat.label}
-                className="w-1/2 sm:w-1/3 lg:w-1/4 px-4 py-4"
+                className="w-1/2 sm:w-1/3 lg:w-1/4 px-4 py-3"
               >
                 {/* VALUE */}
-                <p className="truncate text-[18px] font-semibold leading-[1.1] text-[#111827]">
+                <p className="truncate text-[15px] font-[Geist] font-semibold leading-[30.25px] text-[#1F232B]">
                   {typeof stat.value === "string"
                     ? stat.value.replace("Rs ", "\u20B9")
                     : stat.value}
                 </p>
 
                 {/* LABEL */}
-                <p className="mt-1 text-[10px] font-medium leading-none text-[#9CA3AF]">
+                <p className="-mt-1 text-[11px] font-normal font-[Geist] self-stretch lleading-[20px] text-[#767E88] tracking-[-0.55px]">
                   {stat.label}
                 </p>
               </div>
             ))}
           </div>
 
-          <div className="grid lg:grid-cols-[0.95fr_1.65fr]">
+          <div className="mt-1 grid lg:grid-cols-[0.95fr_1.65fr]">
             <div className="border-b border-[#EAECEF] px-4 py-4 ">
-              <p className="text-[14px] font-normal leading-[20px] text-[#767E88] tracking-[-0.55px] font-[Geist]">
+              <p className="text-[10px] font-normal leading-[20px] text-[#767E88] tracking-[-0.55px] font-[Geist]">
                 Winning Distribution
               </p>
-              <p className="mt-1 text-[20px] font-semibold leading-[30.25px] font-[Geist] text-[#1F232B]">
+              <p className="-mt-2 text-[14px] font-semibold leading-[30.25px] font-[Geist] text-[#1F232B]">
                 {template.winnings}
               </p>
             </div>
 
             <div className="px-4 py-4">
-              <p className="self-stretch text-[#1F232B] font-[Geist] text-[16px] font-semibold leading-[20px] tracking-[-0.55px]">
+              <p className="self-stretch text-[#1F232B] font-[Geist] text-[14px] font-semibold leading-[20px] tracking-[-0.55px]">
                 Game Weighting
               </p>
 
@@ -214,20 +214,20 @@ function BonusTemplatesTab() {
                 {template.weightings.map((weighting) => (
                   <div
                     key={weighting.label}
-                    className="grid grid-cols-[1fr_minmax(120px,1.25fr)_44px] items-center gap-3 border-b border-[#E5E7EB] pb-2"
+                    className="grid grid-cols-[1fr_minmax(120px,1.25fr)_44px] items-center gap-3 border-b border-[#E5E7EB] pb-1"
                   >
-                    <p className="truncate text-[#767E88] font-[Geist] text-[16px] font-normal leading-[20px] tracking-[-0.55px]">
+                    <p className="-mt-1 text-[#767E88] font-[Geist] text-[11px] font-normal leading-[20px] tracking-[-0.55px]">
                       {weighting.label}
                     </p>
 
-                    <div className="w-[248px] h-[8px] bg-[#D9D9D9] rounded-[4px] overflow-hidden">
+                    <div className=" ml-28 w-[220px] h-[7px] bg-[#D9D9D9] rounded-[20px] overflow-hidden">
                       <div
-                        className="w-[98%] h-full bg-[#1566C0] rounded-[4px]"
+                        className="w-[90%] h-full bg-[#1566C0] rounded-[20px]"
                         style={{ width: `${weighting.value}%` }}
                       />
                     </div>
 
-                    <p className="text-right text-[#1F232B] font-[Geist] text-[16px] font-semibold leading-[20px] tracking-[-0.55px]">
+                    <p className="text-right text-[#1F232B] font-[Geist] text-[11px] font-semibold leading-[20px] tracking-[-0.55px]">
                       {weighting.value}%
                     </p>
                   </div>

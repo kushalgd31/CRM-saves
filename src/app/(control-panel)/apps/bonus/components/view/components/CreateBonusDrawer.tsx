@@ -93,18 +93,18 @@ function CreateBonusDrawer({ open, onClose }: CreateBonusDrawerProps) {
       />
 
       <aside
-        className={`absolute right-0 top-0 flex h-full w-full flex-col bg-white shadow-[-16px_0_40px_rgba(15,23,42,0.18)] transition-transform duration-300 sm:w-[600px] ${
+        className={`absolute right-0 top-0 flex h-full max-w-[780px] flex-col bg-white shadow-[-16px_0_40px_rgba(15,23,42,0.18)] transition-transform duration-300 sm:w-[600px] ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
         role="dialog"
         aria-modal="true"
         aria-labelledby="create-bonus-drawer-title"
       >
-        <div className="flex items-center justify-between border-b border-[#DADADA] bg-white px-[26px] py-[10px]">
-          <h2
-            id="create-bonus-drawer-title"
-            className="text-[#1F232B] font-[Geist] text-[16px] font-bold leading-[22.286px] tracking-[0.122px]"
-          >
+          <div className="-mt-2 flex items-center justify-between border-b border-[#DADADA] bg-white pt-[10px] pb-[2px]">
+            <h2
+              id="create-bonus-drawer-title"
+              className="ml-6 text-[#1F232B] font-[Geist] text-[14px] font-bold leading-[22.286px] tracking-[0.122px]"
+            >
             Create Bonus
           </h2>
 
@@ -114,11 +114,11 @@ function CreateBonusDrawer({ open, onClose }: CreateBonusDrawerProps) {
             className="inline-flex h-8 w-8 items-center justify-center rounded-full text-[#6B7280] transition hover:bg-[#F3F4F6] hover:text-[#111827]"
             aria-label="Close drawer"
           >
-            <img src="/assets/images/apps/profile/vector.svg" alt="kkk" className="w-4 h-4" />
+            <img src="/assets/images/apps/profile/vector.svg" alt="kkk" className="w-3 h-3 mr-6" />
           </button>
         </div>
 
-        <div className="border-b border-[#E5E7EB] px-3 pt-1">
+        <div className="-mt-2 border-b border-[#E5E7EB] px-3 pt-0">
           <div className="grid grid-cols-4">
             {tabs.map((tab) => {
               const isActive = activeTab === tab;
@@ -128,10 +128,10 @@ function CreateBonusDrawer({ open, onClose }: CreateBonusDrawerProps) {
                   key={tab}
                   type="button"
                   onClick={() => setActiveTab(tab)}
-                  className={`border-b px-3 py-4 text-center text-[16px] font-medium transition sm:text-[12px] font-[Geist] font-normal ${
+                  className={`border-b -mb-[1px] px-3 pt-4 pb-2 text-center text-[14px] leading-[22.286px] tracking-[0.122px]  font-[Geist] font-normal ${
                     isActive
                       ? "border-[#1566C0] text-[#1566C0]"
-                      : "border-transparent text-[#D7D7D7] hover:text-[#1F232B]"
+                      : "border-b border-[#D7D7D7] hover:text-[#1F232B]"
                   }`}
                 >
                   {tab}
@@ -150,7 +150,7 @@ function CreateBonusDrawer({ open, onClose }: CreateBonusDrawerProps) {
             <button
               type="button"
               onClick={onClose}
-              className="flex w-[264px] px-[10px] py-[11px] justify-center items-center gap-[10px] rounded-[8px] border border-[#1566C0] bg-white text-[#2D3E55] font-[Poppins] text-[14px] font-medium"
+              className="flex w-[200px] px-[10px] py-[11px] justify-center items-center gap-[10px] rounded-[8px] border border-[#1566C0] bg-white text-[#2D3E55] font-[Poppins] text-[14px] font-medium"
             >
               Cancel
             </button>
@@ -159,7 +159,7 @@ function CreateBonusDrawer({ open, onClose }: CreateBonusDrawerProps) {
               type="button"
               onClick={handleNext}
               disabled={isLastTab}
-              className={`flex w-[264px] px-[10px] py-[11px] justify-center items-center gap-[10px] rounded-[8px] bg-[#1566C0] text-white font-[Poppins] text-[14px] font-medium ${
+              className={`flex w-[200px] px-[10px] py-[11px] justify-center items-center gap-[10px] rounded-[8px] bg-[#1566C0] text-white font-[Poppins] text-[14px] font-medium ${
                 isLastTab
                   ? "cursor-not-allowed bg-[#93C5FD]"
                   : ""

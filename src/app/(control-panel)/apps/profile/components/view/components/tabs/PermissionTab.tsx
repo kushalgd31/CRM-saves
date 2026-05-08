@@ -63,7 +63,7 @@ export default function PermissionTab() {
   return (
     <div className="space-y-4">
       <div className="relative w-full rounded-[12px] border border-[#E6ECF2] bg-white p-4 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
-        <Typography className="text-[#1F232B] font-poppins text-[16px] font-semibold leading-normal">
+        <Typography className="text-[#1F232B] font-poppins text-[13px] font-semibold leading-normal">
           Permissions
         </Typography>
 
@@ -141,23 +141,23 @@ export default function PermissionTab() {
       <div className="relative w-full rounded-[12px] border border-[#E6ECF2] bg-white p-4 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
-            <Typography className="text-[#1F232B] font-geist text-[16px] font-medium leading-[24px] tracking-[-0.4px]">
+            <Typography className="text-[#1F232B] font-geist text-[13px] font-medium leading-[24px] tracking-[-0.4px]">
               Player Settings
             </Typography>
 
             <div className="flex items-center gap-2">
-              <Typography className="text-[#6B7280] font-poppins text-[13px] font-medium leading-normal">
+              <Typography className="text-[#6B7280] font-poppins text-[11px] font-medium leading-normal">
                 Filter By Type:
               </Typography>
 
-              <select className="flex w-[96px] items-center justify-center rounded-[8px] border border-[#BDBEBF] bg-[rgba(255,255,255,0.06)] pt-[10px] pr-[11.302px] pb-[9px] pl-[11.961px]">
+              <select className="flex w-[96px] h-[20px] items-center justify-center rounded-[8px] border border-[#BDBEBF] bg-[rgba(255,255,255,0.06)] pt-[10px] pr-[11px] pb-[9px] pl-[11.961px]">
                 <option>Player</option>
               </select>
             </div>
           </div>
         </div>
 
-        <Typography className="mt-2 text-[#6B7280] font-poppins text-[14px] font-normal leading-normal">
+        <Typography className="-mt-1 text-[#6B7280] font-poppins text-[11px] font-normal leading-normal">
           1 pending, 4 completed
         </Typography>
 
@@ -168,7 +168,7 @@ export default function PermissionTab() {
                 {["Type", "Value", "Updated At", "Action"].map((head) => (
                   <th
                     key={head}
-                    className="py-3  text-left text-[#1F232B] font-poppins text-[14px] font-medium leading-normal"
+                    className="py-3 pl-40  text-left text-[#1F232B] font-poppins text-[12px] font-medium leading-normal"
                   >
                     {head}
                   </th>
@@ -182,17 +182,17 @@ export default function PermissionTab() {
                   key={index}
                   className="border-b border-[#E0E0E0] last:border-b-0"
                 >
-                  <td className="py-2.5 text-[#1F232B] font-poppins text-[14px] font-normal leading-normal">
+                  <td className="py-2.5 pl-40 text-[#1F232B] font-poppins text-[11px] font-normal leading-normal ">
                     {item}
                   </td>
-                  <td className="py-2.5 text-[#1F232B] font-poppins text-[14px] font-normal leading-normal">
+                  <td className="py-2.5 pl-40 text-[#1F232B] font-poppins text-[11px] font-normal leading-normal">
                     Not Set
                   </td>
-                  <td className="py-2.5 text-[#1F232B] font-poppins text-[14px] font-normal leading-normal">
+                  <td className="py-2.5 pl-40 text-[#1F232B] font-poppins text-[11px] font-normal leading-normal">
                     NA
                   </td>
-                  <td className="py-2.5 text-[#1F232B] font-poppins text-[14px] font-normal leading-none">
-                    ...
+                  <td className="py-2.5 pl-40 text-[#1F232B] font-poppins text-[11px] font-normal leading-none">
+                    {index === 0 ? "" : "..."}
                   </td>
                 </tr>
               ))}

@@ -11,7 +11,7 @@ export default function DailySummaryTab() {
       elevation={2}
     >
       <div className="px-4 pt-4 sm:px-5 sm:pt-5">
-        <Typography className="self-stretch text-[#1F232B] font-poppins text-[16px] font-semibold">
+        <Typography className="self-stretch text-[#1F232B] font-poppins text-[13px] font-semibold">
           Daily Summary
         </Typography>
       </div>

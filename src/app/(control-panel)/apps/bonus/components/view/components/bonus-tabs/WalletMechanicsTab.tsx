@@ -7,7 +7,18 @@ type Option = {
   title: string;
   description: string;
   tokens?: string[];
+  preview?: {
+    amount?: string;
+    balance: string;
+    tags: Array<{
+      label: string;
+      tone: PreviewTone;
+    }>;
+    note?: string;
+  };
 };
+
+type PreviewTone = "non-cash" | "cash" | "gone" | "payout";
 
 type Scenario = {
   id: string;
@@ -25,14 +36,22 @@ const sections: Scenario[] = [
     heading: "Stake Deduction Order",
     description: "When a player places a bet, which wallet is debited first?",
     sidebarTitle: "Bet Placed",
-    sidebarMeta: "Player bets Rs 500",
+    sidebarMeta: "Player bets ₹500",
     options: [
       {
         id: "deduct-non-cash-first",
         title: "Deduct from non-cash first",
         description:
-          "Bonus is consumed before real money. Player's cash stays safer longer.",
-        tokens: ["Bet Rs 500", "Rs 289", "NC-500", "Cash"],
+          "Bonus is consumed before real money. Player's cash stays safe longer.",
+        preview: {
+          amount: "Bet ₹500",
+          balance: "\u2193219",
+          tags: [
+            { label: "NC:-500", tone: "non-cash" },
+            { label: "Cash: 0", tone: "cash" },
+          ],
+          note: "if non-cash = 0, then cash is used",
+        },
       },
       {
         id: "deduct-cash-first",
@@ -52,10 +71,10 @@ const sections: Scenario[] = [
     id: "on-winning",
     heading: "On winning",
     description:
-      "Player bets Rs 500 and wins Rs 1,200. Where does the stake go? Where do winnings go?",
+      "Player bets ₹500 and wins ₹1,200. Where does the stake go? Where do winnings go?",
     sidebarTitle: "Player wins",
-    sidebarAmount: "Stake Rs 500, Payout",
-    sidebarMeta: "Rs 1,200",
+    sidebarAmount: "Stake ₹500, Payout",
+    sidebarMeta: "₹1,200",
     options: [
       {
         id: "stake-vanishes",
@@ -73,8 +92,16 @@ const sections: Scenario[] = [
         id: "entire-payout",
         title: "Entire payout to cash(stake + winnings)",
         description:
-          "Non-cash stake is deducted but total payout Rs 1,200 goes to cash. Most generous to player.",
-        tokens: ["Rs 289", "NC-500", "Game", "Winnings", "Cash"],
+          "Non-cash stake is deducted but total payout ₹1,700 goes to cash. Most generous to player.",
+        preview: {
+          balance: "\u2193219",
+          tags: [
+            { label: "NC:-500", tone: "non-cash" },
+            { label: "Gone", tone: "gone" },
+            { label: "Payout", tone: "payout" },
+            { label: "Cash: 0", tone: "cash" },
+          ],
+        },
       },
     ],
   },
@@ -83,8 +110,8 @@ const sections: Scenario[] = [
     heading: "On Losing",
     description: "Player bets Rs 500 and loses. What gets deducted?",
     sidebarTitle: "Player Losses",
-    sidebarAmount: "Stake Rs 500, Payout",
-    sidebarMeta: "Rs 0",
+    sidebarAmount: "Stake ₹500, Payout",
+    sidebarMeta: "₹0",
     options: [
       {
         id: "loss-non-cash",
@@ -111,30 +138,46 @@ const defaultSelections = {
 
 function getTokenClasses(token: string) {
   if (token.includes("NC") || token.includes("Non-cash")) {
-    return "bg-[#FEF3C7] text-[#92400E]";
+    return "bg-[#FAEEDA] rounded-[17px] text-[#5F4731] font-[Poppins] text-[10px] font-normal leading-normal";
   }
 
   if (token.includes("Cash")) {
-    return "bg-[#DCFCE7] text-[#166534]";
+    return "bg-[#E1F1E1] rounded-[17px] text-[#357533] font-[Poppins] text-[10px] font-normal leading-normal";
   }
 
   if (token.includes("Win") || token.includes("Winnings")) {
-    return "bg-[#DBEAFE] text-[#1D4ED8]";
+    return "rounded-[17px] bg-[#F6EDED]  text-[#A42F29] font-[Poppins] text-[10px] font-normal leading-normal";
   }
 
   if (token.includes("Lost")) {
-    return "bg-[#FEE2E2] text-[#B91C1C]";
+    return "rounded-[17px] bg-[#F6EDED] text-[#A42F29] font-[Poppins] text-[10px] font-normal leading-normal";
   }
 
   return "bg-[#F3F4F6] text-[#6B7280]";
 }
 
-function getCardClasses(selected: boolean) {
-  if (selected) {
-    return "border-[#93C5FD] bg-[#E8F1FF] shadow-[0_8px_18px_rgba(37,99,235,0.08)]";
+function getPreviewTagClasses(tone: PreviewTone) {
+  if (tone === "non-cash") {
+    return "bg-[#FAEEDA] rounded-[17px] text-[#5F4731] font-[Poppins] text-[10px] font-normal leading-normal";
   }
 
-  return "border-[#E5E7EB] bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] hover:border-[#CBD5E1]";
+  if (tone === "gone") {
+    return "rounded-[17px] bg-[#F6EDED] text-[#A42F29] font-[Poppins] text-[10px] font-normal leading-normal";
+  }
+
+  if (tone === "payout") {
+    return "rounded-[17px] bg-[#E7F1FB] text-[#1566C0] font-[Poppins] text-[10px] font-normal leading-normal";
+  }
+
+  return "bg-[#DCFCE7] text-[#166534]";
+}
+
+function getCardClasses(selected: boolean) {
+  if (selected) {
+    return "border-[#D6E6F8] bg-[#EAF3FE] shadow-none rounded-[8px]";
+  }
+
+  return "border border-[#DFE4EA] bg-white shadow-none hover:border-[#CBD5E1]";
 }
 
 function WalletMechanicsTab() {
@@ -143,30 +186,30 @@ function WalletMechanicsTab() {
   );
 
   return (
-    <div className="sm:p-5">
+    <div className="sm:p-2">
       <div className="space-y-7">
         {sections.map((section) => (
           <section key={section.id} className="space-y-3">
-            <div>
-              <h2 className="font-[Poppins] text-[16px] font-semibold leading-6 text-[#1F232B]">
+            <div className="-mt-2">
+              <h2 className="self-stretch text-[#1F232B] font-[Geist] text-[13px] font-semibold leading-[22.286px] tracking-[0.122px]">
                 {section.heading}
               </h2>
-              <p className="mt-1 font-[Poppins] text-[12px] leading-[18px] text-[#6B7280]">
+              <p className="-mt-1 self-stretch text-[#4B5563] font-[Poppins] text-[11px] font-normal leading-normal">
                 {section.description}
               </p>
             </div>
 
-            <div className="grid overflow-hidden rounded-[12px] border border-[#E5E7EB] bg-white shadow-[0_1px_3px_rgba(15,23,42,0.06)] sm:grid-cols-[96px_minmax(0,1fr)]">
-              <div className="flex min-h-[176px] flex-col justify-center border-r border-[#E5E7EB] bg-[#F9FAFB] px-4 py-4">
-                <p className="font-[Poppins] text-[13px] font-semibold leading-[18px] text-[#1F232B]">
+            <div className="grid w-full overflow-hidden rounded-[14px] border border-[#E0E0E0] bg-white shadow-[0_1px_3px_rgba(15,23,42,0.06)] sm:grid-cols-[132px_minmax(0,1fr)]">
+              <div className="flex min-h-[176px] w-[132px] flex-col justify-center border-r border-[#E5E7EB] bg-[#F9FAFB] px-4 py-4">
+                <p className="self-stretch text-[#1F232B] font-[Geist] text-[13px] font-semibold leading-[22.286px] tracking-[0.122px]">
                   {section.sidebarTitle}
                 </p>
                 {section.sidebarAmount ? (
-                  <p className="mt-2 font-[Poppins] text-[11px] font-medium leading-4 text-[#6B7280]">
+                  <p className="mt-1 whitespace-nowrap self-stretch text-[#4B5563] font-[Poppins] text-[11px] font-normal leading-normal">
                     {section.sidebarAmount}
                   </p>
                 ) : null}
-                <p className="mt-1 font-[Poppins] text-[11px] leading-4 text-[#6B7280]">
+                <p className="mt-1 whitespace-nowrap self-stretch text-[#4B5563] font-[Poppins] text-[11px] font-normal leading-normal">
                   {section.sidebarMeta}
                 </p>
               </div>
@@ -174,6 +217,9 @@ function WalletMechanicsTab() {
               <div className="space-y-2.5 p-3">
                 {section.options.map((option) => {
                   const selected = selectedOptions[section.id] === option.id;
+                  const isStakeDeductionOrder = section.id === "bet-placed";
+                  const isWinningSection = section.id === "on-winning";
+                  const isLosingSection = section.id === "on-losing";
 
                   return (
                     <label
@@ -193,24 +239,81 @@ function WalletMechanicsTab() {
                               [section.id]: option.id,
                             }))
                           }
-                          className="mt-[2px] h-4 w-4 border-[#CBD5E1] text-[#2563EB] focus:ring-[#2563EB]"
+                          className="peer sr-only"
                         />
 
-                        <div className="min-w-0 flex-1">
-                          <p className="font-[Poppins] text-[13px] font-semibold leading-[18px] text-[#1F232B]">
+                        <span
+                          className={`mt-[3px] flex h-[14px] w-[14px] shrink-0 items-center justify-center rounded-full border transition ${
+                            selected
+                              ? "border-[#5A9BEF] bg-white"
+                              : "border-[#C9D2DE] bg-white"
+                          }`}
+                        >
+                          <span
+                            className={`h-[6px] w-[6px] rounded-full transition ${
+                              selected ? "bg-[#2F80ED]" : "bg-transparent"
+                            }`}
+                          />
+                        </span>
+
+                        <div className="min-w-0 flex-1 -ml-1">
+                          <p className="self-stretch text-[#1F232B] font-[Geist] text-[13px] font-semibold leading-[16px] tracking-[0.122px]">
                             {option.title}
                           </p>
-                          <p className="mt-1 font-[Poppins] text-[11px] leading-[16px] text-[#6B7280]">
+                          <p className="-mt-0 self-stretch text-[#4B5563] font-[Poppins] text-[11px] font-normal leading-normal">
                             {option.description}
                           </p>
 
-                          {option.tokens ? (
-                            <div className="mt-3 rounded-[6px] border border-[#E5E7EB] bg-white px-3 py-2">
-                              <div className="flex flex-wrap items-center gap-1.5">
+                          {option.preview ? (
+                            <div
+                              className={`mt-2 -ml-5 rounded-[8px] border px-3 py-1 ${
+                                isStakeDeductionOrder || isWinningSection || isLosingSection
+                                  ? "border-[#D9E0E8] bg-white"
+                                  : "border-[#E0E0E0] bg-white"
+                              }`}
+                            >
+                              <div className="flex flex-wrap items-center gap-[6px]">
+                                {option.preview.amount ? (
+                                  <span className="mr-1 font-[Poppins] text-[11px] font-medium leading-4 text-[#4B5563]">
+                                    {option.preview.amount}
+                                  </span>
+                                ) : null}
+
+                                <span className="self-stretch text-[#7B8794] font-[Poppins] text-[11px] font-normal leading-normal">
+                                  {option.preview.balance}
+                                </span>
+
+                                {option.preview.tags.map((tag) => (
+                                  <span
+                                    key={`${option.id}-${tag.label}`}
+                                    className={`rounded-full px-2 py-[1px] font-[Poppins] text-[9px] font-medium leading-4 ${getPreviewTagClasses(
+                                      tag.tone
+                                    )}`}
+                                  >
+                                    {tag.label}
+                                  </span>
+                                ))}
+                              </div>
+
+                              {option.preview.note ? (
+                                <p className="mt-1 font-[Poppins] text-[11px] leading-4 text-[#6B7280]">
+                                  {option.preview.note}
+                                </p>
+                              ) : null}
+                            </div>
+                          ) : option.tokens ? (
+                            <div
+                              className={`mt-3 rounded-[8px] border bg-white px-4 py-3 ${
+                                isLosingSection
+                                  ? "border-[#D9E0E8]"
+                                  : "border-[#E5E7EB]"
+                              }`}
+                            >
+                              <div className="flex flex-wrap items-center gap-[6px]">
                                 {option.tokens.map((token, index) => (
                                   <span
                                     key={`${option.id}-${token}-${index}`}
-                                    className={`rounded-full px-2 py-[3px] font-[Poppins] text-[10px] font-medium leading-4 ${getTokenClasses(
+                                    className={`rounded-full px-2 py-[1px] font-[Poppins] text-[9px] font-medium leading-4 ${getTokenClasses(
                                       token
                                     )}`}
                                   >

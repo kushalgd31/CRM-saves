@@ -11,11 +11,11 @@ export default function InfoRow({
 }) {
   return (
     <div className="flex items-center justify-between gap-4 py-2">
-      <Typography className="text-[#1F232B] font-poppins text-[12px] font-medium">
+      <Typography className="text-[#1F232B] font-poppins text-[11px] font-medium">
         {label}
       </Typography>
 
-      <Box className="text-right text-[#1F232B] font-poppins text-[12px] font-normal">
+      <Box className="text-right text-[#1F232B] font-poppins text-[11px] font-normal">
         {value}
       </Box>
     </div>

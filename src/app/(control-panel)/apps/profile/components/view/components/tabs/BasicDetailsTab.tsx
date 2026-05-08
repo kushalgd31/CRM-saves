@@ -36,7 +36,7 @@ export default function BasicDetailsTab() {
     <>
       <Paper className="relative w-fullrounded-[12px] bg-white shadow-[0_1px_2px_-1px_rgba(0,0,0,0.10),0_1px_3px_0_rgba(0,0,0,0.10)] p-6 shadow-none">
         <div className="mb-5 flex items-center justify-between">
-          <Typography className="text-[#1F232B] font-poppins text-[16px] font-semibold leading-normal">
+          <Typography className="text-[#1F232B] font-poppins text-[14px] font-semibold leading-normal">
             Basic Details
           </Typography>
 
@@ -46,7 +46,7 @@ export default function BasicDetailsTab() {
             sx={{
               color: "#1566C0",
               fontFamily: "Poppins, sans-serif",
-              fontSize: "14px",
+              fontSize: "12px",
               fontStyle: "normal",
               fontWeight: 600,
               lineHeight: "normal",
@@ -77,7 +77,7 @@ export default function BasicDetailsTab() {
             ))}
           </Box>
 
-          <div className="absolute top-0 left-1/2 hidden h-full w-px -translate-x-1/2 bg-gray-200 lg:block"></div>
+          <div className="absolute top-0 left-1/2 hidden h-full w-px -translate-x-1/2 bg-gray-200 lg:block -mt-0"></div>
 
           <Box>
             <SectionTitle>Other Details</SectionTitle>

@@ -51,20 +51,20 @@ function GameWeighingTab() {
   };
 
   return (
-    <div className=" sm:p-5">
+    <div className=" sm:p-1">
       <div className="space-y-7">
         <section className="space-y-3">
           <div>
-            <h2 className="w-[737px] text-[#1F232B] font-[Geist] text-[16px] font-semibold leading-[22.286px] tracking-[0.122px]">
+            <h2 className="w-[737px] text-[#1F232B] font-[Geist] text-[13px] font-semibold leading-[22.286px] tracking-[0.122px]">
               Wagering contribution by game type
             </h2>
-            <p className="mt-1 w-[737px] text-[#4B5563] font-[Poppins] text-[12px] font-normal">
+            <p className="mt-0 w-[737px] text-[#4B5563] font-[Poppins] text-[11px] font-normal">
               100% = full contribution, 0% = game excluded from wagering
             </p>
           </div>
 
-          <div className="">
-            <div className="space-y-3 border-b border-[#E5E7EB] pb-4">
+          <div className="border-b border-[#D7D7D7] pb-3">
+            <div className="space-y-3 border-b border-[#E5E7EB]  pb-4">
               {contributions.map((item) => (
                 <div
                   key={item.id}
@@ -72,7 +72,7 @@ function GameWeighingTab() {
                 >
                   <label
                     htmlFor={item.id}
-                    className="font-[Poppins] text-[12px] font-medium leading-4 text-[#1F232B]"
+                    className="font-[Poppins] text-[11px] font-medium leading-4 text-[#1F232B]"
                   >
                     {item.label}
                   </label>
@@ -87,7 +87,7 @@ function GameWeighingTab() {
                       onChange={(event) =>
                         updateContribution(item.id, Number(event.target.value))
                       }
-                      className="h-[4px] w-full cursor-pointer appearance-none rounded-full bg-[#E5E7EB]
+                      className="h-[4px] w-full cursor-pointer appearance-none rounded-full  bg-[#E5E7EB]
                         [&::-webkit-slider-thumb]:appearance-none
                         [&::-webkit-slider-thumb]:h-[10px]
                         [&::-webkit-slider-thumb]:w-[10px]
@@ -113,35 +113,54 @@ function GameWeighingTab() {
               ))}
             </div>
 
-            <div className="pt-5">
-              <h3 className="self-stretch text-[#1F232B] font-[Geist] text-[16px] font-semibold leading-[22.286px] tracking-[0.122px]">
-                Excluded Games
-              </h3>
-              <p className="mt-1 self-stretch text-[#4B5563] font-[Poppins] text-[12px] font-normal">
-                These games cannot be played at all while bonus is active
-              </p>
+              <div className="pt-5">
+                <h3 className="self-stretch text-[#1F232B] font-[Geist] text-[13px] font-semibold leading-[22.286px] tracking-[0.122px]">
+                  Excluded Games
+                </h3>
+                <p className="mt-1 self-stretch text-[#4B5563] font-[Poppins] text-[11.44px] font-normal">
+                  These games cannot be played at all while bonus is active
+                </p>
 
-              <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-3">
-                {excludedGameDefaults.map((game) => {
-                  const checked = excludedGames.includes(game);
+                <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3">
+                  {excludedGameDefaults.map((game) => {
+                    const checked = excludedGames.includes(game);
 
-                  return (
-                    <label
-                      key={game}
-                      className="flex cursor-pointer items-center gap-2 rounded-[4px] border border-[#E5E7EB] bg-white px-3 py-2"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        onChange={() => toggleExcludedGame(game)}
-                        className="h-3.5 w-3.5 rounded-[3px] border-[#D1D5DB] text-[#2563EB] focus:ring-[#2563EB]"
-                      />
-                      <span className="font-[Poppins] text-[11px] leading-4 text-[#FFF]">
-                        {game}
-                      </span>
-                    </label>
-                  );
-                })}
+                    return (
+                      <label
+                        key={game}
+                        className={`flex h-[26px] cursor-pointer items-center gap-2 rounded-[4px] border px-3 transition ${
+                          checked
+                            ? "border-[#D6E6F8] bg-[#EAF3FE]"
+                            : "border-[#D9DEE7] bg-white"
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={() => toggleExcludedGame(game)}
+                          className="peer sr-only"
+                        />
+
+                        <span
+                          className={`flex h-[13px] w-[13px] shrink-0 items-center justify-center rounded-[3px] border transition ${
+                            checked
+                              ? "border-[#5A9BEF] bg-white"
+                              : "border-[#CDD5DF] bg-white"
+                          }`}
+                        >
+                          <span
+                            className={`h-[6px] w-[6px] rounded-[2px] transition ${
+                              checked ? "bg-[#2F80ED]" : "bg-transparent"
+                            }`}
+                          />
+                        </span>
+
+                        <span className="font-[Poppins] text-[11px] font-normal leading-4 text-[#1F232B]">
+                          {game}
+                        </span>
+                      </label>
+                    );
+                  })}
               </div>
             </div>
           </div>

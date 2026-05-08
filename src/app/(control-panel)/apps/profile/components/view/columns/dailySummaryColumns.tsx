@@ -13,7 +13,6 @@ export const dailySummaryColumns: MRT_ColumnDef<DailySummaryItem>[] = [
   { accessorKey: "loss", header: "GGR", size: 70 },
   { accessorKey: "ggr", header: "Bonus", size: 70 },
   { accessorKey: "bonus", header: "NGR", size: 80 },
-  { accessorKey: "ngr", header: "Actions", size: 80 },
   {
     id: "action",
     header: "Action",
