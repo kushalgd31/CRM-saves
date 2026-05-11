@@ -9,8 +9,8 @@ export default function ActivityGroup({
   items: ActivityItem[];
 }) {
   return (
-    <div className="mb-6">
-      <Typography className="mb-3 mt-3 text-[#4B5563] font-poppins text-[11px] font-semibold leading-normal uppercase">
+    <div className="mb-4">
+      <Typography className="mb-3 mt-3 text-[#4B5563] font-poppins text-[12px] font-semibold leading-normal uppercase">
         {title}
       </Typography>
 

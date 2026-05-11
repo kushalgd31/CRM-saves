@@ -10,7 +10,7 @@ function DepositDashboardAppHeader() {
 			<div className="flex flex-auto flex-col p-4 pb-0 md:px-8 md:pb-0">
 				<PageBreadcrumb className="mb-2" />
 				<div className="flex min-w-0 flex-auto flex-col">
-					<Typography className="text-3xl font-semibold tracking-tight">Deposit</Typography>
+					<Typography className="text-3xl font-semibold tracking-tight mt-3">Deposit</Typography>
 				</div>
 			</div>
 		</div>

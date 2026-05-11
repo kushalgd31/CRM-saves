@@ -51,21 +51,21 @@ function DepositDashboardAppView() {
 						animate="show"
 					>
 						<motion.div variants={item}>
-							<div className="grid w-full grid-cols-1 gap-4 lg:grid-cols-12">
-								<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:col-span-5">
+							<div className="grid w-full grid-cols-1 gap-2 lg:grid-cols-12">
+								<div className="grid grid-cols-1 gap-15 sm:grid-cols-2 lg:col-span-5">
 									{summaryCards.map((card) => (
 										<Paper
 											key={card.id}
-											className="flex min-h-[210px] flex-col rounded-2xl border border-slate-200 bg-white px-6 py-5 shadow-none"
+											className="flex flex-col rounded-lg border border-slate-200 bg-white px-2 py-5 h-38 w-55"
 											elevation={0}
 										>
 											<Typography className="text-left text-[11px] font-semibold leading-4 text-slate-900">
 												{card.title}
 											</Typography>
-											<Typography className="mt-10 text-center text-[42px] leading-none font-semibold tracking-tight text-slate-800">
+											<Typography className="mt-6 text-center text-[35px] leading-none font-semibold tracking-tight text-slate-800">
 												{card.value}
 											</Typography>
-											<div className="mt-auto pt-4 text-center">
+											<div className="mt-1 pt-4 text-center flex justify-between">
 												{card.footnotes.map((footnote) => (
 													<Typography
 														key={footnote.label}
@@ -85,7 +85,7 @@ function DepositDashboardAppView() {
 									))}
 								</div>
 
-								<div className="lg:col-span-7">
+								<div className="lg:col-span-7 relative bottom-6 right-4">
 									<DepositGatewayHealthCard health={health} />
 								</div>
 							</div>
@@ -93,7 +93,7 @@ function DepositDashboardAppView() {
 
 						<motion.div
 							variants={item}
-							className="mt-4 flex flex-auto flex-col"
+							className="flex flex-auto flex-col mt-[-2%]"
 						>
 							<DepositTable />
 						</motion.div>

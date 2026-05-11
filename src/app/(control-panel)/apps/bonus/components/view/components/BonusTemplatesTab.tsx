@@ -132,7 +132,7 @@ const bonusTemplates = [
 
 function BonusTemplatesTab() {
   return (
-    <div className="mt-7 space-y-6">
+    <div className="mt-3 space-y-6">
       {bonusTemplates.map((template) => (
         <div
           key={template.id}

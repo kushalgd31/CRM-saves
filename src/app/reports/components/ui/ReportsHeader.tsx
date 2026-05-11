@@ -160,7 +160,6 @@ function ReportsHeader({ filters, onFilterChange, onResetFilters, onSearch, titl
 									fontWeight: 600,
 									minHeight: 40,
 									px: 1.75,
-									textTransform: 'none'
 								}}
 							>
 									More Filters

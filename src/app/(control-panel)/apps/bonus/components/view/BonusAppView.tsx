@@ -113,7 +113,7 @@ function BonusAppView() {
             </div>
           </div>
 
-          <div className="mt-4 grid grid-cols-1 items-end gap-[24px] pb-4 md:grid-cols-[1.2fr_1.2fr_1.2fr_auto_auto]">
+          <div className="mt-4 grid grid-cols-1 items-end gap-[13px] pb-4 md:grid-cols-[1.2fr_1.2fr_1.2fr_auto_auto]">
             <div>
               <label className="mb-1 block text-[11.44px] font-medium text-[#1F232B] font-poppins">
                 Search
@@ -134,7 +134,6 @@ function BonusAppView() {
                 <option>Name...</option>
               </select>
 
-              
               <img
                 src="/assets/images/apps/profile/Vector (8).svg"
                 alt="dropdown"
@@ -151,7 +150,6 @@ function BonusAppView() {
                 <option>Name...</option>
               </select>
 
-            
               <img
                 src="/assets/images/apps/profile/Vector (8).svg"
                 alt="dropdown"
@@ -159,17 +157,19 @@ function BonusAppView() {
               />
             </div>
 
-            <button className="-mr-4 h-[30px] rounded-[6px] border border-[#1566C0] bg-[linear-gradient(180deg,rgba(48,48,48,0)_63.53%,rgba(255,255,255,0.15)_100%)] px-6 text-black font-geist text-[10px] font-medium leading-[13px] tracking-[0.122px]">
-              Reset Filter
-            </button>
+            <div className="flex items-center gap-7">
+              <button className="-mr-4 h-[30px] rounded-[6px] border border-[#1566C0] bg-[linear-gradient(180deg,rgba(48,48,48,0)_63.53%,rgba(255,255,255,0.15)_100%)] px-6 text-black font-geist text-[10px] font-medium leading-[13px] tracking-[0.122px]">
+                Reset Filter
+              </button>
 
-            <button
-              type="button"
-              onClick={() => setOpenCreateBonus(true)}
-              className="h-[30px] rounded-[6px] bg-black px-6 text-white font-[Geist] text-[10px] font-medium leading-[13px] tracking-[0.122px]"
-            >
-              + Create Template
-            </button>
+              <button
+                type="button"
+                onClick={() => setOpenCreateBonus(true)}
+                className="ml-auto flex h-[30px] w-[110px] items-center justify-start whitespace-nowrap rounded-[6px] bg-black pl-2 text-white font-[Geist] text-[10px] font-medium leading-[13px] tracking-[0.122px] -mr-4 "
+              >
+                + Create Template
+              </button>
+            </div>
           </div>
 
           {renderTabContent()}

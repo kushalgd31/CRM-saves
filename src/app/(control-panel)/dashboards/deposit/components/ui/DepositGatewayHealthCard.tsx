@@ -22,7 +22,7 @@ type DepositGatewayHealthCardProps = {
 function DepositGatewayHealthCard({ health }: DepositGatewayHealthCardProps) {
 	return (
 		<Paper
-			className="overflow-hidden rounded-2xl border border-slate-200 px-4 py-3 shadow-none"
+			className="overflow-hidden rounded-lg border border-slate-200 px-4 py-3 scale-78 w-170"
 			elevation={0}
 		>
 			<div className="flex h-full flex-col">

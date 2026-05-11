@@ -28,7 +28,8 @@ export default function ProfileTabs({
             letterSpacing: "0.122px",
           },
           "& .MuiTabs-indicator": {
-            backgroundColor: "#fff",
+            backgroundColor:
+              "bg-[linear-gradient(90deg,#F0F0F0_29.99%,rgba(240,240,240,0)_100%)]",
             height: "2px",
           },
         }}

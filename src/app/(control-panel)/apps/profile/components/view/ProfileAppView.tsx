@@ -70,7 +70,7 @@ export default function ProfileAppView() {
           onTabChange={handleTabChange}
         />
       }
-      content={<div className="w-full p-4 sm:p-6">{tabContent}</div>}
+      content={<div className="w-full  p-4 sm:p-6">{tabContent}</div>}
       scroll="page"
     />
   );

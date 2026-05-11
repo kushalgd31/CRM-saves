@@ -29,16 +29,14 @@ const navigationConfig: FuseNavItemType[] = [
 				type: 'item',
 				icon: 'lucide:clipboard-check',
 				url: '/dashboards/project'
-			},	
-					{
-						id: 'dashboards.transactions',
-						title: 'Transactions',
-						type: 'item',
-						icon: 'lucide:list',
-						url: '/dashboards/transactions'
-					}
-					
-				
+			},
+			{
+				id: 'dashboards.transactions',
+				title: 'Transactions',
+				type: 'item',
+				icon: 'lucide:list',
+				url: '/dashboards/transactions'
+			}
 		]
 	},
 	{
@@ -51,14 +49,21 @@ const navigationConfig: FuseNavItemType[] = [
 		children: [
 			{
 				id: 'dashboards.kyc',
-				title: 'KYC',
+				title: 'Players KYC',
 				type: 'item',
 				icon: 'lucide:badge-check',
 				url: '/dashboards/kyc'
 			},
+			{
+				id: 'dashboards.player-commission',
+				title: 'Player Commission',
+				type: 'item',
+				icon: 'lucide:wallet-cards',
+				url: '/dashboards/player-commission'
+			}
 		]
 	},
-	
+
 	{
 		id: 'finance',
 		title: 'Finance',
@@ -68,19 +73,19 @@ const navigationConfig: FuseNavItemType[] = [
 		translate: 'Finance',
 		children: [
 			{
-						id: 'dashboards.withdraw',
-						title: 'Withdraw',
-						type: 'item',
-						icon: 'lucide:arrow-down-to-line',
-						url: '/dashboards/withdraw'
-					},
-					{
-						id: 'dashboards.deposit',
-						title: 'Deposit',
-						type: 'item',
-						icon: 'lucide:wallet',
-						url: '/dashboards/deposit'
-					},
+				id: 'dashboards.withdraw',
+				title: 'Withdraw',
+				type: 'item',
+				icon: 'lucide:arrow-down-to-line',
+				url: '/dashboards/withdraw'
+			},
+			{
+				id: 'dashboards.deposit',
+				title: 'Deposit',
+				type: 'item',
+				icon: 'lucide:wallet',
+				url: '/dashboards/deposit'
+			}
 		]
 	},
 	{
@@ -92,16 +97,17 @@ const navigationConfig: FuseNavItemType[] = [
 		translate: 'Roles',
 		children: [
 			{
-						id: 'dashboards.sales',
-						title: 'Sales',
-						type: 'item',
-						icon: 'lucide:trending-up',
-						url: '/dashboards/sales'
-					},
-		]},
+				id: 'sales',
+				title: 'Sales Team',
+				type: 'item',
+				icon: 'lucide:trending-up',
+				url: '/dashboards/sales'
+			}
+		]
+	},
 	{
-		id: 'bonus-management',
-		title: 'Bonus Management',
+		id: 'Bonus Management',
+		title: 'Report',
 		subtitle: 'Create Bonus, view history',
 		type: 'group',
 		icon: 'lucide:feed',
@@ -114,8 +120,10 @@ const navigationConfig: FuseNavItemType[] = [
 				icon: 'lucide:gift',
 				url: '/apps/bonus'
 			},
+			
+			
 		]
-		},
+	},
 	{
 		id: 'reports',
 		title: 'Report',
@@ -196,8 +204,16 @@ const navigationConfig: FuseNavItemType[] = [
 				type: 'item',
 				icon: 'lucide:settings',
 				url: '/settings'
-			},]
-		}
+			},
+			{
+				id: 'profile',
+				title: 'Profile',
+				type: 'item',
+				icon: 'person',
+				url: '/apps/profile'
+			}
+		]
+	}
 ];
 
 export default navigationConfig;

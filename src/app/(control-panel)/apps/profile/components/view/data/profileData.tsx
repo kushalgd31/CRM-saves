@@ -57,7 +57,7 @@ export function getBasicDetailsPersonalDetails({
           <button
             type="button"
             onClick={onOpenLastSigninIpDrawer}
-            className="ml-1 text-[#3182CE] font-poppins text-[12px] font-semibold underline"
+            className="text-[#3182CE] font-poppins text-[12px] font-semibold underline"
           >
             <span className="text-[#1F232B]">(</span>
             View History
@@ -74,7 +74,7 @@ export function getBasicDetailsPersonalDetails({
           <button
             type="button"
             onClick={onOpenDeviceDrawer}
-            className="ml-1 text-[#3182CE] font-poppins text-[12px] font-semibold underline"
+            className="text-[#3182CE] font-poppins text-[12px] font-semibold underline"
           >
             <span className="text-[#1F232B]">(</span>
             View History
@@ -91,7 +91,7 @@ export function getBasicDetailsPersonalDetails({
           <button
             type="button"
             onClick={onOpenOsDrawer}
-            className="ml-1 text-[#3182CE] font-poppins text-[12px] font-semibold underline"
+            className="text-[#3182CE] font-poppins text-[12px] font-semibold underline"
           >
             <span className="text-[#1F232B]">(</span>
             View History

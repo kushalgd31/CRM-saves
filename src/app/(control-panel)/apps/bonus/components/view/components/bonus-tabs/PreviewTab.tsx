@@ -95,7 +95,7 @@ function PreviewTab() {
         </section>
 
         <section className="space-y-4">
-          <div className="grid items-center gap-3 sm:grid-cols-[72px_minmax(0,1fr)_86px] border-b border-[#D1D5DB] pb-3">
+          <div className="grid items-center gap-3 sm:grid-cols-[72px_minmax(0,1fr)_86px] border-b border-[#D1D5DB] pb-3 ">
             <span className="text-[#1F232B] font-[Poppins] text-[12px] font-normal">
               Wagering
             </span>

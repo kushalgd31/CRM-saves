@@ -55,20 +55,20 @@ function GameWeighingTab() {
       <div className="space-y-7">
         <section className="space-y-3">
           <div>
-            <h2 className="w-[737px] text-[#1F232B] font-[Geist] text-[13px] font-semibold leading-[22.286px] tracking-[0.122px]">
+            <h2 className="w-full text-[#1F232B] font-[Geist] text-[13px] font-semibold leading-[22.286px] tracking-[0.122px]">
               Wagering contribution by game type
             </h2>
-            <p className="mt-0 w-[737px] text-[#4B5563] font-[Poppins] text-[11px] font-normal">
+            <p className="mt-0 w-full text-[#4B5563] font-[Poppins] text-[11px] font-normal">
               100% = full contribution, 0% = game excluded from wagering
             </p>
           </div>
 
-          <div className="border-b border-[#D7D7D7] pb-3">
-            <div className="space-y-3 border-b border-[#E5E7EB]  pb-4">
+          <div className=" pb-3">
+            <div className="space-y-3   pb-4">
               {contributions.map((item) => (
                 <div
                   key={item.id}
-                  className="grid items-center gap-3 sm:grid-cols-[72px_minmax(0,1fr)_42px]"
+                  className="grid items-center gap-3  border-b border-[#E4E4E4] pb-3 sm:grid-cols-[72px_minmax(0,1fr)_42px]"
                 >
                   <label
                     htmlFor={item.id}
@@ -87,21 +87,21 @@ function GameWeighingTab() {
                       onChange={(event) =>
                         updateContribution(item.id, Number(event.target.value))
                       }
-                      className="h-[4px] w-full cursor-pointer appearance-none rounded-full  bg-[#E5E7EB]
+                      className="h-[4px] w-full cursor-pointer appearance-none rounded-[14px]  bg-[#E9E9E9]
                         [&::-webkit-slider-thumb]:appearance-none
-                        [&::-webkit-slider-thumb]:h-[10px]
-                        [&::-webkit-slider-thumb]:w-[10px]
+                        [&::-webkit-slider-thumb]:h-[13px]
+                        [&::-webkit-slider-thumb]:w-[13px]
                         [&::-webkit-slider-thumb]:rounded-full
                         [&::-webkit-slider-thumb]:border
-                        [&::-webkit-slider-thumb]:border-[#E5E7EB]
-                        [&::-webkit-slider-thumb]:bg-[#E5E7EB]
+                        [&::-webkit-slider-thumb]:border-[#E9E9E9]
+                        [&::-webkit-slider-thumb]:bg-[#E9E9E9]
                         [&::-webkit-slider-thumb]:shadow-[0_1px_2px_rgba(15,23,42,0.08)]
-                        [&::-moz-range-thumb]:h-[10px]
-                        [&::-moz-range-thumb]:w-[10px]
+                        [&::-moz-range-thumb]:h-[13px]
+                        [&::-moz-range-thumb]:w-[13px]
                         [&::-moz-range-thumb]:rounded-full
                         [&::-moz-range-thumb]:border
-                        [&::-moz-range-thumb]:border-[#E5E7EB]
-                        [&::-moz-range-thumb]:bg-[#E5E7EB]
+                        [&::-moz-range-thumb]:border-[#E9E9E9]
+                        [&::-moz-range-thumb]:bg-[#E9E9E9]
                         [&::-moz-range-thumb]:shadow-[0_1px_2px_rgba(15,23,42,0.08)]"
                     />
                   </div>
@@ -113,7 +113,7 @@ function GameWeighingTab() {
               ))}
             </div>
 
-              <div className="pt-5">
+              <div className="pt-5 -mt-4">
                 <h3 className="self-stretch text-[#1F232B] font-[Geist] text-[13px] font-semibold leading-[22.286px] tracking-[0.122px]">
                   Excluded Games
                 </h3>
@@ -121,7 +121,7 @@ function GameWeighingTab() {
                   These games cannot be played at all while bonus is active
                 </p>
 
-                <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3">
+                <div className="mt-2 mb-15 grid grid-cols-1 gap-2 sm:grid-cols-3">
                   {excludedGameDefaults.map((game) => {
                     const checked = excludedGames.includes(game);
 
@@ -130,7 +130,7 @@ function GameWeighingTab() {
                         key={game}
                         className={`flex h-[26px] cursor-pointer items-center gap-2 rounded-[4px] border px-3 transition ${
                           checked
-                            ? "border-[#D6E6F8] bg-[#EAF3FE]"
+                            ? "border-[1px solid #E1E1E1] rounded-[6px]"
                             : "border-[#D9DEE7] bg-white"
                         }`}
                       >
@@ -144,8 +144,8 @@ function GameWeighingTab() {
                         <span
                           className={`flex h-[13px] w-[13px] shrink-0 items-center justify-center rounded-[3px] border transition ${
                             checked
-                              ? "border-[#5A9BEF] bg-white"
-                              : "border-[#CDD5DF] bg-white"
+                              ? "border-[#B0B0B0] bg-white"
+                              : "border border-[#B0B0B0] bg-white rounded-[4px]"
                           }`}
                         >
                           <span

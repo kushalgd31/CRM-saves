@@ -75,10 +75,10 @@ export default function PermissionTab() {
             >
               <div className="flex items-center justify-between px-4 py-[9px]">
                 <div className="flex items-center gap-[8px]">
-                  <span className="w-[10px] text-[12px] leading-none text-[#6B7280]">
+                  <span className="w-[10px] text-[13px] leading-none text-[#6B7280]">
                     {">"}
                   </span>
-                  <Typography className="text-[#1F232B] font-geist text-[13px] font-medium leading-[16.25px] tracking-[0.122px]">
+                  <Typography className="text-[#1F232B] font-geist text-[12px] font-medium leading-[16.25px] tracking-[0.122px]">
                     {item.name}
                   </Typography>
                 </div>
@@ -150,8 +150,9 @@ export default function PermissionTab() {
                 Filter By Type:
               </Typography>
 
-              <select className="flex w-[96px] h-[20px] items-center justify-center rounded-[8px] border border-[#BDBEBF] bg-[rgba(255,255,255,0.06)] pt-[10px] pr-[11px] pb-[9px] pl-[11.961px]">
+              <select className="w-[96px] h-[30px] rounded-[8px] border border-[#BDBEBF] bg-[rgba(255,255,255,0.06)] px-[12px] text-[11px] text-[#1F232B] outline-none">
                 <option>Player</option>
+                
               </select>
             </div>
           </div>
@@ -192,8 +193,8 @@ export default function PermissionTab() {
                     NA
                   </td>
                   <td className="py-2.5 pl-40 text-[#1F232B] font-poppins text-[11px] font-normal leading-none">
-                    {index === 0 ? "" : "..."}
-                  </td>
+  ...
+</td>
                 </tr>
               ))}
             </tbody>

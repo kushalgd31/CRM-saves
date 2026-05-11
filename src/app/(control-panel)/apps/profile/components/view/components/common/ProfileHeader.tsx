@@ -16,14 +16,14 @@ export default function ProfileHeader({
   onTabChange: (event: SyntheticEvent, value: TabValue) => void;
 }) {
   return (
-    <div className="bg-white w-[1568px] h-[172px] ml-[52px]">
+    <div className="bg-white w-full h-[160px] ml-[44px]">
       <div className="flex w-[1464px] flex-col items-start gap-4">
         <div className="flex w-full flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div className="mt-[14px] flex items-center gap-[14px]">
             <Avatar
               src={profileHeader.avatar}
               alt="User avatar"
-              className="h-[94px] w-[94px] rounded-full"
+              className="h-[75px] w-[75px] rounded-full"
             />
 
             <div className="flex items-center gap-8">

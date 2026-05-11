@@ -8,6 +8,7 @@ import financeDashboardApi from './api/financeDashboardApi';
 import analyticsDashboardApi from './api/analyticsDashboardApi';
 import depositDashboardApi from './api/depositDashboardApi';
 import kycDashboardApi from './api/kycDashboardApi';
+import playerCommissionDashboardApi from './api/playerCommissionDashboardApi';
 import withdrawDashboardApi from './api/withdrawDashboardApi';
 import transactionsDashboardApi from './api/transactionsDashboardApi';
 import calendarApi from './api/calendarApi';
@@ -44,6 +45,7 @@ export const worker = setupWorker(
 		...analyticsDashboardApi,
 		...depositDashboardApi,
 		...kycDashboardApi,
+		...playerCommissionDashboardApi,
 		...withdrawDashboardApi,
 		...transactionsDashboardApi,
 		...calendarApi,
