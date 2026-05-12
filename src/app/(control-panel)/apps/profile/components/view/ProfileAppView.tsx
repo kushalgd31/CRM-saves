@@ -58,7 +58,7 @@ export default function ProfileAppView() {
       default:
         return null;
     }
-  }, [selectedTab]);
+  }, [selectedTab]);    
 
   return (
     <Root
