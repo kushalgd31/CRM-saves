@@ -48,6 +48,13 @@ const navigationConfig: FuseNavItemType[] = [
 		translate: 'Players',
 		children: [
 			{
+				id: 'dashboards.players',
+				title: 'Players',
+				type: 'item',
+				icon: 'lucide:users',
+				url: '/dashboards/players'
+			},
+			{
 				id: 'dashboards.kyc',
 				title: 'Players KYC',
 				type: 'item',
@@ -85,6 +92,20 @@ const navigationConfig: FuseNavItemType[] = [
 				type: 'item',
 				icon: 'lucide:wallet',
 				url: '/dashboards/deposit'
+			},
+			{
+				id: 'dashboards.agent-coin-management',
+				title: 'Agent Coin Management',
+				type: 'item',
+				icon: 'lucide:coins',
+				url: '/dashboards/agent-coin-management'
+			},
+			{
+				id: 'dashboards.whitelabel-coin-management',
+				title: 'Whitelabel Coin Management',
+				type: 'item',
+				icon: 'lucide:badge-dollar-sign',
+				url: '/dashboards/whitelabel-coin-management'
 			}
 		]
 	},

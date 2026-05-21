@@ -3,7 +3,7 @@ export type PlayerCommissionStatusType = 'pending' | 'approved' | 'rejected';
 export type PlayerCommissionSummaryCardType = {
 	id: string;
 	title: string;
-	value: number;
+	value: number | string;
 	time: string;
 	rate: string | null;
 	status: PlayerCommissionStatusType | 'total';
