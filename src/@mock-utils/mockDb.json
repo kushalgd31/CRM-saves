@@ -4508,7 +4508,7 @@
       },
       "currentRange": "DT",
       "data": {
-        "name": "Due Tasks",
+        "name": "New Registration",
         "count": {
           "DY": 21,
           "DT": 342,
@@ -4518,7 +4518,7 @@
           "name": "Completed",
           "count": {
             "DY": 6,
-            "DT": 7,
+            "DT": "+18%",
             "DTM": "-"
           }
         }
@@ -4526,36 +4526,36 @@
       "detail": "You can show some detailed information about this widget in here."
     },
     "overdue": {
-      "title": "Overdue",
+      "title": "Active Today",
       "data": {
         "name": "Tasks",
         "count": 4,
         "extra": {
-          "name": "Yesterday's overdue",
-          "count": 2
+          "name": "Yesterday",
+          "count": "+6%"
         }
       },
       "detail": "You can show some detailed information about this widget in here."
     },
     "issues": {
-      "title": "Issues",
+      "title": "Total Players",
       "data": {
         "name": "Open",
         "count": 89412,
         "extra": {
-          "name": "Closed today",
+          "name": "Lifetime registered",
           "count": 0
         }
       },
       "detail": "You can show some detailed information about this widget in here."
     },
     "features": {
-      "title": "Features",
+      "title": "KYC Pending",
       "data": {
         "name": "Proposals",
         "count": 127,
         "extra": {
-          "name": "Implemented",
+          "name": "Avg 2.3 days waiting",
           "count": 8
         }
       },
@@ -4567,8 +4567,8 @@
         "name": "Tasks",
         "count": 122,
         "extra": {
-          "name": "Unblocked today",
-          "count": 5
+          "name": "self-exluced",
+          "count": 2
         }
       },
       "detail": "You can show some detailed information about this widget in here."

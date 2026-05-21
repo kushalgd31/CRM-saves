@@ -44,22 +44,22 @@ function ScheduleWidget() {
 					</Tabs>
 				</div>
 			</div>
-			<table className='mt-5  border-collapse text-left'>
+			<table className='mt-5  border-collapse text-left font-[geist]'>
 				<thead>
-					<tr className='border-b text-sm uppercase tracking-wide text-slate-500'>
-						<th className='pb-3 pr-2 font-medium'>#</th>
-						<th className='pb-3 pr-2 font-medium'>Game</th>
-						<th className='pb-3 pr-2 font-medium'>Type</th>
-						<th className='pb-3 font-medium'>GGR</th>
+					<tr className='border-b text-sm uppercase tracking-wide text-center'>
+						<th className='pb-3 pr-2 font-semibold'>#</th>
+						<th className='pb-3 pr-2 font-semibold'>Game</th>
+						<th className='pb-3 pr-2 font-semibold'>Type</th>
+						<th className='pb-3 font-semibold'>GGR</th>
 					</tr>
 				</thead>
 				<tbody>
 					{currentSchedule.map((item, index) => (
-						<tr key={`${item.title}-${index}`} className='border-b last:border-b-0 text-sm'>
-							<td className='py-3 pr-4 text-slate-700'>{index + 1}</td>
-							<td className='py-3 pr-2 text-slate-900'>{item.title}</td>
-							<td className='py-3 pr-2 text-slate-700'>{item.type}</td>
-							<td className='py-3 text-slate-700'>{item.GGR || '—'}</td>
+						<tr key={`${item.title}-${index}`} className='border-b last:border-b-0 text-sm text-center'>
+							<td className='py-3 pr-4 text-md'>{index + 1}</td>
+							<td className='py-3 pr-2 font-semibold text-md'>{item.title}</td>
+							<td className='py-3 pr-3 text-md text-[#4B5563] font-medium'>{item.type}</td>
+							<td className='py-3 text-md text-[#4B5563] font-semibold'>{item.GGR || '—'}</td>
 						</tr>
 					))}
 				</tbody>

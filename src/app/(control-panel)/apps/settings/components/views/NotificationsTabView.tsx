@@ -71,10 +71,10 @@ function NotificationsTabView({ savedValues, onRegisterForm }: Props) {
         <div className="w-full max-w-5xl">
             <form className="flex w-full flex-col gap-12">
                 <div className='pl-4'>
-                    <Typography className="w-full text-lg font-medium">
+                    <Typography className="w-full text-xl font-medium">
                         <FuseSvgIcon size={24}>heroicons-outline:adjustments</FuseSvgIcon> Features
                     </Typography>
-                    <p className='text-slate-500 text-xl'>Enable or disable features for sports betting</p>
+                    <p className='text-slate-500 text-md'>Enable or disable features for sports betting</p>
                     <div className="grid w-full grid-cols-1 gap-1.5 mt-2">
                         {[
                             { name: 'Scorecard', label: 'Live Score Card', helper: 'Display live scores during matches' },
@@ -101,6 +101,11 @@ function NotificationsTabView({ savedValues, onRegisterForm }: Props) {
                                                         name={item.name}
                                                     />
                                                 }
+                                                slotProps={{
+                                                    typography:{
+                                                        className : "font-semibold"
+                                                    }
+                                                }}
                                             />
                                             <FormHelperText>{item.helper}</FormHelperText>
                                         </div>

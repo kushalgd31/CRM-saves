@@ -33,7 +33,7 @@ function KycSummaryCards({ cards }: KycSummaryCardsProps) {
 					</div>
 
 					<div className="mt-4 text-center">
-						<Typography className="text-7xl leading-none font-bold tracking-tight sm:text-8xl">
+						<Typography className="text-4xl leading-none font-bold tracking-tight sm:text-7xl">
 							{String(card.value)}
 						</Typography>
 					</div>

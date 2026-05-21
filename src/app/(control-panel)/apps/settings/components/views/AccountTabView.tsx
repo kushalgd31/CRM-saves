@@ -50,6 +50,53 @@ type Props = {
     onRegisterForm?: (api: { submit: () => Promise<void>; getValues: () => FormType }) => void;
 };
 
+type FieldConfig = {
+    name: keyof FormType;
+    id: string;
+    label: string;
+    helperText: string;
+    type?: 'text' | 'number';
+    inputProps?: {
+        min?: number;
+        className?: string;
+    };
+};
+
+const settingsFields: FieldConfig[] = [
+    {
+        name: 'maxOdd',
+        id: 'max-odd',
+        label: 'Max Odds Allowed to Bet',
+        helperText: 'Maximum odds users can place bets on',
+        type: 'number',
+        inputProps: { min: 0, className: 'bg-gray-100 border-gray-100 rounded-lg' }
+    },
+    {
+        name: 'maxCash',
+        id: 'max-cash',
+        label: 'Max Cashout (Odds) per Bet/Match',
+        helperText: 'Maximum odds for cashout per bet or match',
+        type: 'number',
+        inputProps: { min: 0, className: 'bg-gray-100 border-gray-100 rounded-lg' }
+    },
+    {
+        name: 'minBet',
+        id: 'min-bet',
+        label: 'Min Bet Amount per Bet',
+        helperText: 'Minimum amount users can bet',
+        type: 'number',
+        inputProps: { min: 0, className: 'bg-gray-100 border-gray-100 rounded-lg' }
+    },
+    {
+        name: 'maxBet',
+        id: 'max-bet',
+        label: 'Max Bet Amount per Bet',
+        helperText: 'Maximum amount users can bet',
+        type: 'number',
+        inputProps: { min: 0, className: 'bg-gray-100 border-gray-100 rounded-lg' }
+    }
+];
+
 function AccountTabView({ savedValues, onRegisterForm }: Props) {
     const { data: accountSettings } = useAccountSettings();
     const { mutate: updateAccountSettings } = useUpdateAccountSettings();
@@ -88,86 +135,30 @@ function AccountTabView({ savedValues, onRegisterForm }: Props) {
                         <Typography className="text-slate-500 text-xl">Configure betting limits and parameters</Typography>
                     </div>
                     <div className="grid w-full gap-4 sm:grid-cols-2">
-                        <div className="sm:col-span-2">
-                            <Controller
-                                control={control}
-                                name="maxOdd"
-                                render={({ field }) => (
-                                    <FormControl className="w-full">
-                                        <FormLabel className='text-black text-lg font-semibold'>Max Odds Allowed to Bet</FormLabel>
-                                        <TextField
-                                            {...field}
-                                            id="max-odd"
-                                            type="number"
-                                            inputProps={{ min: 0 }}
-                                            required
-                                            fullWidth
-                                        />
-                                        <FormHelperText>Maximum odds users can place bets on</FormHelperText>
-                                    </FormControl>
-                                )}
-                            />
-                        </div>
-                        <div className="sm:col-span-2">
-                            <Controller
-                                control={control}
-                                name="maxCash"
-                                render={({ field }) => (
-                                    <FormControl className="w-full">
-                                        <FormLabel className='text-black text-lg font-semibold'>Max Cashout (Odds) per Bet/Match</FormLabel>
-                                        <TextField
-                                            {...field}
-                                            id="max-cash"
-                                            type="number"
-                                            inputProps={{ min: 0 }}
-                                            required
-                                            fullWidth
-                                        />
-                                        <FormHelperText>Maximum odds for cashout per bet or match</FormHelperText>
-                                    </FormControl>
-                                )}
-                            />
-                        </div>
-                        <div className="sm:col-span-2">
-                            <Controller
-                                control={control}
-                                name="minBet"
-                                render={({ field }) => (
-                                    <FormControl className="w-full">
-                                        <FormLabel className='text-black text-lg font-semibold'>Min Bet Amount per Bet</FormLabel>
-                                        <TextField
-                                            {...field}
-                                            id="min-bet"
-                                            type="number"
-                                            inputProps={{ min: 0 }}
-                                            required
-                                            fullWidth
-                                        />
-                                        <FormHelperText>Minimum amount users can bet</FormHelperText>
-                                    </FormControl>
-                                )}
-                            />
-                        </div>
-                        <div className="sm:col-span-2">
-                            <Controller
-                                control={control}
-                                name="maxBet"
-                                render={({ field }) => (
-                                    <FormControl className="w-full">
-                                        <FormLabel className='text-black text-lg font-semibold'>Max Bet Amount per Bet</FormLabel>
-                                        <TextField
-                                            {...field}
-                                            id="max-bet"
-                                            type="number"
-                                            inputProps={{ min: 0 }}
-                                            required
-                                            fullWidth
-                                        />
-                                        <FormHelperText>Maximum amount users can bet</FormHelperText>
-                                    </FormControl>
-                                )}
-                            />
-                        </div>
+                        {settingsFields.map((fieldConfig) => (
+                            <div key={fieldConfig.name} className="sm:col-span-2">
+                                <Controller
+                                    control={control}
+                                    name={fieldConfig.name}
+                                    render={({ field }) => (
+                                        <FormControl className="w-full">
+                                            <FormLabel className='text-black text-lg font-semibold'>
+                                                {fieldConfig.label}
+                                            </FormLabel>
+                                            <TextField
+                                                {...field}
+                                                id={fieldConfig.id}
+                                                type={fieldConfig.type ?? 'text'}
+                                                inputProps={fieldConfig.inputProps}
+                                                required
+                                                fullWidth
+                                            />
+                                            <FormHelperText>{fieldConfig.helperText}</FormHelperText>
+                                        </FormControl>
+                                    )}
+                                />
+                            </div>
+                        ))}
                     </div>
                 </div>
             </form>
