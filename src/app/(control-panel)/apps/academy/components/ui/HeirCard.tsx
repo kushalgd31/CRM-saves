@@ -36,10 +36,10 @@ function OverdueWidget(props: OverdueWidgetProps) {
 	const { data, title } = widget;
 
 	return (
-		<Paper className="flex flex-auto flex-col overflow-hidden rounded-xl shadow-sm">
+		<Paper className="flex flex-auto flex-col overflow-hidden rounded-xl shadow-sm w-60 h-35">
 			<div className="flex items-center justify-between px-2 pt-2">
 				<Typography
-					className="truncate px-3 text-lg leading-6 font-medium tracking-tight"
+					className="truncate px-3 text-md leading-6 font-medium tracking-tight"
 					color="text.secondary"
 				>
 					{props.title || title}
@@ -48,8 +48,8 @@ function OverdueWidget(props: OverdueWidgetProps) {
 					<FuseSvgIcon color={props.data.color as any}>lucide:settings</FuseSvgIcon>
 				</IconButton>
 			</div>
-			<div className="mt-4 text-center">
-				<Typography className="text-7xl leading-none font-bold tracking-tight sm:text-8xl">
+			<div className="mt-2 text-center">
+				<Typography className="text-5xl leading-none font-bold tracking-tight sm:text-6xl">
 					{String(props.data.count)}
 				</Typography>
 				<Typography

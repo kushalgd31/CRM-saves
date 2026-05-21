@@ -82,7 +82,7 @@ type SettingsAppProps = {
 
 function SettingsAppView(){
 	return(
-		<div className="p-4">
+		<div className="p-4 font-[Geist]">
 			<div className='flex justify-between items-center mb-4 mx-2'>
 				<div>
 			<h1 className='text-3xl font-semibold'>Sports Settings</h1>
