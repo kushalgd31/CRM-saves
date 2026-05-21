@@ -162,7 +162,7 @@ const handleSubmit = async () => {
 
   return (
     <div className="p-6 font-[Geist]">
-      <div className="grid grid-cols-4 gap-4 mb-6">
+      <div className="grid h-20 grid-cols-4 gap-4 mb-6">
         <Heir title="Total Teams" data={data1}/>
         <Heir title="Total Layers" data={data2} />
         <Heir title="Avg Layers" data={data3}   />

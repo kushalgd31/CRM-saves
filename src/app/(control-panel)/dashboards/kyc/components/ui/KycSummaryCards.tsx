@@ -20,7 +20,7 @@ function KycSummaryCards({ cards }: KycSummaryCardsProps) {
 			{cards.map((card) => (
 				<Paper
 					key={card.id}
-					className="flex min-h-35 flex-auto flex-col overflow-hidden rounded-xl border border-slate-200 shadow-sm"
+					className="flex min-h-30 flex-auto flex-col overflow-hidden rounded-xl border border-slate-200 shadow-sm"
 					elevation={0}
 				>
 					<div className="items-center justify-between px-2 pt-2">
@@ -32,7 +32,7 @@ function KycSummaryCards({ cards }: KycSummaryCardsProps) {
 						</Typography>
 					</div>
 
-					<div className="mt-4 text-center">
+					<div className="mt-3 text-center">
 						<Typography className="text-4xl leading-none font-bold tracking-tight sm:text-7xl">
 							{String(card.value)}
 						</Typography>

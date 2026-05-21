@@ -36,7 +36,7 @@ function OverdueWidget(props: OverdueWidgetProps) {
 	const { data, title } = widget;
 
 	return (
-		<Paper className="flex flex-auto flex-col overflow-hidden rounded-xl shadow-sm w-60 h-35">
+		<Paper className="flex flex-auto flex-col overflow-hidden rounded-xl shadow-sm w-60 h-30">
 			<div className="flex items-center justify-between px-2 pt-2">
 				<Typography
 					className="truncate px-3 text-md leading-6 font-medium tracking-tight"

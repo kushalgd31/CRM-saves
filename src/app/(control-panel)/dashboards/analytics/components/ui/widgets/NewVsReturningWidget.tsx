@@ -119,7 +119,7 @@ function NewVsReturningWidget() {
 			</div>
 
 			<div className='flex justify-start'>
-			<div className="mt-3 flex h-65 flex-col relative">
+			<div className="mt-3 flex h-60 flex-col relative">
 				<ReactApexChart
 					className="flex h-full w-full flex-auto items-center justify-center relative right-10"
 					options={chartOptions}
@@ -129,7 +129,7 @@ function NewVsReturningWidget() {
 				/>
 			</div>
 			<div className="mt-8 self-center relative right-10">
-				<div className="-my-3 flex flex-col gap-2">
+				<div className="-my-3 flex flex-col gap-5">
 					{series.map((dataset, i) => (
 						<div
 							className="flex flex-col px-2 py-3 w-50 h-20 bg-[#F6F7F8] rounded-md"
