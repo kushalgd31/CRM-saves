@@ -30,7 +30,9 @@ function CompactHeirCard(props: OverdueWidgetProps) {
 				? 'text-[#155dfc]'
 				: props.data.color === 'secondary'
 					? 'text-[#9810fa]'
-					: 'text-[#101828]';
+					: props.data.color === 'warning'
+						? 'text-[#ff4f0f]'
+						: 'text-[#101828]';
 
 	return (
 		<Paper
@@ -40,7 +42,7 @@ function CompactHeirCard(props: OverdueWidgetProps) {
 			<Typography className={`font-['Geist'] text-[22px] leading-6 font-semibold ${toneClass}`}>
 				{String(props.data.count)}
 			</Typography>
-			<Typography className="mt-1 text-[13px] leading-4 font-[Geist] text-[#4A5565]">
+			<Typography className="mt-1 font-[Geist] text-[13px] leading-4 text-[#4A5565]">
 				{props.data.name}
 			</Typography>
 		</Paper>
