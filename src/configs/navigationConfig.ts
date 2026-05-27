@@ -48,6 +48,13 @@ const navigationConfig: FuseNavItemType[] = [
 		translate: 'Players',
 		children: [
 			{
+				id: 'dashboards.players',
+				title: 'Players',
+				type: 'item',
+				icon: 'lucide:users',
+				url: '/dashboards/players'
+			},
+			{
 				id: 'dashboards.kyc',
 				title: 'Players KYC',
 				type: 'item',
@@ -85,6 +92,20 @@ const navigationConfig: FuseNavItemType[] = [
 				type: 'item',
 				icon: 'lucide:wallet',
 				url: '/dashboards/deposit'
+			},
+			{
+				id: 'dashboards.agent-coin-management',
+				title: 'Agent Coin Management',
+				type: 'item',
+				icon: 'lucide:coins',
+				url: '/dashboards/agent-coin-management'
+			},
+			{
+				id: 'dashboards.whitelabel-coin-management',
+				title: 'Whitelabel Coin Management',
+				type: 'item',
+				icon: 'lucide:badge-dollar-sign',
+				url: '/dashboards/whitelabel-coin-management'
 			}
 		]
 	},
@@ -199,6 +220,13 @@ const navigationConfig: FuseNavItemType[] = [
 		translate: 'Others',
 		children: [
 			{
+				id: 'apps.whitelabel',
+				title: 'Whitelabel',
+				type: 'item',
+				icon: 'lucide:layers',
+				url: '/apps/whitelabel'
+			},
+			{
 				id: 'dashboards.settings',
 				title: 'Settings',
 				type: 'item',
@@ -218,6 +246,13 @@ const navigationConfig: FuseNavItemType[] = [
 				type: 'item',
 				icon: 'person',
 				url: '/apps/profile'
+			},
+			{
+				id: '2FA',
+				title: '2FA Setup',
+				type: 'item',
+				icon: 'lucide:shield-check',
+				url: '/others/2FA'
 			}
 		]
 	}

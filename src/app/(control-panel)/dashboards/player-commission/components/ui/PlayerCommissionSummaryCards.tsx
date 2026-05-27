@@ -16,7 +16,7 @@ const statusStyles: Record<PlayerCommissionSummaryCardType['status'], string> = 
 
 function PlayerCommissionSummaryCards({ cards }: PlayerCommissionSummaryCardsProps) {
 	return (
-		<div className="grid w-full grid-cols-5 gap-4">
+		<div className="grid w-full grid-cols-5 gap-4 font-['Geist']">
 			{cards.map((card) => (
 				<Paper
 					key={card.id}
@@ -25,21 +25,21 @@ function PlayerCommissionSummaryCards({ cards }: PlayerCommissionSummaryCardsPro
 				>
 					<div className="flex items-center justify-between px-2 pt-2">
 						<Typography
-							className="px-3 text-lg text-center leading-6 font-medium tracking-tight whitespace-nowrap"
+							className="px-3 text-sm text-center leading-6 font-medium font-[Geist] tracking-tight whitespace-nowrap"
 							color="text.secondary"
 						>
 							{card.title} { card.rate != null ?  <span> @ {card.rate}</span> : <span></span> }
 						</Typography>
 					</div>
 
-					<div className="mt-6 text-center">
-						<Typography className="text-4xl leading-none font-bold tracking-tight sm:text-6xl">
+					<div className="mt-5 text-center">
+						<Typography className="text-5xl leading-none font-bold tracking-tight">
 							{String(card.value)}
 						</Typography>
 					</div>
 
-					<div className='text-center mt-2 text-green-500'>
-						<Typography>
+					<div className='text-center mt-5 text-green-500 font-[Geist]'>
+						<Typography className='text-[10px]'>
 							{card.time}
 						</Typography>
 					</div>
@@ -50,3 +50,4 @@ function PlayerCommissionSummaryCards({ cards }: PlayerCommissionSummaryCardsPro
 }
 
 export default PlayerCommissionSummaryCards;
+``

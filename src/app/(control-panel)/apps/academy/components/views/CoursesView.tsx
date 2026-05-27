@@ -86,7 +86,7 @@ function CoursesView() {
 	return (
 		<Root
 			content={
-				<div>
+				<div className='font-[Geist]'>
 
 					<h1 className='ml-5 text-5xl font-medium'>Sales Hierarchy Configuration</h1>
 					<h5 className='ml-5 mt-2 text-xl text-slate-500'>Define sales team structures with flexible 1-5 layer hierarchies and commission rates</h5>

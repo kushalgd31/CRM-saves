@@ -76,39 +76,35 @@ function HomeTab() {
 				id: 'summary',
 				title: summaryWidget?.data.name ?? 'Summary',
 				value: summaryWidget?.data.count?.[currentRange] ?? '--',
-				footnote: `${summaryWidget?.data.extra.name ?? 'Updated'}: ${
-					summaryWidget?.data.extra.count?.[currentRange] ?? '--'
-				}`,
+				footnote: `${summaryWidget?.data.extra.count?.[currentRange] ?? '--'} vs ${summaryWidget?.data.extra.name ?? 'Updated'}`,
 				footnoteTone: 'text-emerald-600'
 			},
 			{
 				id: 'overdue',
 				title: overdueWidget?.title ?? 'Overdue',
 				value: overdueWidget?.data.count ?? '--',
-				footnote: `${overdueWidget?.data.extra.name ?? 'Updated'}: ${overdueWidget?.data.extra.count ?? '--'}`,
+				footnote: `${overdueWidget?.data.extra.count ?? '--'} vs ${overdueWidget?.data.extra.name ?? 'Updated'}`,
 				footnoteTone: 'text-emerald-600'
 			},
 			{
 				id: 'issues',
 				title: issuesWidget?.title ?? 'Issues',
 				value: issuesWidget?.data.count ?? '--',
-				footnote: `${issuesWidget?.data.extra.name ?? 'Updated'}: ${issuesWidget?.data.extra.count ?? '--'}`,
+				footnote: `${issuesWidget?.data.extra.name ?? 'Updated'}`,
 				footnoteTone: 'text-slate-500'
 			},
 			{
 				id: 'features',
 				title: featuresWidget?.title ?? 'Features',
 				value: featuresWidget?.data.count ?? '--',
-				footnote: `${featuresWidget?.data.extra.name ?? 'Updated'}: ${
-					featuresWidget?.data.extra.count ?? '--'
-				}`,
+				footnote: `${featuresWidget?.data.extra.name ?? 'Updated'}`,
 				footnoteTone: 'text-rose-500'
 			},
 			{
 				id: 'blocked',
 				title: blockedWidget?.title ?? 'Blocked',
 				value: blockedWidget?.data.count ?? '--',
-				footnote: `${blockedWidget?.data.extra.name ?? 'Updated'}: ${blockedWidget?.data.extra.count ?? '--'}`,
+				footnote: `${blockedWidget?.data.extra.count ?? '--'} ${blockedWidget?.data.extra.name ?? 'Updated'}`,
 				footnoteTone: 'text-slate-500'
 			}
 		];
@@ -290,7 +286,7 @@ function HomeTab() {
 					variants={item}
 				>
 					<Paper
-						className="flex min-h-[132px] flex-col rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
+						className="flex min-h-[132px] flex-col rounded-lg border border-slate-200 bg-white px-3 py-3 shadow-sm sm:px-4"
 						elevation={0}
 					>
 						{isWidgetsLoading ? (
@@ -303,7 +299,7 @@ function HomeTab() {
 							<>
 								<p className="text-md font-medium font-[geist]">{card.title}</p>
 								<div className="mt-4">
-									<p className="text-[38px] leading-none font-bold text-center tracking-tight text-slate-800">
+									<p className="text-[28px] leading-none font-bold text-center tracking-tight text-slate-800 sm:text-[32px] md:text-[38px] relative top-1">
 										{typeof card.value === 'number'
 											? card.value.toLocaleString('en-IN')
 											: card.value}

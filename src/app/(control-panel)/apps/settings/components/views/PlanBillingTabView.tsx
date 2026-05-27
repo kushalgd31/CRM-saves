@@ -147,7 +147,7 @@ function SettingField({ control, config, compact = false }: SettingFieldProps) {
                             '& .MuiOutlinedInput-root': {
                                 backgroundColor: '#f3f4f6',
                                 borderRadius: '0.75rem',
-                                padding: compact ? '8px 12px' : undefined
+                                padding: compact ? '2px 12px' : undefined
                             }
                         }}
                     />

@@ -82,13 +82,13 @@ type SettingsAppProps = {
 
 function SettingsAppView(){
 	return(
-		<div className="p-4">
-			<div className='flex justify-between items-center mb-4'>
+		<div className="p-4 font-[Geist]">
+			<div className='flex justify-between items-center mb-4 mx-2'>
 				<div>
 			<h1 className='text-3xl font-semibold'>Sports Settings</h1>
 			<p className='text-slate-500 mt-2'>Configure features and betting parameters for sports management</p>
 			</div>
-			<button className=' text-white text-xl px-2 py-2 bg-green-500 rounded-lg hover:cursor-pointer'><FuseSvgIcon className='inline mr-5'>lucide:save</FuseSvgIcon>Save Changes</button>
+			<button className=' text-white text-xl px-1.5 py-1.5 bg-green-500 rounded-lg hover:cursor-pointer'><FuseSvgIcon className='inline mr-5 mb-1'>lucide:save</FuseSvgIcon>Save Changes</button>
 		</div>
 		<div className='grid grid-cols-2 gap-4 m-2'>
 			<div className='bg-white rounded-xl p-2'>

@@ -9,6 +9,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Link from '@fuse/core/Link';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router';
+import { setSessionRedirectUrl } from '@fuse/core/FuseAuthorization/sessionRedirectUrl';
 import useJwtAuth from '../useJwtAuth';
 
 /**
@@ -33,6 +35,7 @@ const defaultValues: FormType = {
 
 function JwtSignInForm() {
 	const { signIn } = useJwtAuth();
+	const navigate = useNavigate();
 
 	const { control, formState, handleSubmit, setValue, setError } = useForm<FormType>({
 		mode: 'onChange',
@@ -50,10 +53,16 @@ function JwtSignInForm() {
 	function onSubmit(formData: FormType) {
 		const { email, password } = formData;
 
+		setSessionRedirectUrl('/otp');
+
 		signIn({
 			email,
 			password
-		}).catch((error) => {
+		})
+			.then(() => {
+				navigate('/otp');
+			})
+			.catch((error) => {
 			const errorData = error?.data as {
 				type: 'email' | 'password' | 'remember' | `root.${string}` | 'root';
 				message: string;
