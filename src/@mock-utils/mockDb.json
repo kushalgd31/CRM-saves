@@ -27141,5 +27141,108 @@
         ]
       }
     }
+  ],
+  "trusted_devices": [
+    {
+      "id": "trusted-1",
+      "title": "Chrome on Windows 11",
+      "deviceType": "desktop",
+      "browserVersion": "Chrome 125.0",
+      "osVersion": "Windows 11",
+      "location": "Bengaluru, India",
+      "ip": "103.45.67.89",
+      "trustedAt": "2024-05-24 10:30:00",
+      "expiresAt": "2024-06-23 10:30:00",
+      "status": "Active",
+      "current": true
+    },
+    {
+      "id": "trusted-2",
+      "title": "Safari on iPhone 15",
+      "deviceType": "mobile",
+      "browserVersion": "Safari 17.4",
+      "osVersion": "iOS 17.4",
+      "location": "Bengaluru, India",
+      "ip": "103.45.67.90",
+      "trustedAt": "2024-05-20 15:45:00",
+      "expiresAt": "2024-06-19 15:45:00",
+      "status": "Active",
+      "current": false
+    },
+    {
+      "id": "trusted-3",
+      "title": "Firefox on Linux",
+      "deviceType": "desktop",
+      "browserVersion": "Firefox 126.0",
+      "osVersion": "Ubuntu 22.04",
+      "location": "Mumbai, India",
+      "ip": "182.76.23.45",
+      "trustedAt": "2024-05-12 09:15:00",
+      "expiresAt": "2024-05-22 09:15:00",
+      "status": "Expired",
+      "current": false
+    }
+  ],
+  "login_history": [
+    {
+      "id": "login-1",
+      "timestamp": "2024-05-24 10:30:15",
+      "device": "Chrome on Windows 11",
+      "location": "Bengaluru, India",
+      "ip": "103.45.67.89",
+      "twoFaMethod": "TOTP",
+      "status": "Success",
+      "risk": "Low"
+    },
+    {
+      "id": "login-2",
+      "timestamp": "2024-05-23 14:20:30",
+      "device": "Safari on iPhone 15",
+      "location": "Bengaluru, India",
+      "ip": "103.45.67.90",
+      "twoFaMethod": "Trusted",
+      "status": "Success",
+      "risk": "Low"
+    },
+    {
+      "id": "login-3",
+      "timestamp": "2024-05-22 08:45:12",
+      "device": "Chrome on Windows 11",
+      "location": "Bengaluru, India",
+      "ip": "103.45.67.89",
+      "twoFaMethod": "Backup code",
+      "status": "Success",
+      "risk": "Medium"
+    },
+    {
+      "id": "login-4",
+      "timestamp": "2024-05-17 11:23:45",
+      "device": "Firefox on Linux",
+      "location": "Mumbai, India",
+      "ip": "182.76.23.45",
+      "twoFaMethod": "TOTP",
+      "status": "Blocked",
+      "risk": "High"
+    },
+    {
+      "id": "login-5",
+      "timestamp": "2024-05-17 11:22:18",
+      "device": "Firefox on Linux",
+      "location": "Mumbai, India",
+      "ip": "182.76.23.45",
+      "twoFaMethod": "TOTP",
+      "status": "Failed",
+      "risk": "High"
+    },
+    {
+      "id": "login-6",
+      "timestamp": "2024-05-17 11:20:52",
+      "device": "Firefox on Linux",
+      "location": "Mumbai, India",
+      "ip": "182.76.23.45",
+      "twoFaMethod": "TOTP",
+      "status": "Failed",
+      "risk": "High"
+    }
   ]
 }

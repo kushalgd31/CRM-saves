@@ -230,6 +230,13 @@ const navigationConfig: FuseNavItemType[] = [
 				type: 'item',
 				icon: 'person',
 				url: '/apps/profile'
+			},
+			{
+				id: '2FA',
+				title: '2FA Setup',
+				type: 'item',
+				icon: 'lucide:shield-check',
+				url: '/others/2FA'
 			}
 		]
 	}
