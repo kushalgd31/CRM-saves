@@ -218,6 +218,13 @@ const navigationConfig: FuseNavItemType[] = [
 		translate: 'Others',
 		children: [
 			{
+				id: 'apps.whitelabel',
+				title: 'Whitelabel',
+				type: 'item',
+				icon: 'lucide:globe-2',
+				url: '/apps/whitelabel'
+			},
+			{
 				id: 'dashboards.settings',
 				title: 'Settings',
 				type: 'item',

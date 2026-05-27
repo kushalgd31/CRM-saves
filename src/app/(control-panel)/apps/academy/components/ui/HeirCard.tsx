@@ -8,21 +8,46 @@ import WidgetDataType from '../../../../dashboards/project/api/types/home/Widget
 import { useGetWidget } from '../../../../dashboards/project/api/hooks/widgets/useGetWidget';
 
 type OverdueWidgetProps = {
-	title:string;
-	data:DataType;
-
+	title: string;
+	data: DataType;
+	variant?: 'default' | 'compact';
 };
 
 type DataType = {
-	count: number|string;
+	count: number | string;
 	name: string;
 	color?: string;
-}
+};
 
 /**
  * The OverdueWidget widget.
  */
-function OverdueWidget(props: OverdueWidgetProps) {
+function CompactHeirCard(props: OverdueWidgetProps) {
+	const toneClass =
+		props.data.color === 'success'
+			? 'text-[#00a63e]'
+			: props.data.color === 'primary'
+				? 'text-[#155dfc]'
+				: props.data.color === 'secondary'
+					? 'text-[#9810fa]'
+					: 'text-[#101828]';
+
+	return (
+		<Paper
+			className="flex h-[95px] w-full flex-col justify-center rounded-xl border border-[#eaecf0] bg-white px-5 shadow-none"
+			elevation={0}
+		>
+			<Typography className={`font-['Geist'] text-[22px] leading-6 font-semibold ${toneClass}`}>
+				{String(props.data.count)}
+			</Typography>
+			<Typography className="mt-1 text-[13px] leading-4 font-[Geist] text-[#4A5565]">
+				{props.data.name}
+			</Typography>
+		</Paper>
+	);
+}
+
+function DefaultHeirCard(props: OverdueWidgetProps) {
 	const { data: widget, isLoading } = useGetWidget<WidgetDataType>('overdue');
 
 	if (isLoading) {
@@ -36,16 +61,30 @@ function OverdueWidget(props: OverdueWidgetProps) {
 	const { data, title } = widget;
 
 	return (
-		<Paper className="flex flex-auto flex-col overflow-hidden rounded-xl shadow-sm w-60 h-30">
+		<Paper className="flex h-30 w-60 flex-auto flex-col overflow-hidden rounded-xl shadow-sm">
 			<div className="flex items-center justify-between px-2 pt-2">
 				<Typography
-					className="truncate px-3 text-md leading-6 font-medium tracking-tight"
+					className="text-md truncate px-3 leading-6 font-medium tracking-tight"
 					color="text.secondary"
 				>
 					{props.title || title}
 				</Typography>
 				<IconButton aria-label="more">
-					<FuseSvgIcon color={props.data.color as any}>lucide:settings</FuseSvgIcon>
+					<FuseSvgIcon
+						className={
+							props.data.color === 'success'
+								? 'text-green-600'
+								: props.data.color === 'primary'
+									? 'text-blue-600'
+									: props.data.color === 'secondary'
+										? 'text-purple-600'
+										: props.data.color === 'warning'
+											? 'text-amber-600'
+											: 'text-slate-600'
+						}
+					>
+						lucide:settings
+					</FuseSvgIcon>
 				</IconButton>
 			</div>
 			<div className="mt-2 text-center">
@@ -68,6 +107,14 @@ function OverdueWidget(props: OverdueWidgetProps) {
 			</Typography>
 		</Paper>
 	);
+}
+
+function OverdueWidget(props: OverdueWidgetProps) {
+	if (props.variant === 'compact') {
+		return <CompactHeirCard {...props} />;
+	}
+
+	return <DefaultHeirCard {...props} />;
 }
 
 export default memo(OverdueWidget);
