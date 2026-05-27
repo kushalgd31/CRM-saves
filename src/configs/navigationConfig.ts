@@ -221,7 +221,7 @@ const navigationConfig: FuseNavItemType[] = [
 				id: 'apps.whitelabel',
 				title: 'Whitelabel',
 				type: 'item',
-				icon: 'lucide:globe-2',
+				icon: 'lucide:layers',
 				url: '/apps/whitelabel'
 			},
 			{
