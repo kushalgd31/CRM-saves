@@ -61,8 +61,8 @@ export default function PermissionTab() {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="relative w-full rounded-[12px] border border-[#E6ECF2] bg-white p-4 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
+    <div className="space-y-4 -mt-2">
+      <div className="relative w-full rounded-[12px] bg-white shadow-[0_1px_2px_-1px_rgba(0,0,0,0.10),0_1px_3px_0_rgba(0,0,0,0.10)] p-4 ">
         <Typography className="text-[#1F232B] font-poppins text-[13px] font-semibold leading-normal">
           Permissions
         </Typography>
@@ -74,11 +74,11 @@ export default function PermissionTab() {
               className="overflow-hidden rounded-[6px] border border-[#E5E7EB] bg-white"
             >
               <div className="flex items-center justify-between px-4 py-[9px]">
-                <div className="flex items-center gap-[8px]">
-                  <span className="w-[10px] text-[13px] leading-none text-[#6B7280]">
+                <div className="flex items-center gap-[5px]">
+                  <span className="w-[10px] text-[11px] leading-none text-[#6B7280]">
                     {">"}
                   </span>
-                  <Typography className="text-[#1F232B] font-geist text-[12px] font-medium leading-[16.25px] tracking-[0.122px]">
+                  <Typography className="text-[#1F232B] font-geist text-[11px] font-medium leading-[16.25px] tracking-[0.122px]">
                     {item.name}
                   </Typography>
                 </div>
@@ -106,11 +106,11 @@ export default function PermissionTab() {
                       key={childIndex}
                       className="flex items-center justify-between py-[6px] pr-[10px]"
                     >
-                      <div className="flex items-center gap-2 pl-3">
-                        <span className="text-[13px] text-[#6B7280]">
+                      <div className="flex items-center gap-1 pl-3">
+                        <span className="text-[11px] text-[#6B7280]">
                           {"•"}
                         </span>
-                        <Typography className="text-[#1F232B] font-poppins text-[13px] font-medium leading-normal">
+                        <Typography className="text-[#1F232B] font-poppins text-[11px] font-medium leading-normal">
                           {child.name}
                         </Typography>
                       </div>
@@ -138,7 +138,7 @@ export default function PermissionTab() {
         </div>
       </div>
 
-      <div className="relative w-full rounded-[12px] border border-[#E6ECF2] bg-white p-4 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
+      <div className="relative w-full rounded-[12px] bg-white shadow-[0_1px_2px_-1px_rgba(0,0,0,0.10),0_1px_3px_0_rgba(0,0,0,0.10)] p-4 ">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
             <Typography className="text-[#1F232B] font-geist text-[13px] font-medium leading-[24px] tracking-[-0.4px]">
@@ -183,17 +183,21 @@ export default function PermissionTab() {
                   key={index}
                   className="border-b border-[#E0E0E0] last:border-b-0"
                 >
-                  <td className="py-2.5 pl-40 text-[#1F232B] font-poppins text-[11px] font-normal leading-normal ">
+                  <td className="py-2.5 pl-40 text-[#1F232B] font-poppins text-[10px] font-normal leading-normal ">
                     {item}
                   </td>
-                  <td className="py-2.5 pl-40 text-[#1F232B] font-poppins text-[11px] font-normal leading-normal">
+                  <td className="py-2.5 pl-40 text-[#1F232B] font-poppins text-[10px] font-normal leading-normal">
                     Not Set
                   </td>
-                  <td className="py-2.5 pl-40 text-[#1F232B] font-poppins text-[11px] font-normal leading-normal">
+                  <td className="py-2.5 pl-46 text-[#1F232B] font-poppins text-[10px] font-normal leading-normal">
                     NA
                   </td>
-                  <td className="py-2.5 pl-40 text-[#1F232B] font-poppins text-[11px] font-normal leading-none">
-  ...
+                  <td className="py-2.5 pl-44 text-[#1F232B] font-poppins text-[10px] font-normal leading-none">
+  <img
+      src="/assets/images/apps/profile/fi_512222.svg"
+      alt="icon"
+      className="h-2 w-2"
+    />
 </td>
                 </tr>
               ))}

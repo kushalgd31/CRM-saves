@@ -57,7 +57,7 @@ export function getBasicDetailsPersonalDetails({
           <button
             type="button"
             onClick={onOpenLastSigninIpDrawer}
-            className="text-[#3182CE] font-poppins text-[12px] font-semibold underline"
+            className="text-[#3182CE] font-poppins text-[10px] font-semibold underline"
           >
             <span className="text-[#1F232B]">(</span>
             View History
@@ -74,7 +74,7 @@ export function getBasicDetailsPersonalDetails({
           <button
             type="button"
             onClick={onOpenDeviceDrawer}
-            className="text-[#3182CE] font-poppins text-[12px] font-semibold underline"
+            className="text-[#3182CE] font-poppins text-[10px] font-semibold underline"
           >
             <span className="text-[#1F232B]">(</span>
             View History
@@ -91,7 +91,7 @@ export function getBasicDetailsPersonalDetails({
           <button
             type="button"
             onClick={onOpenOsDrawer}
-            className="text-[#3182CE] font-poppins text-[12px] font-semibold underline"
+            className="text-[#3182CE] font-poppins text-[10px] font-semibold underline"
           >
             <span className="text-[#1F232B]">(</span>
             View History
@@ -105,7 +105,7 @@ export function getBasicDetailsPersonalDetails({
       value: (
         <span>
           Chrome
-          <span className=" text-[#3182CE] font-poppins text-[12px] font-semibold underline">
+          <span className=" text-[#3182CE] font-poppins text-[10px] font-semibold underline">
             <span className="text-[#1F232B]">(</span>
             View History
             <span className="text-[#1F232B]">)</span>
@@ -123,11 +123,11 @@ export const basicDetailsOtherDetails: InfoItem[] = [
   {
     label: "KYC:",
     value: (
-      <div className="flex items-center justify-end gap-[10px]">
+      <div className="flex items-center justify-end gap-[6px]">
         <img
           src="/assets/images/apps/profile/mukti01.svg"
           alt="tick"
-          className="h-[12px] w-[12px]"
+          className="h-[10px] w-[10px]"
         />
         <span>Approved</span>
       </div>
@@ -164,11 +164,11 @@ export const financialOtherDetails: InfoItem[] = [
   {
     label: "KYC Status:",
     value: (
-      <div className="flex items-center justify-end gap-[10px]">
+      <div className="flex items-center justify-end gap-[6px]">
         <img
           src="/assets/images/apps/profile/mukti01.svg"
           alt="tick"
-          className="h-[12px] w-[12px]"
+          className="h-[10px] w-[10px]"
         />
         <span>Approved</span>
       </div>
@@ -504,7 +504,7 @@ export const simpleTimelineSections: ActivitySection[] = [
           <>
             Lead stage change from <strong>Confirmed</strong> to{" "}
             <strong>Shipped</strong> by{" "}
-            <span className="text-[#1566C0] font-poppins text-[12px] font-bold not-italic leading-normal">
+            <span className="text-[#1566C0] font-poppins text-[10px] font-bold not-italic leading-normal">
               Praz
             </span>
           </>
@@ -516,7 +516,7 @@ export const simpleTimelineSections: ActivitySection[] = [
           <>
             Lead stage changed from <strong>Punched</strong> to{" "}
             <strong>Confirmed</strong> by{" "}
-            <span className="text-[#1566C0] font-poppins text-[12px] font-bold not-italic leading-normal">
+            <span className="text-[#1566C0] font-poppins text-[10px] font-bold not-italic leading-normal">
               System
             </span>{" "}
             through <strong>Automation</strong>
@@ -529,7 +529,7 @@ export const simpleTimelineSections: ActivitySection[] = [
           <>
             Lead stage change from <strong>Confirmed</strong> to{" "}
             <strong>Shipped</strong> by{" "}
-            <span className="text-[#1566C0] font-poppins text-[12px] font-bold not-italic leading-normal">
+            <span className="text-[#1566C0] font-poppins text-[10px] font-bold not-italic leading-normal">
               Praz
             </span>
           </>
@@ -546,7 +546,7 @@ export const simpleTimelineSections: ActivitySection[] = [
           <>
             Lead stage change from <strong>Confirmed</strong> to{" "}
             <strong>Shipped</strong> by{" "}
-            <span className="text-[#1566C0] font-poppins text-[12px] font-bold not-italic leading-normal">
+            <span className="text-[#1566C0] font-poppins text-[10px] font-bold not-italic leading-normal">
               Praz
             </span>
           </>
@@ -558,7 +558,7 @@ export const simpleTimelineSections: ActivitySection[] = [
           <>
             Lead stage change from <strong>Confirmed</strong> to{" "}
             <strong>Shipped</strong> by{" "}
-            <span className="text-[#1566C0] font-poppins text-[12px] font-bold not-italic leading-normal">
+            <span className="text-[#1566C0] font-poppins text-[10px] font-bold not-italic leading-normal">
               Praz
             </span>
           </>
@@ -575,7 +575,7 @@ export const simpleTimelineSections: ActivitySection[] = [
           <>
             Lead stage change from <strong>Confirmed</strong> to{" "}
             <strong>Shipped</strong> by{" "}
-            <span className="text-[#1566C0] font-poppins text-[12px] font-bold not-italic leading-normal">
+            <span className="text-[#1566C0] font-poppins text-[10px] font-bold not-italic leading-normal">
               Praz
             </span>
           </>
@@ -587,7 +587,7 @@ export const simpleTimelineSections: ActivitySection[] = [
           <>
             Lead stage change from <strong>Confirmed</strong> to{" "}
             <strong>Shipped</strong> by{" "}
-            <span className="text-[#1566C0] font-poppins text-[12px] font-bold not-italic leading-normal">
+            <span className="text-[#1566C0] font-poppins text-[10px] font-bold not-italic leading-normal">
               Praz
             </span>
           </>
@@ -599,7 +599,7 @@ export const simpleTimelineSections: ActivitySection[] = [
           <>
             Lead stage change from <strong>Confirmed</strong> to{" "}
             <strong>Shipped</strong> by{" "}
-            <span className="text-[#1566C0] font-poppins text-[12px] font-bold not-italic leading-normal">
+            <span className="text-[#1566C0] font-poppins text-[10px] font-bold not-italic leading-normal">
               Praz
             </span>
           </>
@@ -619,7 +619,7 @@ export const notesTimelineSections: ActivitySection[] = [
           <>
             Lead stage change from <strong>Confirmed</strong> to{" "}
             <strong>Shipped</strong> by{" "}
-            <span className="text-[#1566C0] font-poppins text-[12px] font-bold not-italic leading-normal">
+            <span className="text-[#1566C0] font-poppins text-[10px] font-bold not-italic leading-normal">
               Praz
             </span>
           </>
@@ -631,7 +631,7 @@ export const notesTimelineSections: ActivitySection[] = [
           <>
             Lead stage changed from <strong>Punched</strong> to{" "}
             <strong>Confirmed</strong> by{" "}
-            <span className="text-[#1566C0] font-poppins text-[12px] font-bold not-italic leading-normal">
+            <span className="text-[#1566C0] font-poppins text-[10px] font-bold not-italic leading-normal">
               System
             </span>{" "}
             through <strong>Automation</strong>
@@ -649,7 +649,7 @@ export const notesTimelineSections: ActivitySection[] = [
           <>
             Lead stage change from <strong>Confirmed</strong> to{" "}
             <strong>Shipped</strong> by{" "}
-            <span className="text-[#1566C0] font-poppins text-[12px] font-bold not-italic leading-normal">
+            <span className="text-[#1566C0] font-poppins text-[10px] font-bold not-italic leading-normal">
               Praz
             </span>
           </>
@@ -661,7 +661,7 @@ export const notesTimelineSections: ActivitySection[] = [
           <>
             Lead stage change from <strong>Confirmed</strong> to{" "}
             <strong>Shipped</strong> by{" "}
-            <span className="text-[#1566C0] font-poppins text-[12px] font-bold not-italic leading-normal">
+            <span className="text-[#1566C0] font-poppins text-[10px] font-bold not-italic leading-normal">
               Praz
             </span>
           </>
@@ -673,7 +673,7 @@ export const notesTimelineSections: ActivitySection[] = [
           <>
             Lead stage change from <strong>Confirmed</strong> to{" "}
             <strong>Shipped</strong> by{" "}
-            <span className="text-[#1566C0] font-poppins text-[12px] font-bold not-italic leading-normal">
+            <span className="text-[#1566C0] font-poppins text-[10px] font-bold not-italic leading-normal">
               Praz
             </span>
           </>
@@ -690,7 +690,7 @@ export const notesTimelineSections: ActivitySection[] = [
           <>
             Lead stage change from <strong>Confirmed</strong> to{" "}
             <strong>Shipped</strong> by{" "}
-            <span className="text-[#1566C0] font-poppins text-[12px] font-bold not-italic leading-normal">
+            <span className="text-[#1566C0] font-poppins text-[10px] font-bold not-italic leading-normal">
               Praz
             </span>
           </>
@@ -702,7 +702,7 @@ export const notesTimelineSections: ActivitySection[] = [
           <>
             Lead stage change from <strong>Confirmed</strong> to{" "}
             <strong>Shipped</strong> by{" "}
-            <span className="text-[#1566C0] font-poppins text-[12px] font-bold not-italic leading-normal">
+            <span className="text-[#1566C0] font-poppins text-[10px] font-bold not-italic leading-normal">
               Praz
             </span>
           </>
@@ -714,7 +714,7 @@ export const notesTimelineSections: ActivitySection[] = [
           <>
             Lead stage change from <strong>Confirmed</strong> to{" "}
             <strong>Shipped</strong> by{" "}
-            <span className="text-[#1566C0] font-poppins text-[12px] font-bold not-italic leading-normal">
+            <span className="text-[#1566C0] font-poppins text-[10px] font-bold not-italic leading-normal">
               Praz
             </span>
           </>

@@ -10,12 +10,12 @@ export default function InfoRow({
   value: ReactNode;
 }) {
   return (
-    <div className="flex items-center justify-between gap-4 py-2">
-      <Typography className="text-[#1F232B] font-poppins text-[11px] font-medium">
+    <div className="flex items-center justify-between gap-4 py-1 ml-1 mt-2">
+      <Typography className="text-[#1F232B] font-poppins text-[10px] font-medium">
         {label}
       </Typography>
 
-      <Box className="text-right text-[#1F232B] font-poppins text-[11px] font-normal">
+      <Box className="text-right text-[#1F232B] font-poppins text-[10px] font-normal">
         {value}
       </Box>
     </div>

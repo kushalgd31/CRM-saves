@@ -2,7 +2,7 @@ import { Drawer } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import type { LastSigninIpHistoryItem } from "../../types";
 
-export default function LastSigninIpHistoryDrawer({
+export default function   LastSigninIpHistoryDrawer({
   open,
   onClose,
   history,

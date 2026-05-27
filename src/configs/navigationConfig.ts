@@ -206,6 +206,13 @@ const navigationConfig: FuseNavItemType[] = [
 				url: '/settings'
 			},
 			{
+				id: 'apps.registration-config',
+				title: 'Registration Config',
+				type: 'item',
+				icon: 'lucide:user-plus',
+				url: '/apps/registration-config'
+			},
+			{
 				id: 'profile',
 				title: 'Profile',
 				type: 'item',

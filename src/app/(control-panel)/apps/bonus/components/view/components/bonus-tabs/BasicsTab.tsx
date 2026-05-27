@@ -51,7 +51,7 @@ function BasicsTab() {
 
   <div className="grid grid-cols-1 gap-x-5 gap-y-4 sm:grid-cols-2">
     <div>
-      <label className="-mt-1 mb-0 block self-stretch text-[#1F232B] font-[Poppins] text-[13px] font-medium leading-normal">
+      <label className="-mt-1 mb-0 block self-stretch text-[#1F232B] font-[Poppins] text-[13px] font-semibold leading-normal">
         Template name
       </label>
       <input
@@ -87,7 +87,7 @@ function BasicsTab() {
     </div>
 
     <div>
-      <label className="mb-0 block self-stretch text-[#1F232B] font-[Poppins] text-[13px] font-medium leading-normal">
+      <label className="mb-0 block self-stretch text-[#1F232B] font-[Poppins] font-[semibold] text-[13px] font-medium leading-normal">
         Maximum bonus (cap)
       </label>
       <input

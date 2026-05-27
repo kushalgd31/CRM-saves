@@ -1,21 +1,9 @@
-@layer base, mui, theme, components, utilities;
+@layer theme, base, mui, components, utilities;
 
-/**
-Tailwind base styles
-*/
-@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss";
+@source "../**/*.{html,js,jsx,ts,tsx}";
 
-@import './app-base.css';
-
-/**
-Tailwind theme styles
-*/
-@import "tailwindcss/theme.css" layer(theme);
-
-/**
-Tailwind utilities styles
-*/
-@import "tailwindcss/utilities.css" layer(utilities);
+@import './app-base.css' layer(base);
 
 
 @layer utilities {

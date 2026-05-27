@@ -43,7 +43,7 @@ function CreateBonusDrawer({ open, onClose }: CreateBonusDrawerProps) {
 
   const activeIndex = useMemo(
     () => tabs.findIndex((tab) => tab === activeTab),
-    [activeTab]
+    [activeTab],
   );
 
   const isLastTab = activeIndex === tabs.length - 1;
@@ -100,11 +100,11 @@ function CreateBonusDrawer({ open, onClose }: CreateBonusDrawerProps) {
         aria-modal="true"
         aria-labelledby="create-bonus-drawer-title"
       >
-          <div className="-mt-2 flex items-center justify-between border-b border-[#DADADA] bg-white pt-[10px] pb-[2px]">
-            <h2
-              id="create-bonus-drawer-title"
-              className="ml-6 text-[#1F232B] font-[Geist] text-[14px] font-bold leading-[22.286px] tracking-[0.122px]"
-            >
+        <div className="-mt-2 flex items-center justify-between border-b border-[#DADADA] bg-white pt-[10px] pb-[2px]">
+          <h2
+            id="create-bonus-drawer-title"
+            className="ml-6 text-[#1F232B] font-[Geist] text-[14px] font-bold leading-[22.286px] tracking-[0.122px]"
+          >
             Create Bonus
           </h2>
 
@@ -114,7 +114,11 @@ function CreateBonusDrawer({ open, onClose }: CreateBonusDrawerProps) {
             className="inline-flex h-8 w-8 items-center justify-center rounded-full text-[#6B7280] transition hover:bg-[#F3F4F6] hover:text-[#111827]"
             aria-label="Close drawer"
           >
-            <img src="/assets/images/apps/profile/vector.svg" alt="kkk" className="w-3 h-3 mr-6" />
+            <img
+              src="/assets/images/apps/profile/vector.svg"
+              alt="kkk"
+              className="w-3 h-3 mr-6"
+            />
           </button>
         </div>
 
@@ -160,9 +164,7 @@ function CreateBonusDrawer({ open, onClose }: CreateBonusDrawerProps) {
               onClick={handleNext}
               disabled={isLastTab}
               className={`flex w-[200px] px-[10px] py-[11px] justify-center items-center gap-[10px] rounded-[8px] bg-[#1566C0] text-white font-[Poppins] text-[14px] font-medium ${
-                isLastTab
-                  ? "cursor-not-allowed bg-[#93C5FD]"
-                  : ""
+                isLastTab ? "cursor-not-allowed bg-[#93C5FD]" : ""
               }`}
             >
               Next
@@ -171,7 +173,7 @@ function CreateBonusDrawer({ open, onClose }: CreateBonusDrawerProps) {
         </div>
       </aside>
     </div>,
-    document.body
+    document.body,
   );
 }
 

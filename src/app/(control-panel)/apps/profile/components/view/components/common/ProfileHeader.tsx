@@ -16,7 +16,7 @@ export default function ProfileHeader({
   onTabChange: (event: SyntheticEvent, value: TabValue) => void;
 }) {
   return (
-    <div className="bg-white w-full h-[160px] ml-[44px]">
+    <div className="bg-white w-full h-[150px] ml-[44px]">
       <div className="flex w-[1464px] flex-col items-start gap-4">
         <div className="flex w-full flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div className="mt-[14px] flex items-center gap-[14px]">
@@ -27,16 +27,16 @@ export default function ProfileHeader({
             />
 
             <div className="flex items-center gap-8">
-              <div>
+              <div className="space-y-1">
                 <Typography className="self-stretch text-[#1F232B] font-poppins text-sm font-semibold">
                   {profileHeader.name}
                 </Typography>
-                <Typography className="text-[#4B5563] font-poppins text-xs font-medium">
+                <Typography className="text-[#4B5563] font-poppins text-xs font-medium ">
                   {profileHeader.location}
                 </Typography>
               </div>
 
-              <div>
+              <div className="space-y-1">
                 <Typography className="text-[#1F232B] font-poppins text-sm font-medium">
                   {profileHeader.phone}
                 </Typography>
@@ -45,7 +45,7 @@ export default function ProfileHeader({
                 </Typography>
               </div>
 
-              <div>
+              <div className="space-y-1">
                 <Typography className="text-[#1F232B] font-poppins text-sm font-medium">
                   {profileHeader.email}
                 </Typography>

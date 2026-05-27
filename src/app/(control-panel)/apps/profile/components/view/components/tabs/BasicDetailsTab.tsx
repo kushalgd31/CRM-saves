@@ -34,9 +34,10 @@ export default function BasicDetailsTab() {
 
   return (
     <>
-      <Paper className="relative w-fullrounded-[12px] bg-white shadow-[0_1px_2px_-1px_rgba(0,0,0,0.10),0_1px_3px_0_rgba(0,0,0,0.10)] p-6 shadow-none">
-        <div className="mb-5 flex items-center justify-between">
-          <Typography className="text-[#1F232B] font-poppins text-[14px] font-semibold leading-normal">
+    <div className="-mt-2">
+      <Paper className="relative w-full  rounded-[12px] bg-white shadow-[0_1px_2px_-1px_rgba(0,0,0,0.10),0_1px_3px_0_rgba(0,0,0,0.10)] p-4 shadow-none ">
+        <div className="mb-4 ml-1 flex items-center justify-between">
+          <Typography className="text-[#1F232B] font-poppins text-[13px] font-semibold leading-normal mt-1">
             Basic Details
           </Typography>
 
@@ -44,6 +45,7 @@ export default function BasicDetailsTab() {
             size="small"
             variant="text"
             sx={{
+              ml: "-8px",
               color: "#1566C0",
               fontFamily: "Poppins, sans-serif",
               fontSize: "12px",
@@ -77,7 +79,7 @@ export default function BasicDetailsTab() {
             ))}
           </Box>
 
-          <div className="absolute top-0 left-1/2 hidden h-full w-px -translate-x-1/2 bg-gray-200 lg:block -mt-0"></div>
+          <div className="absolute top-0 left-1/2 hidden h-full w-px -translate-x-1/2 bg-gray-200 lg:block -ml-0"></div>
 
           <Box>
             <SectionTitle>Other Details</SectionTitle>
@@ -91,6 +93,7 @@ export default function BasicDetailsTab() {
           </Box>
         </div>
       </Paper>
+      </div>
 
       <LastSigninIpHistoryDrawer
         open={isLastSigninIpDrawerOpen}
