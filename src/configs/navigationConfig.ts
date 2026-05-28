@@ -110,6 +110,29 @@ const navigationConfig: FuseNavItemType[] = [
 		]
 	},
 	{
+		id: 'agent-financials',
+		title: 'Agent Financials',
+		subtitle: 'Manage agent payments',
+		type: 'group',
+		icon: 'lucide:feed',
+		children: [
+			{
+				id: 'dashboards.deposit-management',
+				title: 'Deposit Management',
+				type: 'item',
+				icon: 'lucide:wallet-cards',
+				url: '/dashboards/deposit-management'
+			},
+			{
+				id: 'dashboards.withdrawal-management',
+				title: 'Withdrawal Management',
+				type: 'item',
+				icon: 'lucide:banknote-arrow-down',
+				url: '/dashboards/withdrawal-management'
+			}
+		]
+	},
+	{
 		id: 'roles',
 		title: 'Role Management',
 		subtitle: 'Create roles, define permissions',
@@ -235,7 +258,7 @@ const navigationConfig: FuseNavItemType[] = [
 				id: 'profile',
 				title: 'Profile',
 				type: 'item',
-				icon: 'person',
+				icon: 'lucide:user',
 				url: '/apps/profile'
 			},
 			{
