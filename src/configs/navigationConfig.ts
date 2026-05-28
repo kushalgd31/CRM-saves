@@ -276,6 +276,13 @@ const navigationConfig: FuseNavItemType[] = [
 				type: 'item',
 				icon: 'lucide:shield-check',
 				url: '/others/2FA'
+			},
+			{
+				id: 'apps.banner-management',
+				title: 'Banner Management',
+				type: 'item',
+				icon: 'lucide:monitor',
+				url: '/apps/banner-management'
 			}
 		]
 	}
