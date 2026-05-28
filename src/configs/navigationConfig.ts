@@ -267,7 +267,7 @@ const navigationConfig: FuseNavItemType[] = [
 				id: 'profile',
 				title: 'Profile',
 				type: 'item',
-				icon: 'person',
+				icon: 'lucide:user',
 				url: '/apps/profile'
 			},
 			{
