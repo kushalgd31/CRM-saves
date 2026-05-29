@@ -12,8 +12,8 @@ const TeamTabView = lazy(() => import('./components/views/TeamTabView'));
 /**
  * The Settings App Route.
  */
-const Route: FuseRouteItemType = {
-	path: 'apps/settings',
+const settingsRoute: FuseRouteItemType = {
+	path: 'settings',
 	element: (
 		<SettingsAppView>
 			<Outlet />
@@ -33,10 +33,6 @@ const Route: FuseRouteItemType = {
 			element: <PlanBillingTabView />
 		},
 		{
-			path: 'security',
-			element: <SecurityTabView />
-		},
-		{
 			path: 'notifications',
 			element: <NotificationsTabView />
 		},
@@ -51,4 +47,9 @@ const Route: FuseRouteItemType = {
 	]
 };
 
-export default Route;
+const legacySettingsRoute: FuseRouteItemType = {
+	...settingsRoute,
+	path: 'apps/settings'
+};
+
+export default [settingsRoute, legacySettingsRoute];

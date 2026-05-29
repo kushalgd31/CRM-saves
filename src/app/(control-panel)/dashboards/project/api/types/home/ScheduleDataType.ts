@@ -1,7 +1,7 @@
 type ScheduleItem = {
 	title: string;
-	time: string;
-	location?: string;
+	type: string;
+	GGR: string;
 };
 
 /**

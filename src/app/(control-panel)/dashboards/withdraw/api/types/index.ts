@@ -27,3 +27,28 @@ export type WithdrawRowType = {
 	coverImageUrl: string;
 	screenshotUrl: string;
 };
+
+
+export type WithdrawSummaryCardType = {
+	id: string;
+	title: string;
+	value: string;
+	footnotes: {
+		label: string;
+		color: 'green' | 'red' | 'amber';
+	}[];
+};
+
+export type WithdrawHealthMetricType = {
+	id: string;
+	label: string;
+	value: number;
+	color: 'green' | 'red' | 'amber';
+};
+
+export type WithdrawHealthType = {
+	title: string;
+	badgeLabel: string;
+	metrics: WithdrawHealthMetricType[];
+	note: string;
+};

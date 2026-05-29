@@ -2,23 +2,30 @@ import { http, HttpResponse } from 'msw';
 
 const kycSummary = [
 	{
-		id: 'total-submissions',
-		title: 'Total Submissions',
-		value: 3,
+		id: 'pending KYCs',
+		title: 'Pending KYCs',
+		value: 43,
 		icon: 'lucide:file-text',
 		status: 'total'
 	},
 	{
 		id: 'pending',
-		title: 'Pending',
-		value: 1,
+		title: 'Pending Bank Accounts',
+		value: 12,
 		icon: 'lucide:clock-3',
 		status: 'pending'
 	},
 	{
 		id: 'approved',
-		title: 'Approved',
-		value: 1,
+		title: 'Approved KYCs today',
+		value: 12,
+		icon: 'lucide:circle-check',
+		status: 'approved'
+	},
+	{
+		id: 'approve bank',
+		title: 'Approved Bank Accounts today',
+		value: 12,
 		icon: 'lucide:circle-check',
 		status: 'approved'
 	},
@@ -28,13 +35,6 @@ const kycSummary = [
 		value: 0,
 		icon: 'lucide:circle-x',
 		status: 'rejected'
-	},
-	{
-		id: 'partial',
-		title: 'Partial',
-		value: 1,
-		icon: 'lucide:triangle-alert',
-		status: 'partial'
 	}
 ] as const;
 
@@ -48,7 +48,22 @@ const kycRows = [
 		idProof: 'pending',
 		selfie: 'pending',
 		bankAccount: 'pending',
-		overallStatus: 'pending'
+		overallStatus: 'pending',
+		date: '2024-06-01',
+		time: '10:30:00',
+		panCardImages: [
+			'./public/assets/images/demo-content/Frame 454.svg'
+		],
+		idProofImages: [
+			'./public/assets/images/demo-content/Frame 454.svg',
+			'./public/assets/images/demo-content/Frame 454.svg'
+		],
+		selfieImages: [
+			'./public/assets/images/demo-content/Frame 454.svg'
+		],
+		bankAccountImages: [
+			'./public/assets/images/demo-content/Frame 454.svg'
+		]
 	},
 	{
 		id: 'kyc-2',
@@ -59,7 +74,23 @@ const kycRows = [
 		idProof: 'approved',
 		selfie: 'approved',
 		bankAccount: 'approved',
-		overallStatus: 'approved'
+		overallStatus: 'approved',
+		date: '2024-06-02',
+		time: '14:45:00',
+		panno: 'ABCDE1234F',
+		panCardImages: [
+			'./public/assets/images/demo-content/Frame 454.svg'
+		],
+		idProofImages: [
+			'./public/assets/images/demo-content/Frame 454.svg',
+			'./public/assets/images/demo-content/Frame 454.svg'
+		],
+		selfieImages: [
+			'./public/assets/images/demo-content/Frame 454.svg'
+		],
+		bankAccountImages: [
+			'./public/assets/images/demo-content/Frame 454.svg'
+		]
 	},
 	{
 		id: 'kyc-3',
@@ -70,7 +101,22 @@ const kycRows = [
 		idProof: 'rejected',
 		selfie: 'pending',
 		bankAccount: 'pending',
-		overallStatus: 'partial'
+		overallStatus: 'pending',
+		date: '2024-06-03',
+		time: '09:15:00',
+		panCardImages: [
+			'./public/assets/images/demo-content/Frame 454.svg'
+		],
+		idProofImages: [
+			'./public/assets/images/demo-content/Frame 454.svg',
+			'./public/assets/images/demo-content/Frame 454.svg'
+		],
+		selfieImages: [
+			'./public/assets/images/demo-content/Frame 454.svg'
+		],
+		bankAccountImages: [
+			'./public/assets/images/demo-content/Frame 454.svg'
+		]
 	}
 ] as const;
 

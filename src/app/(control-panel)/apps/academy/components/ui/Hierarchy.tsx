@@ -1,15 +1,36 @@
 import { useState } from "react";
 import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
 import { createPortal } from "react-dom";
-import Overdue from "@/app/(control-panel)/dashboards/project/components/ui/tabs/home/widgets/OverdueWidget"
+import Heir from "./HeirCard"
+import { useEffect } from "react";
+import mockApi from "src/@mock-utils/mockApi";
+import { hierarchyService } from '../../api/services/heirarchy'
 
+type Team = {
+  id: string;
+  name: string;
+  description: string;
+  layers: number;
+  levels: { name: string; rate: number }[];
+};
+
+
+const api = mockApi('hierarchy_teams');
 
 
 export default function HierarchyTeams() {
-  const [teams, setTeams] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
   const [edit, setEdit] = useState(false);
+  const [teams, setTeams] = useState<Team[]>([]);
+
+ useEffect(() => {
+  const load = async () => {
+    const data = await hierarchyService.findAll();
+    setTeams(data);
+  };
+  load();
+}, []);
 
   const defaultLevels = (count) => {
     if (count === 1) {
@@ -53,12 +74,12 @@ export default function HierarchyTeams() {
     return [];
   };
 
-  const [form, setForm] = useState({
-    name: "",
-    description: "",
-    layers: 2,
-    levels: defaultLevels(2),
-  });
+  const [form, setForm] = useState<Omit<Team, "id">>({
+  name: "",
+  description: "",
+  layers: 2,
+  levels: defaultLevels(2),
+});
 
   const openCreate = () => {
     setEditIndex(null);
@@ -71,12 +92,13 @@ export default function HierarchyTeams() {
     setShowModal(true);
   };
 
-  const openEdit = (index) => {
-    setEditIndex(index);
-    setForm(teams[index]);
-    setShowModal(true);
-    setEdit(true);
-  };
+  const openEdit = (index: number) => {
+  const { id, ...rest } = teams[index];
+  setForm(rest);
+  setEditIndex(index);
+  setShowModal(true);
+  setEdit(true);
+};
 
   const handleLayerChange = (layers) => {
     setForm({ ...form, layers, levels: defaultLevels(layers) });
@@ -96,22 +118,33 @@ export default function HierarchyTeams() {
     return true;
   };
 
-  const handleSubmit = () => {
-    if (editIndex !== null) {
-      const updated = [...teams];
-      updated[editIndex] = form;
-      setTeams(updated);
-    } else {
-      setTeams([...teams, form]);
-    }
-    setShowModal(false);
-  };
+const handleSubmit = async () => {
+  if (editIndex !== null) {
+    const team = teams[editIndex];
 
-  const handleDelete = (index) => {
-    if (confirm("Are you sure you want to delete this team?")) {
-      setTeams(teams.filter((_, i) => i !== index));
-    }
-  };
+    const updated = await hierarchyService.update(team.id, form);
+
+    setTeams((prev) =>
+      prev.map((t, i) => (i === editIndex ? updated! : t))
+    );
+  } else {
+    const created = await hierarchyService.create(form);
+
+    setTeams((prev) => [...prev, created]);
+  }
+
+  setShowModal(false);
+};
+
+  const handleDelete = async (index: number) => {
+  const team = teams[index];
+
+  if (confirm("Are you sure?")) {
+    await hierarchyService.delete(team.id);
+
+    setTeams((prev) => prev.filter((_, i) => i !== index));
+  }
+};
 
   
 
@@ -128,16 +161,16 @@ export default function HierarchyTeams() {
   
 
   return (
-    <div className="p-6">
+    <div className="p-6 font-[Geist]">
       <div className="grid grid-cols-4 gap-4 mb-6">
-        <Overdue title="Total Teams" data={data1}/>
-        <Overdue title="Total Layers" data={data2} />
-        <Overdue title="Avg Layers" data={data3}   />
-        <Overdue title="Commission Levels" data={data4}  />
+        <Heir title="Total Teams" data={data1}/>
+        <Heir title="Total Layers" data={data2} />
+        <Heir title="Avg Layers" data={data3}   />
+        <Heir title="Commission Levels" data={data4}  />
       </div>
 
-      <div className="flex justify-between mb-4">
-        <h2 className="text-4xl font-bold mt-2">Hierarchy Teams</h2>
+      <div className="flex justify-between my-4">
+        <h2 className="text-4xl font-semibold mt-2">Hierarchy Teams</h2>
         <button
           onClick={openCreate}
           className="bg-green-600 text-white px-4 py-2 rounded text-xl"

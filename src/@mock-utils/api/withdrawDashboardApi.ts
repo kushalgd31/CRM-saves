@@ -119,9 +119,50 @@ const withdrawRows = [
 	}
 ];
 
+
+const withdrawSummary = [
+	{
+		id: '1',
+		title: 'Total Withdrawals',
+		value: '2,23,388',
+		footnotes: [
+			{ label: '240 Requests', color: 'green' },
+			{ label: '22 FTW Today', color: 'green' }
+		]
+	},
+	{
+		id: '2',
+		title: 'Pending Approval',
+		value: '40,218',
+		footnotes: [
+			{ label: '12 Pending', color: 'green' },
+			{ label: '42 Rejected', color: 'red' }
+		]
+	}
+];
+
+const withdrawHealth = {
+	title: 'Payment Gateway Health',
+	badgeLabel: 'Stable',
+	metrics: [
+		{ id: 'upi', label: 'UPI', value: 94.2, color: 'green' },
+		{ id: 'imps', label: 'IMPS', value: 91.8, color: 'green' },
+		{ id: 'netbanking', label: 'Net Banking', value: 87.2, color: 'amber' },
+		{ id: 'cards', label: 'Cards', value: 72.2, color: 'red' }
+	],
+	note: 'Cards gateway degraded since 11:40 AM - 23 failed transactions, ₹1.2L stuck. Provider: PayU.'
+};
+
 const withdrawDashboardApi = [
 	http.get('/api/mock/withdraw-dashboard/rows', async () => {
 		return HttpResponse.json(withdrawRows);
+	}),
+	http.get('/api/mock/withdraw-dashboard/summary', async () => {
+		return HttpResponse.json(withdrawSummary);
+	}),
+	http.get('/api/mock/withdraw-dashboard/health', async () => {
+		return HttpResponse.json(withdrawHealth);
+
 	})
 ];
 

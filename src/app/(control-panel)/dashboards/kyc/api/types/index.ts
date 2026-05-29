@@ -1,4 +1,4 @@
-export type KycStatusType = 'pending' | 'approved' | 'rejected' | 'partial';
+export type KycStatusType = 'pending' | 'approved' | 'rejected' ;
 
 export type KycSummaryCardType = {
 	id: string;
@@ -18,4 +18,10 @@ export type KycUserRowType = {
 	selfie: KycStatusType;
 	bankAccount: KycStatusType;
 	overallStatus: KycStatusType;
+	date: string;
+	time: string;
+	panCardImages: string[];
+	idProofImages: string[];
+	selfieImages: string[];
+	bankAccountImages: string[];
 };

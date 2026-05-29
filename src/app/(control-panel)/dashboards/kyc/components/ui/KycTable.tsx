@@ -1,150 +1,172 @@
-import { useMemo, useState } from 'react';
-import { MRT_ColumnDef } from 'material-react-table';
-import { InputAdornment, MenuItem, Paper, Select, TextField, Typography } from '@mui/material';
-import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
+import Dialog from '@mui/material/Dialog';
+import IconButton from '@mui/material/IconButton';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 import FuseLoading from '@fuse/core/FuseLoading';
+import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
+import { useEffect, useMemo, useState } from 'react';
+import { type MRT_ColumnDef } from 'material-react-table';
 import DataTable from 'src/components/data-table/DataTable';
+import VerifyCard from './VerifyCard';
 import { KycStatusType, KycUserRowType } from '../../api/types';
 import { useGetKycRows } from '../../api/hooks/useGetKycRows';
 
-const statusOptions: { label: string; value: 'all' | KycStatusType }[] = [
-	{ label: 'All Status', value: 'all' },
-	{ label: 'Pending', value: 'pending' },
-	{ label: 'Approved', value: 'approved' },
-	{ label: 'Rejected', value: 'rejected' },
-	{ label: 'Partial', value: 'partial' }
-];
-
 const statusClassMap: Record<KycStatusType, string> = {
+	pending: 'bg-amber-500',
+	approved: 'bg-emerald-500',
+	rejected: 'bg-red-500'
+};
+
+const statusTextClassMap: Record<KycStatusType, string> = {
 	pending: 'bg-amber-100 text-amber-700',
 	approved: 'bg-emerald-100 text-emerald-700',
-	rejected: 'bg-rose-100 text-rose-700',
-	partial: 'bg-orange-100 text-orange-700'
+	rejected: 'bg-red-100 text-red-700'
 };
+
+const formatStatusLabel = (status: KycStatusType) => status.charAt(0).toUpperCase() + status.slice(1);
 
 function KycTable() {
 	const { data: rows, isLoading } = useGetKycRows();
-	const [search, setSearch] = useState('');
-	const [statusFilter, setStatusFilter] = useState<'all' | KycStatusType>('all');
+	const [localRows, setLocalRows] = useState<KycUserRowType[] | null>(null);
+	const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
 
-	const filteredRows = useMemo(() => {
-		if (!rows) {
-			return [];
+	useEffect(() => {
+		if (rows && localRows === null) {
+			setLocalRows(rows);
+		}
+	}, [rows, localRows]);
+
+	const safeRows = localRows ?? rows ?? [];
+	const selectedRow = safeRows.find((row) => row.id === selectedRowId) ?? null;
+
+	const computeOverallStatus = (row: KycUserRowType): KycStatusType => {
+		const values = [row.panCard, row.idProof, row.selfie, row.bankAccount];
+
+		if (values.includes('rejected')) {
+			return 'rejected';
 		}
 
-		return rows.filter((row) => {
-			const matchesSearch =
-				`${row.name} ${row.email} ${row.phone}`.toLowerCase().includes(search.toLowerCase()) ||
-				row.id.toLowerCase().includes(search.toLowerCase());
-			const matchesStatus = statusFilter === 'all' || row.overallStatus === statusFilter;
-			return matchesSearch && matchesStatus;
-		});
-	}, [rows, search, statusFilter]);
+		if (values.includes('pending')) {
+			return 'pending';
+		}
+
+		return 'approved';
+	};
+
+	const updateRowStatus = (
+		rowId: string,
+		field: 'panCard' | 'idProof' | 'selfie' | 'bankAccount',
+		value: KycStatusType
+	) => {
+		setLocalRows((prevRows) =>
+			prevRows
+				? prevRows.map((row) => {
+						if (row.id !== rowId) {
+							return row;
+						}
+
+						const updatedRow = { ...row, [field]: value } as KycUserRowType;
+						return {
+							...updatedRow,
+							overallStatus: computeOverallStatus(updatedRow)
+						};
+					})
+				: prevRows
+		);
+	};
 
 	const columns = useMemo<MRT_ColumnDef<KycUserRowType>[]>(
 		() => [
 			{
-				accessorKey: 'name',
-				header: 'USER DETAILS',
-				size: 290,
-				enableSorting: false,
-				muiTableHeadCellProps: {
-					align: 'left'
-				},
-				muiTableBodyCellProps: {
-					align: 'left'
-				},
+				accessorKey: 'id',
+				header: 'ID',
 				Cell: ({ row }) => (
-					<div className="py-1">
-						<Typography className="text-[14px] font-semibold text-slate-900">{row.original.name}</Typography>
-						<Typography className="text-[12px] text-slate-500">{row.original.email}</Typography>
-						<Typography className="text-[12px] text-slate-500">{row.original.phone}</Typography>
-					</div>
+					<button
+						type="button"
+						onClick={() => setSelectedRowId(row.original.id)}
+						className="text-primary-600 font-semibold hover:underline"
+					>
+						{row.original.id}
+					</button>
 				)
 			},
 			{
+				accessorKey: 'name',
+				header: 'Username',
+				Cell: ({ row }) => <span className="font-semibold text-slate-800">{row.original.name}</span>
+			},
+			{
+				accessorKey: 'email',
+				header: 'Email',
+				Cell: ({ row }) => <span className="font-semibold text-slate-600">{row.original.email}</span>
+			},
+			{
+				accessorKey: 'phone',
+				header: 'Phone',
+				Cell: ({ row }) => <span className="font-semibold text-slate-600">{row.original.phone}</span>
+			},
+			{
 				accessorKey: 'panCard',
-				header: 'PAN CARD',
-				enableSorting: false,
-				Cell: ({ cell }) => (
-					<span
-						className={`inline-flex rounded-full px-3 py-1 text-[12px] leading-none font-semibold capitalize ${statusClassMap[cell.getValue<KycStatusType>()]}`}
+				header: 'PAN Card',
+				Cell: ({ row }) => (
+					<div
+						className={`inline-flex rounded-md px-2.5 py-1 text-[10px] font-bold text-white ${statusClassMap[row.original.panCard]}`}
 					>
-						{cell.getValue<KycStatusType>()}
-					</span>
+						{formatStatusLabel(row.original.panCard)}
+					</div>
 				)
 			},
 			{
 				accessorKey: 'idProof',
-				header: 'ID PROOF',
-				enableSorting: false,
-				Cell: ({ cell }) => (
-					<span
-						className={`inline-flex rounded-full px-3 py-1 text-[12px] leading-none font-semibold capitalize ${statusClassMap[cell.getValue<KycStatusType>()]}`}
+				header: 'ID Proof',
+				Cell: ({ row }) => (
+					<div
+						className={`inline-flex rounded-md px-2.5 py-1 text-[10px] font-bold text-white ${statusClassMap[row.original.idProof]}`}
 					>
-						{cell.getValue<KycStatusType>()}
-					</span>
+						{formatStatusLabel(row.original.idProof)}
+					</div>
 				)
 			},
 			{
 				accessorKey: 'selfie',
-				header: 'SELFIE',
-				enableSorting: false,
-				Cell: ({ cell }) => (
-					<span
-						className={`inline-flex rounded-full px-3 py-1 text-[12px] leading-none font-semibold capitalize ${statusClassMap[cell.getValue<KycStatusType>()]}`}
+				header: 'Selfie',
+				Cell: ({ row }) => (
+					<div
+						className={`inline-flex rounded-md px-2.5 py-1 text-[10px] font-bold text-white ${statusClassMap[row.original.selfie]}`}
 					>
-						{cell.getValue<KycStatusType>()}
-					</span>
+						{formatStatusLabel(row.original.selfie)}
+					</div>
 				)
 			},
 			{
 				accessorKey: 'bankAccount',
-				header: 'BANK ACCOUNT',
-				enableSorting: false,
-				Cell: ({ cell }) => (
-					<span
-						className={`inline-flex rounded-full px-3 py-1 text-[12px] leading-none font-semibold capitalize ${statusClassMap[cell.getValue<KycStatusType>()]}`}
+				header: 'Bank Account',
+				Cell: ({ row }) => (
+					<div
+						className={`inline-flex rounded-md px-2.5 py-1 text-[10px] font-bold text-white ${statusClassMap[row.original.bankAccount]}`}
 					>
-						{cell.getValue<KycStatusType>()}
-					</span>
+						{formatStatusLabel(row.original.bankAccount)}
+					</div>
 				)
 			},
 			{
 				accessorKey: 'overallStatus',
-				header: 'OVERALL STATUS',
-				enableSorting: false,
-				Cell: ({ cell }) => (
-					<span
-						className={`inline-flex rounded-full px-3 py-1 text-[12px] leading-none font-semibold capitalize ${statusClassMap[cell.getValue<KycStatusType>()]}`}
+				header: 'Overall Status',
+				Cell: ({ row }) => (
+					<div
+						className={`inline-flex rounded-md px-2.5 py-1 text-[10px] font-bold text-white ${statusClassMap[row.original.overallStatus]}`}
 					>
-						{cell.getValue<KycStatusType>()}
-					</span>
+						{formatStatusLabel(row.original.overallStatus)}
+					</div>
 				)
 			},
 			{
-				id: 'actions',
-				header: 'ACTIONS',
-				enableSorting: false,
-				size: 130,
-				Cell: ({ row }) => (
-					<div className="flex items-center justify-center gap-2 border-l border-slate-200 pl-4">
-						<button
-							type="button"
-							className="flex h-7 w-7 items-center justify-center rounded-lg bg-red-500 text-white shadow-sm"
-							aria-label={`Reject ${row.original.name}`}
-						>
-							<FuseSvgIcon size={12}>lucide:x</FuseSvgIcon>
-						</button>
-						<button
-							type="button"
-							className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500 text-white shadow-sm"
-							aria-label={`Approve ${row.original.name}`}
-						>
-							<FuseSvgIcon size={12}>lucide:check</FuseSvgIcon>
-						</button>
-					</div>
-				)
+				accessorKey: 'date',
+				header: 'Date'
+			},
+			{
+				accessorKey: 'time',
+				header: 'Time'
 			}
 		],
 		[]
@@ -154,128 +176,228 @@ function KycTable() {
 		return <FuseLoading />;
 	}
 
-	return (
-		<div className="space-y-6">
-			<Paper
-				className="rounded-[16px] border border-slate-200 bg-white p-4 shadow-none"
-				elevation={0}
-			>
-				<div className="flex flex-col gap-3 md:flex-row">
-					<TextField
-						fullWidth
-						size="small"
-						placeholder="Search by name, email, PAN, or ID number..."
-						value={search}
-						onChange={(event) => setSearch(event.target.value)}
-						InputProps={{
-							startAdornment: (
-								<InputAdornment position="start">
-									<FuseSvgIcon className="text-slate-400">lucide:search</FuseSvgIcon>
-								</InputAdornment>
-							)
-						}}
-						sx={{
-							'& .MuiOutlinedInput-root': {
-								height: 46,
-								borderRadius: '14px',
-								backgroundColor: '#ffffff'
-							},
-							'& .MuiInputBase-input': {
-								fontSize: 14
-							}
-						}}
-					/>
-					<Select
-						size="small"
-						value={statusFilter}
-						onChange={(event) => setStatusFilter(event.target.value as 'all' | KycStatusType)}
-						className="min-w-[140px]"
-						sx={{
-							height: 46,
-							borderRadius: '14px',
-							fontSize: 14
-						}}
-					>
-						{statusOptions.map((option) => (
-							<MenuItem
-								key={option.value}
-								value={option.value}
-							>
-								{option.label}
-							</MenuItem>
-						))}
-					</Select>
-				</div>
-			</Paper>
+	if (!safeRows.length && !rows) {
+		return null;
+	}
 
+	return (
+		<>
 			<Paper
-				className="flex h-full w-full flex-auto flex-col overflow-hidden rounded-[16px] border border-slate-200 bg-white shadow-none"
+				className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
 				elevation={0}
 			>
 				<DataTable
-					data={filteredRows}
+					data={safeRows}
 					columns={columns}
-					enableColumnActions={false}
-					enableColumnFilters={false}
-					enableRowActions={false}
+					muiSearchTextFieldProps={{
+						placeholder: 'Search...',
+						sx: {
+							minWidth: '300px'
+						}
+					}}
 					enableRowSelection={false}
-					enableDensityToggle={false}
-					enableGlobalFilter={false}
-					enableTopToolbar={false}
-					enableBottomToolbar={false}
-					enablePagination={false}
-					enableSorting={false}
-					muiTableContainerProps={{
-						className: 'flex-auto overflow-x-auto'
-					}}
-					muiTablePaperProps={{
-						elevation: 0,
-						square: true,
-						className: 'flex h-full flex-col flex-auto'
-					}}
-					muiTableHeadCellProps={({ column }) => ({
-						align: column.id === 'name' ? 'left' : 'center',
-						sx: {
-							py: 2.2,
-							fontSize: 12,
-							fontWeight: 700,
-							color: '#7c8799',
-							backgroundColor: '#ffffff',
-							borderBottom: '1px solid #e5e7eb',
-							letterSpacing: '0.06em',
-							borderLeft: column.id === 'actions' ? '1px solid #e2e8f0' : undefined,
-							'& .Mui-TableHeadCell-Content-Actions': {
-								display: 'none'
-							},
-							'& .MuiButtonBase-root[aria-label=\"Show/Hide columns\"]': {
-								display: 'none'
-							},
-							'& .MuiButtonBase-root[aria-label=\"Drag\"]': {
-								display: 'none'
-							}
-						}
-					})}
-					muiTableBodyCellProps={({ column }) => ({
-						align: column.id === 'name' ? 'left' : 'center',
-						sx: {
-							py: 2,
-							fontSize: 13,
-							borderBottom: '1px solid #eceff3',
-							borderLeft: column.id === 'actions' ? '1px solid #e2e8f0' : undefined
-						}
-					})}
-					muiTableBodyRowProps={{
-						hover: false,
-						sx: {
-							backgroundColor: '#ffffff'
-						}
-					}}
-					enableColumnOrdering={false}
-					enableGrouping={false}
-					enableColumnPinning={false}
+					enableExpanding={false}
+					enableRowNumbers={false}
+					renderRowActionMenuItems={() => []}
+					renderRowActions={({ row }) => (
+						<div className="flex cursor-pointer items-center justify-center gap-1 font-semibold text-slate-600 hover:text-slate-900">
+							<button
+								type="button"
+								onClick={() => setSelectedRowId(row.original.id)}
+								className="flex items-center gap-1"
+							>
+								<FuseSvgIcon size={14}>lucide:eye</FuseSvgIcon>
+								<span className="text-[11px]">View</span>
+							</button>
+						</div>
+					)}
 				/>
 			</Paper>
-		</div>
+
+			<Dialog
+				open={Boolean(selectedRow)}
+				onClose={() => setSelectedRowId(null)}
+				maxWidth={false}
+				slotProps={{
+					paper: {
+						className:
+							'm-0 ml-auto h-full max-h-none w-full max-w-[560px] overflow-hidden rounded-l-[28px] rounded-r-none shadow-2xl'
+					}
+				}}
+			>
+				{selectedRow && (
+					<div className="flex h-full flex-col bg-white">
+						<div className="border-b border-slate-200">
+							<div className="flex items-start justify-between px-6 py-5">
+								<div>
+									<Typography className="text-lg font-bold tracking-tight text-slate-900">
+										{selectedRow.name}
+									</Typography>
+									<Typography className="mt-0.5 text-[13px] font-medium text-slate-400">
+										#{selectedRow.id}
+									</Typography>
+								</div>
+								<IconButton
+									onClick={() => setSelectedRowId(null)}
+									className="border border-slate-200 bg-slate-50 text-slate-400 hover:text-slate-700"
+									size="small"
+									aria-label="Close details popup"
+								>
+									<FuseSvgIcon size={16}>lucide:x</FuseSvgIcon>
+								</IconButton>
+							</div>
+						</div>
+
+						<div className="flex-1 space-y-6 overflow-y-auto px-6 py-6 pb-24">
+							<div className="rounded-2xl border border-slate-200 bg-white">
+								<div className="border-b border-slate-100 px-5 py-4">
+									<Typography className="text-[15px] font-bold text-slate-900">
+										User Details
+									</Typography>
+								</div>
+								<div className="px-5 py-2">
+									<div className="flex justify-between border-b border-slate-50 py-3 last:border-b-0">
+										<Typography className="text-[13px] font-medium text-slate-500">
+											Full Name
+										</Typography>
+										<Typography className="text-[13px] font-bold text-slate-900">
+											{selectedRow.name}
+										</Typography>
+									</div>
+									<div className="flex justify-between border-b border-slate-50 py-3 last:border-b-0">
+										<Typography className="text-[13px] font-medium text-slate-500">
+											Email
+										</Typography>
+										<Typography className="text-[13px] font-bold text-slate-900">
+											{selectedRow.email}
+										</Typography>
+									</div>
+									<div className="flex justify-between border-b border-slate-50 py-3 last:border-b-0">
+										<Typography className="text-[13px] font-medium text-slate-500">
+											Phone No.
+										</Typography>
+										<Typography className="text-[13px] font-bold text-slate-900">
+											{selectedRow.phone}
+										</Typography>
+									</div>
+									<div className="flex justify-between border-b border-slate-50 py-3 last:border-b-0">
+										<Typography className="text-[13px] font-medium text-slate-500">
+											Overall Status
+										</Typography>
+										<span
+											className={`inline-flex rounded-full px-3 py-1 text-[12px] font-semibold ${statusTextClassMap[selectedRow.overallStatus]}`}
+										>
+											{formatStatusLabel(selectedRow.overallStatus)}
+										</span>
+									</div>
+								</div>
+							</div>
+
+							<div className="rounded-2xl border border-slate-200 bg-white">
+								<div className="border-b border-slate-100 px-5 py-4">
+									<Typography className="text-[15px] font-bold text-slate-900">
+										Submission Details
+									</Typography>
+								</div>
+								<div className="px-5 py-2">
+									<div className="flex justify-between border-b border-slate-50 py-3 last:border-b-0">
+										<Typography className="text-[13px] font-medium text-slate-500">
+											Submitted Date
+										</Typography>
+										<Typography className="text-[13px] font-bold text-slate-900">
+											{selectedRow.date}
+										</Typography>
+									</div>
+									<div className="flex justify-between border-b border-slate-50 py-3 last:border-b-0">
+										<Typography className="text-[13px] font-medium text-slate-500">
+											Submitted Time
+										</Typography>
+										<Typography className="text-[13px] font-bold text-slate-900">
+											{selectedRow.time}
+										</Typography>
+									</div>
+									<div className="flex justify-between border-b border-slate-50 py-3 last:border-b-0">
+										<Typography className="text-[13px] font-medium text-slate-500">
+											PAN Card
+										</Typography>
+										<span
+											className={`inline-flex rounded-full px-3 py-1 text-[12px] font-semibold ${statusTextClassMap[selectedRow.panCard]}`}
+										>
+											{formatStatusLabel(selectedRow.panCard)}
+										</span>
+									</div>
+									<div className="flex justify-between border-b border-slate-50 py-3 last:border-b-0">
+										<Typography className="text-[13px] font-medium text-slate-500">
+											ID Proof
+										</Typography>
+										<span
+											className={`inline-flex rounded-full px-3 py-1 text-[12px] font-semibold ${statusTextClassMap[selectedRow.idProof]}`}
+										>
+											{formatStatusLabel(selectedRow.idProof)}
+										</span>
+									</div>
+									<div className="flex justify-between border-b border-slate-50 py-3 last:border-b-0">
+										<Typography className="text-[13px] font-medium text-slate-500">
+											Selfie
+										</Typography>
+										<span
+											className={`inline-flex rounded-full px-3 py-1 text-[12px] font-semibold ${statusTextClassMap[selectedRow.selfie]}`}
+										>
+											{formatStatusLabel(selectedRow.selfie)}
+										</span>
+									</div>
+									<div className="flex justify-between border-b border-slate-50 py-3 last:border-b-0">
+										<Typography className="text-[13px] font-medium text-slate-500">
+											Bank Account
+										</Typography>
+										<span
+											className={`inline-flex rounded-full px-3 py-1 text-[12px] font-semibold ${statusTextClassMap[selectedRow.bankAccount]}`}
+										>
+											{formatStatusLabel(selectedRow.bankAccount)}
+										</span>
+									</div>
+								</div>
+							</div>
+
+							<div className="space-y-4">
+								<VerifyCard
+									title="PAN Card"
+									status={selectedRow.panCard}
+									images={selectedRow.panCardImages}
+									onApprove={() => updateRowStatus(selectedRow.id, 'panCard', 'approved')}
+									onReject={() => updateRowStatus(selectedRow.id, 'panCard', 'rejected')}
+									onVerify={() => updateRowStatus(selectedRow.id, 'panCard', 'pending')}
+								/>
+								<VerifyCard
+									title="ID Proof"
+									status={selectedRow.idProof}
+									images={selectedRow.idProofImages}
+									onApprove={() => updateRowStatus(selectedRow.id, 'idProof', 'approved')}
+									onReject={() => updateRowStatus(selectedRow.id, 'idProof', 'rejected')}
+									onVerify={() => updateRowStatus(selectedRow.id, 'idProof', 'pending')}
+								/>
+								<VerifyCard
+									title="Selfie"
+									status={selectedRow.selfie}
+									images={selectedRow.selfieImages}
+									onApprove={() => updateRowStatus(selectedRow.id, 'selfie', 'approved')}
+									onReject={() => updateRowStatus(selectedRow.id, 'selfie', 'rejected')}
+									onVerify={() => updateRowStatus(selectedRow.id, 'selfie', 'pending')}
+								/>
+								<VerifyCard
+									title="Bank Account"
+									status={selectedRow.bankAccount}
+									images={selectedRow.bankAccountImages}
+									onApprove={() => updateRowStatus(selectedRow.id, 'bankAccount', 'approved')}
+									onReject={() => updateRowStatus(selectedRow.id, 'bankAccount', 'rejected')}
+									onVerify={() => updateRowStatus(selectedRow.id, 'bankAccount', 'pending')}
+								/>
+							</div>
+						</div>
+					</div>
+				)}
+			</Dialog>
+		</>
 	);
 }
 

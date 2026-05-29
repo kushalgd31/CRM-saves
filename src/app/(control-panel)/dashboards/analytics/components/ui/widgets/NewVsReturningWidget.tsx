@@ -1,7 +1,7 @@
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { memo, useEffect, useState } from 'react';
-import Chip from '@mui/material/Chip';
+import { Tabs, Tab } from '@mui/material';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import { ApexOptions } from 'apexcharts';
@@ -15,11 +15,12 @@ import ReactApexChart from 'react-apexcharts';
 function NewVsReturningWidget() {
 	const theme = useTheme();
 	const { data: widget } = useGetWidget<NewVsReturningWidgetType>('newVsReturning');
-
+	const [tabValue, setTabValue] = useState(0);
 	const series = widget?.series || [];
 	const labels = widget?.labels;
 	const uniqueVisitors = widget?.uniqueVisitors;
 	const [awaitRender, setAwaitRender] = useState(true);
+	const ranges = widget?.ranges || {};
 
 	const chartOptions: ApexOptions = {
 		chart: {
@@ -96,54 +97,66 @@ function NewVsReturningWidget() {
 	}
 
 	return (
-		<Paper className="flex flex-auto flex-col overflow-hidden rounded-xl p-4 shadow-sm">
+		<Paper className="flex flex-col overflow-hidden rounded-xl p-4 shadow-sm">
 			<div className="flex flex-col items-start justify-between sm:flex-row">
 				<Typography className="truncate text-lg leading-6 font-medium tracking-tight">
 					New vs. Returning
 				</Typography>
-				<div className="ml-2">
-					<Chip
-						size="small"
-						className="text-sm font-medium"
-						label="30 days"
-					/>
-				</div>
+				<div className="mt-3 sm:mt-0">
+									<Tabs
+										value={tabValue}
+										onChange={(ev, value: number) => setTabValue(value)}
+									>
+										{Object.entries(ranges).map(([key, label], index) => (
+											<Tab
+												key={key}
+												value={index}
+												label={label}
+											/>
+										))}
+									</Tabs>
+								</div>
 			</div>
 
-			<div className="mt-6 flex h-48 flex-auto flex-col">
+			<div className='flex justify-start'>
+			<div className="mt-3 flex h-60 flex-col relative">
 				<ReactApexChart
-					className="flex h-full w-full flex-auto items-center justify-center"
+					className="flex h-full w-full flex-auto items-center justify-center relative right-10"
 					options={chartOptions}
 					series={series}
 					type={chartOptions?.chart?.type}
 					height={chartOptions?.chart?.height}
 				/>
 			</div>
-			<div className="mt-8">
-				<div className="-my-3 divide-y">
+			<div className="mt-8 self-center relative right-10">
+				<div className="-my-3 flex flex-col gap-5">
 					{series.map((dataset, i) => (
 						<div
-							className="grid grid-cols-3 py-3"
+							className="flex flex-col px-2 py-3 w-50 h-20 bg-[#F6F7F8] rounded-md"
 							key={i}
 						>
 							<div className="flex items-center">
 								<Box
-									className="h-2 w-2 shrink-0 rounded-full"
+									className="h-2 w-2 shrink-0 "
 									sx={{ backgroundColor: chartOptions?.colors?.[i] as string }}
 								/>
 								<Typography className="ml-3 truncate">{labels[i]}</Typography>
 							</div>
-							<Typography className="text-right font-medium">
+							<div className='flex justify-between'>
+							<Typography className=" font-semibold text-xl">
 								{((uniqueVisitors * dataset) / 100).toLocaleString('en-US')}
 							</Typography>
 							<Typography
-								className="text-right"
+								className=" px-1 rounded-md bg-white"
 								color="text.secondary"
 							>
 								{dataset}%
 							</Typography>
+							</div>
+							<Typography className='text-xs'>GGR</Typography>
 						</div>
 					))}
+				</div>
 				</div>
 			</div>
 		</Paper>

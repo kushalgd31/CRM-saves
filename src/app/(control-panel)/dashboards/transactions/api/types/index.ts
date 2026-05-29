@@ -1,0 +1,28 @@
+export type TransactionsRowType = {
+	id: string;
+	username: string;
+	type: string;
+	subType: string;
+	stake: string;
+	amount: string;
+	result: string;
+	winLoose: string;
+	runningBalance: string;
+	createdAt: string;
+	roundId?: string;
+	phoneNo: string;
+	ip: string;
+	os: string;
+	device: string;
+	beforeBalanceBonus: string;
+	beforeBalanceWallet: string;
+	afterBalanceBonus: string;
+	afterBalanceWallet: string;
+	currency: string;
+	betOn: string;
+	timestamp: string;
+	debitedFromBonus: string;
+	debitedFromWallet: string;
+	creditedToBonus: string;
+	creditedToWallet: string;
+};

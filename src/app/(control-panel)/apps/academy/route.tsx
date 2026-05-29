@@ -9,7 +9,7 @@ const CoursesView = lazy(() => import('./components/views/CoursesView'));
 /**
  * The Academy app routes.
  */
-const route: FuseRouteItemType = {
+const academyRoute: FuseRouteItemType = {
 	path: 'apps/academy',
 	element: <Outlet />,
 	children: [
@@ -28,4 +28,9 @@ const route: FuseRouteItemType = {
 	]
 };
 
-export default route;
+const salesRoute: FuseRouteItemType = {
+	path: 'dashboards/sales',
+	element: <CoursesView />
+};
+
+export default [academyRoute, salesRoute];
