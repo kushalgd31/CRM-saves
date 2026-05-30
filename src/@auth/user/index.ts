@@ -15,3 +15,14 @@ export type User = FuseAuthUser & {
 	settings?: PartialDeep<FuseSettingsConfigType>;
 	loginRedirectUrl?: string; // The URL to redirect to after login.
 };
+
+export type AppRegistration = {
+	app_id: string;
+	name: string;
+	spoc: string;
+	support_email: string;
+	production_domain: string;
+	test_domain: string;
+	products: string[];
+	registration_config: Record<string, unknown>;
+};

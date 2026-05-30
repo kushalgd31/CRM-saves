@@ -8,6 +8,7 @@ import { ProductOption, WhitelabelFormData } from '../types';
 type CreateWhitelabelDialogProps = {
 	activeTab: number;
 	formData: WhitelabelFormData;
+	isCreating: boolean;
 	open: boolean;
 	productOptions: ProductOption[];
 	selectedProducts: string[];
@@ -15,18 +16,21 @@ type CreateWhitelabelDialogProps = {
 	onFormDataChange: (formData: WhitelabelFormData) => void;
 	onTabChange: (tab: number) => void;
 	onToggleProduct: (productId: string) => void;
+	handleCreateWhitelabel: () => void | Promise<void>;
 };
 
 function CreateWhitelabelDialog({
 	activeTab,
 	formData,
+	isCreating,
 	open,
 	productOptions,
 	selectedProducts,
 	onClose,
 	onFormDataChange,
 	onTabChange,
-	onToggleProduct
+	onToggleProduct,
+	handleCreateWhitelabel
 }: CreateWhitelabelDialogProps) {
 	return (
 		<Dialog
@@ -231,9 +235,12 @@ function CreateWhitelabelDialog({
 					</Button>
 					<Button
 						variant="contained"
+						onClick={handleCreateWhitelabel}
+						disabled={isCreating}
+						loading={isCreating}
 						className="h-10 rounded-lg bg-[#155dfc] px-5 font-['Geist'] text-[13px] font-semibold text-white shadow-none hover:bg-[#1249d6]"
 					>
-						Create Whitelabel
+						{isCreating ? 'Creating...' : 'Create Whitelabel'}
 					</Button>
 				</div>
 			</div>

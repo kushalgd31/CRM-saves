@@ -9,10 +9,11 @@ import { splitAppId } from '../utils/splitAppId';
 
 type WhitelabelSitesTableProps = {
 	rows: WhitelabelSite[];
+	onCreateUser: (site: WhitelabelSite) => void;
 	onViewSite: (site: WhitelabelSite) => void;
 };
 
-function WhitelabelSitesTable({ rows, onViewSite }: WhitelabelSitesTableProps) {
+function WhitelabelSitesTable({ rows, onCreateUser, onViewSite }: WhitelabelSitesTableProps) {
 	const columns = useMemo<MRT_ColumnDef<WhitelabelSite>[]>(
 		() => [
 			{
@@ -178,10 +179,11 @@ function WhitelabelSitesTable({ rows, onViewSite }: WhitelabelSitesTableProps) {
 				size: 115,
 				Cell: ({ row }) => (
 					<span
-						className={`inline-flex items-center gap-1 rounded-full px-2 py-1 font-['Geist'] text-[11px] font-semibold ${row.original.status === 'Active'
-							? 'bg-[#dcfce7] text-[#008236]'
-							: 'bg-[#f1f5f9] text-[#4A5565]'
-							}`}
+						className={`inline-flex items-center gap-1 rounded-full px-2 py-1 font-['Geist'] text-[11px] font-semibold ${
+							row.original.status === 'Active'
+								? 'bg-[#dcfce7] text-[#008236]'
+								: 'bg-[#f1f5f9] text-[#4A5565]'
+						}`}
 					>
 						<FuseSvgIcon size={12}>
 							{row.original.status === 'Active' ? 'lucide:circle-check' : 'lucide:circle-x'}
@@ -224,10 +226,23 @@ function WhitelabelSitesTable({ rows, onViewSite }: WhitelabelSitesTableProps) {
 					enableColumnPinning={false}
 					renderRowActionMenuItems={() => []}
 					renderRowActions={({ row }) => (
-						<div className="flex items-center justify-center gap-6 pr-1 text-[#155dfc]">
+						<div className="flex items-center justify-center gap-4 pr-1 text-[#155dfc]">
 							<button
 								type="button"
-								onClick={() => onViewSite(row.original)}
+								onClick={(event) => {
+									event.stopPropagation();
+									onCreateUser(row.original);
+								}}
+								className="rounded-md bg-[#155dfc] px-3 py-1.5 font-['Geist'] text-[11px] font-semibold whitespace-nowrap text-white"
+							>
+								Create User
+							</button>
+							<button
+								type="button"
+								onClick={(event) => {
+									event.stopPropagation();
+									onViewSite(row.original);
+								}}
 								aria-label="View whitelabel"
 							>
 								<FuseSvgIcon size={15}>lucide:eye</FuseSvgIcon>

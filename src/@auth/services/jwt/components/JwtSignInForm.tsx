@@ -7,11 +7,13 @@ import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import Alert from '@mui/material/Alert';
 import Link from '@fuse/core/Link';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router';
 import { setSessionRedirectUrl } from '@fuse/core/FuseAuthorization/sessionRedirectUrl';
 import useJwtAuth from '../useJwtAuth';
+import { HTTPError } from 'ky';
 
 /**
  * Form Validation Schema
@@ -28,8 +30,8 @@ const schema = z.object({
 type FormType = z.infer<typeof schema>;
 
 const defaultValues: FormType = {
-	email: '',
-	password: '',
+	email: 'admin@crm.local',
+	password: 'Admin@1234',
 	remember: true
 };
 
@@ -43,38 +45,40 @@ function JwtSignInForm() {
 		resolver: zodResolver(schema)
 	});
 
-	const { isValid, dirtyFields, errors } = formState;
+	const { isValid, dirtyFields, errors, isSubmitting } = formState;
 
 	useEffect(() => {
-		setValue('email', 'admin@fusetheme.com', { shouldDirty: true, shouldValidate: true });
-		setValue('password', '5;4+0IOx:\\Dy', { shouldDirty: true, shouldValidate: true });
+		setValue('email', defaultValues.email, { shouldDirty: true, shouldValidate: true });
+		setValue('password', defaultValues.password, { shouldDirty: true, shouldValidate: true });
 	}, [setValue]);
 
-	function onSubmit(formData: FormType) {
+	async function onSubmit(formData: FormType) {
 		const { email, password } = formData;
 
 		setSessionRedirectUrl('/otp');
 
-		signIn({
-			email,
-			password
-		})
-			.then(() => {
-				navigate('/otp');
-			})
-			.catch((error) => {
-			const errorData = error?.data as {
-				type: 'email' | 'password' | 'remember' | `root.${string}` | 'root';
-				message: string;
-			}[];
-
-			errorData?.forEach?.((err) => {
-				setError(err.type, {
-					type: 'manual',
-					message: err.message
-				});
+		try {
+			await signIn({
+				email,
+				password
 			});
-		});
+			navigate('/otp');
+		} catch (error) {
+			if (error instanceof HTTPError) {
+				const errorData = await error.response.json().catch(() => null);
+
+				setError('root', {
+					type: 'manual',
+					message: errorData?.error || 'Unable to sign in. Please check your credentials and try again.'
+				});
+				return;
+			}
+
+			setError('root', {
+				type: 'manual',
+				message: 'Unable to sign in. Please try again.'
+			});
+		}
 	}
 
 	return (
@@ -84,6 +88,15 @@ function JwtSignInForm() {
 			className="flex w-full flex-col justify-center"
 			onSubmit={handleSubmit(onSubmit)}
 		>
+			{errors.root?.message && (
+				<Alert
+					severity="error"
+					className="mb-6"
+				>
+					{errors.root.message}
+				</Alert>
+			)}
+
 			<Controller
 				name="email"
 				control={control}
@@ -153,11 +166,11 @@ function JwtSignInForm() {
 				color="secondary"
 				className="mt-4 w-full"
 				aria-label="Sign in"
-				disabled={_.isEmpty(dirtyFields) || !isValid}
+				disabled={_.isEmpty(dirtyFields) || !isValid || isSubmitting}
 				type="submit"
 				size="large"
 			>
-				Sign in
+				{isSubmitting ? 'Signing in...' : 'Sign in'}
 			</Button>
 		</form>
 	);

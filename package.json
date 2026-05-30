@@ -44,6 +44,7 @@
     "@tiptap/pm": "3.19.0",
     "@tiptap/react": "3.19.0",
     "@tiptap/starter-kit": "3.19.0",
+    "ag-grid-react": "^35.3.0",
     "apexcharts": "5.3.6",
     "autosuggest-highlight": "3.3.4",
     "aws-amplify": "6.16.2",

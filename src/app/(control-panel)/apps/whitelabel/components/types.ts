@@ -39,3 +39,18 @@ export type WhitelabelFormData = {
 	productionDomain: string;
 	testDomain: string;
 };
+
+export type CreateAdminUserFormData = {
+	email: string;
+	name: string;
+	password: string;
+	permissionRoleId: string;
+	roleType: 'admin' | 'sub_admin' | 'agent';
+	department: string;
+	status: 'active' | 'inactive';
+	google2faRequired: boolean;
+	mpinRequired: boolean;
+	mpinDigits: 4 | 6;
+	ipWhitelist: string;
+	piiMasking: boolean;
+};
