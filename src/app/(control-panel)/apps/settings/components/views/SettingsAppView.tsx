@@ -1,11 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
 import FusePageSimple from '@fuse/core/FusePageSimple';
-import usePathname from '@fuse/hooks/usePathname';
-import SettingsAppSidebarContent from '../ui/SettingsAppSidebarContent';
-import SettingsAppHeader from '../ui/SettingsAppHeader';
+import { ReactNode } from 'react';
 import { styled } from '@mui/material/styles';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import Notification from './NotificationsTabView'
@@ -34,53 +30,10 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 }));
 
 type SettingsAppProps = {
-	children?: React.ReactNode;
+	children?: ReactNode;
 };
 
-/**
- * The notes app.
- */
-// function SettingsAppView(props: SettingsAppProps) {
-	// const { children } = props;
-	// const pathname = usePathname();
-	// const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
-	// const [leftSidebarOpen, setLeftSidebarOpen] = useState(!isMobile);
-// 
-	// useEffect(() => {
-		// setLeftSidebarOpen(!isMobile);
-	// }, [isMobile]);
-// 
-	// useEffect(() => {
-		// if (isMobile) {
-			// setLeftSidebarOpen(false);
-		// }
-	// }, [pathname, isMobile]);
-// 
-	// return (
-		// <Root
-			// content={
-				// <div className="max-w-2xl flex-auto p-4 md:p-6">
-					{/* <SettingsAppHeader */}
-						// className="mb-4"
-						// onSetSidebarOpen={setLeftSidebarOpen}
-					// />
-					{/* {children} */}
-				{/* </div> */}
-			// }
-			// leftSidebarProps={{
-				// open: leftSidebarOpen,
-				// onClose: () => {
-					// setLeftSidebarOpen(false);
-				// },
-				// content: <SettingsAppSidebarContent onSetSidebarOpen={setLeftSidebarOpen} />,
-				// width: 320
-			// }}
-			// scroll={isMobile ? 'page' : 'content'}
-		// />
-	// );
-// }
-
-function SettingsAppView(){
+function SettingsAppView({children}:SettingsAppProps){
 	return(
 		<div className="p-4 font-[Geist]">
 			<div className='flex justify-between items-center mb-4 mx-2'>

@@ -14,6 +14,24 @@ export type User = FuseAuthUser & {
 	shortcuts?: string[];
 	settings?: PartialDeep<FuseSettingsConfigType>;
 	loginRedirectUrl?: string; // The URL to redirect to after login.
+	crm?: {
+		expiresIn?: number;
+		tokenType?: string;
+		requires2fa?: boolean;
+		isActive?: boolean;
+		isPlatformAdmin?: boolean;
+		apps?: {
+			app_id: string;
+			name: string;
+			role_type: string;
+			membership_id?: string | null;
+		}[];
+		selectedApp?: {
+			app_id: string;
+			name: string;
+			role_type: string;
+		};
+	};
 };
 
 export type AppRegistration = {

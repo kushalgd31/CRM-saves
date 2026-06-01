@@ -20,6 +20,12 @@ export type JwtSignUpPayload = {
 	password: string;
 };
 
+export type JwtCompleteSignInPayload = {
+	user: User;
+	accessToken: string;
+	refreshToken?: string;
+};
+
 function JwtAuthProvider(props: FuseAuthProviderComponentProps) {
 	const { ref, children, onAuthStateChanged } = props;
 
@@ -97,25 +103,35 @@ function JwtAuthProvider(props: FuseAuthProviderComponentProps) {
 	/**
 	 * Sign in
 	 */
-	const signIn: JwtAuthContextType['signIn'] = useCallback(
-		async (credentials) => {
-			try {
-				const session = await authSignIn(credentials);
-				setAuthState({
-					authStatus: 'authenticated',
-					isAuthenticated: true,
-					user: session.user
-				});
-				setTokenStorageValue(session.access_token);
-				setGlobalHeaders({ Authorization: `Bearer ${session.access_token}` });
-				return session;
-			} catch (error) {
-				if (error instanceof HTTPError) {
-					console.error('Sign in failed:', error.response.status);
-				}
-
-				throw error;
+	const signIn: JwtAuthContextType['signIn'] = useCallback(async (credentials) => {
+		try {
+			return await authSignIn(credentials);
+		} catch (error) {
+			if (error instanceof HTTPError) {
+				console.error('Sign in failed:', error.response.status);
 			}
+
+			throw error;
+		}
+	}, []);
+
+	const completeSignIn: JwtAuthContextType['completeSignIn'] = useCallback(
+		async ({ user, accessToken, refreshToken }) => {
+			setAuthState({
+				authStatus: 'authenticated',
+				isAuthenticated: true,
+				user
+			});
+			setTokenStorageValue(accessToken);
+			setGlobalHeaders({ Authorization: `Bearer ${accessToken}` });
+
+			if (refreshToken) {
+				localStorage.setItem('jwt_refresh_token', refreshToken);
+			} else {
+				localStorage.removeItem('jwt_refresh_token');
+			}
+
+			return { user, access_token: accessToken };
 		},
 		[setTokenStorageValue]
 	);
@@ -151,6 +167,7 @@ function JwtAuthProvider(props: FuseAuthProviderComponentProps) {
 	 */
 	const signOut: JwtAuthContextType['signOut'] = useCallback(() => {
 		removeTokenStorageValue();
+		localStorage.removeItem('jwt_refresh_token');
 		removeGlobalHeaders(['Authorization']);
 		setAuthState({
 			authStatus: 'unauthenticated',
@@ -199,12 +216,13 @@ function JwtAuthProvider(props: FuseAuthProviderComponentProps) {
 			({
 				...authState,
 				signIn,
+				completeSignIn,
 				signUp,
 				signOut,
 				updateUser,
 				refreshToken
 			}) as JwtAuthContextType,
-		[authState, signIn, signUp, signOut, updateUser, refreshToken]
+		[authState, signIn, completeSignIn, signUp, signOut, updateUser, refreshToken]
 	);
 
 	/**

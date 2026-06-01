@@ -230,6 +230,7 @@ function DashboardProductsTable() {
 						right: ['mrt-row-actions']
 					},
 					pagination: {
+						pageIndex:0,
 						pageSize: 15
 					}
 				}}

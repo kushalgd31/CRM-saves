@@ -1,6 +1,5 @@
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect } from 'react';
 import { z } from 'zod';
 import _ from 'lodash';
 import TextField from '@mui/material/TextField';
@@ -14,6 +13,8 @@ import { useNavigate } from 'react-router';
 import { setSessionRedirectUrl } from '@fuse/core/FuseAuthorization/sessionRedirectUrl';
 import useJwtAuth from '../useJwtAuth';
 import { HTTPError } from 'ky';
+import { authSelectApp, type CrmAuthApp, type CrmPreAuthSession } from '@auth/authApi';
+import { User } from '@auth/user';
 
 /**
  * Form Validation Schema
@@ -30,16 +31,16 @@ const schema = z.object({
 type FormType = z.infer<typeof schema>;
 
 const defaultValues: FormType = {
-	email: 'admin@crm.local',
-	password: 'Admin@1234',
+	email: '',
+	password: '',
 	remember: true
 };
 
 function JwtSignInForm() {
-	const { signIn } = useJwtAuth();
+	const { completeSignIn, signIn } = useJwtAuth();
 	const navigate = useNavigate();
 
-	const { control, formState, handleSubmit, setValue, setError } = useForm<FormType>({
+	const { control, formState, handleSubmit, setError } = useForm<FormType>({
 		mode: 'onChange',
 		defaultValues,
 		resolver: zodResolver(schema)
@@ -47,22 +48,63 @@ function JwtSignInForm() {
 
 	const { isValid, dirtyFields, errors, isSubmitting } = formState;
 
-	useEffect(() => {
-		setValue('email', defaultValues.email, { shouldDirty: true, shouldValidate: true });
-		setValue('password', defaultValues.password, { shouldDirty: true, shouldValidate: true });
-	}, [setValue]);
+	async function completePreAuthSession(preAuthSession: CrmPreAuthSession) {
+		if (!preAuthSession.user) {
+			setError('root', {
+				type: 'manual',
+				message: 'Unable to sign in. The server did not return user details.'
+			});
+			return;
+		}
+
+		const primaryApp = preAuthSession.apps[0];
+
+		if (primaryApp) {
+			const finalSession = await authSelectApp(preAuthSession.preAuthToken, primaryApp.app_id);
+			const finalUser = createFinalUser(preAuthSession.user, primaryApp, finalSession.app);
+
+			await completeSignIn({
+				user: finalUser,
+				accessToken: finalSession.accessToken,
+				refreshToken: finalSession.refreshToken
+			});
+		} else {
+			await completeSignIn({
+				user: preAuthSession.user,
+				accessToken: preAuthSession.preAuthToken
+			});
+		}
+
+		navigate('/dashboards/project', { replace: true });
+	}
 
 	async function onSubmit(formData: FormType) {
 		const { email, password } = formData;
 
-		setSessionRedirectUrl('/otp');
+		setSessionRedirectUrl('/dashboards/project');
 
 		try {
-			await signIn({
+			const preAuthSession = await signIn({
 				email,
 				password
 			});
-			navigate('/otp');
+
+			if (!preAuthSession?.preAuthToken) {
+				setError('root', {
+					type: 'manual',
+					message: 'Unable to sign in. The server did not return an authorization token.'
+				});
+				return;
+			}
+
+			if (!preAuthSession.requires2fa || preAuthSession.user?.crm?.isPlatformAdmin) {
+				await completePreAuthSession(preAuthSession);
+				return;
+			}
+
+			navigate('/otp', {
+				state: preAuthSession
+			});
 		} catch (error) {
 			if (error instanceof HTTPError) {
 				const errorData = await error.response.json().catch(() => null);
@@ -174,6 +216,21 @@ function JwtSignInForm() {
 			</Button>
 		</form>
 	);
+}
+
+function createFinalUser(user: User, app: CrmAuthApp, selectedApp?: User['crm']['selectedApp']): User {
+	return {
+		...user,
+		role: user.crm?.isPlatformAdmin ? 'admin' : app.role_type,
+		crm: {
+			...user.crm,
+			selectedApp: selectedApp || {
+				app_id: app.app_id,
+				name: app.name,
+				role_type: app.role_type
+			}
+		}
+	};
 }
 
 export default JwtSignInForm;

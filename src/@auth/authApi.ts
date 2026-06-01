@@ -10,25 +10,41 @@ type AuthResponse = {
 	access_token: string;
 };
 
+export type CrmAuthApp = {
+	app_id: string;
+	name: string;
+	role_type: string;
+	membership_id?: string | null;
+};
+
+type CrmAuthUser = {
+	id: string;
+	email: string;
+	name: string | null;
+	is_platform_admin: boolean;
+	is_active: boolean;
+};
+
 type CrmLoginResponse = {
 	success: true;
 	data: {
+		requires_2fa?: boolean;
 		preAuthToken: string;
 		expiresIn: number;
 		tokenType: string;
-		user: {
-			id: string;
-			email: string;
-			name: string | null;
-			is_platform_admin: boolean;
-			is_active: boolean;
-		};
-		apps?: {
-			app_id: string;
-			name: string;
-			role_type: string;
-			membership_id: string | null;
-		}[];
+		user?: CrmAuthUser;
+		apps?: CrmAuthApp[];
+	};
+};
+
+type CrmVerify2faResponse = {
+	success: true;
+	data: {
+		preAuthToken: string;
+		expiresIn?: number;
+		tokenType?: string;
+		user: CrmAuthUser;
+		apps: CrmAuthApp[];
 	};
 };
 
@@ -44,6 +60,42 @@ type CrmAppSessionResponse = {
 			name: string;
 			role_type: string;
 		};
+	};
+};
+
+export type CrmPreAuthSession = {
+	requires2fa: boolean;
+	preAuthToken: string;
+	expiresIn?: number;
+	tokenType?: string;
+	user?: User;
+	apps: CrmAuthApp[];
+};
+
+export type CrmFinalSession = {
+	accessToken: string;
+	refreshToken?: string;
+	expiresIn?: number;
+	tokenType?: string;
+	app?: {
+		app_id: string;
+		name: string;
+		role_type: string;
+	};
+};
+
+export type TwoFactorSetupResponse = {
+	success: true;
+	data: {
+		secret: string;
+		otpauth_url: string;
+	};
+};
+
+export type TwoFactorConfirmResponse = {
+	success: true;
+	data: {
+		enabled: boolean;
 	};
 };
 
@@ -105,28 +157,58 @@ function getClientAuditPayload() {
 	};
 }
 
-function mapCrmLoginResponse(response: CrmLoginResponse): AuthResponse {
+function mapCrmUser(data: {
+	user: CrmAuthUser;
+	apps?: CrmAuthApp[];
+	expiresIn?: number;
+	tokenType?: string;
+	requires2fa?: boolean;
+	selectedApp?: CrmFinalSession['app'];
+}): User {
+	const primaryApp = data.selectedApp || data.apps?.[0];
+
+	return UserModel({
+		id: data.user.id,
+		email: data.user.email,
+		displayName: data.user.name || data.user.email,
+		role: data.user.is_platform_admin ? 'admin' : primaryApp?.role_type || 'staff',
+		loginRedirectUrl: '/dashboards/project',
+		settings: {},
+		shortcuts: [],
+		crm: {
+			expiresIn: data.expiresIn,
+			tokenType: data.tokenType,
+			requires2fa: data.requires2fa,
+			isActive: data.user.is_active,
+			isPlatformAdmin: data.user.is_platform_admin,
+			apps: data.apps || [],
+			selectedApp: data.selectedApp
+		}
+	});
+}
+
+function mapCrmPreAuthSession(
+	response: CrmLoginResponse | CrmVerify2faResponse,
+	requires2faOverride?: boolean
+): CrmPreAuthSession {
 	const { data } = response;
-	const primaryApp = data.apps?.[0];
+	const requires2fa = requires2faOverride ?? ('requires_2fa' in data ? Boolean(data.requires_2fa) : false);
 
 	return {
-		access_token: data.preAuthToken,
-		user: UserModel({
-			id: data.user.id,
-			email: data.user.email,
-			displayName: data.user.name || data.user.email,
-			role: data.user.is_platform_admin ? 'admin' : primaryApp?.role_type || 'staff',
-			loginRedirectUrl: '/otp',
-			settings: {},
-			shortcuts: [],
-			crm: {
-				expiresIn: data.expiresIn,
-				tokenType: data.tokenType,
-				isActive: data.user.is_active,
-				isPlatformAdmin: data.user.is_platform_admin,
-				apps: data.apps || []
-			}
-		})
+		requires2fa,
+		preAuthToken: data.preAuthToken,
+		expiresIn: data.expiresIn,
+		tokenType: data.tokenType,
+		user: data.user
+			? mapCrmUser({
+					user: data.user,
+					apps: data.apps,
+					expiresIn: data.expiresIn,
+					tokenType: data.tokenType,
+					requires2fa
+				})
+			: undefined,
+		apps: data.apps || []
 	};
 }
 
@@ -151,7 +233,7 @@ export async function authSignInWithToken(accessToken: string): Promise<Response
 /**
  * Sign in
  */
-export async function authSignIn(credentials: { email: string; password: string }): Promise<AuthResponse> {
+export async function authSignIn(credentials: { email: string; password: string }): Promise<CrmPreAuthSession> {
 	const response = await crmApi
 		.post('v1/auth/login', {
 			json: {
@@ -161,7 +243,73 @@ export async function authSignIn(credentials: { email: string; password: string 
 		})
 		.json<CrmLoginResponse>();
 
-	return mapCrmLoginResponse(response);
+	return mapCrmPreAuthSession(response, true);
+}
+
+/**
+ * Verify 2FA code with the temporary pre-auth token
+ */
+export async function authVerify2fa(preAuthToken: string, code: string): Promise<CrmPreAuthSession> {
+	const response = await crmApi
+		.post('v1/auth/2fa/verify', {
+			headers: {
+				Authorization: `Bearer ${preAuthToken}`
+			},
+			json: { code }
+		})
+		.json<CrmVerify2faResponse>();
+
+	return mapCrmPreAuthSession(response);
+}
+
+/**
+ * Select CRM app and receive the final application session
+ */
+export async function authSelectApp(preAuthToken: string, appId: string): Promise<CrmFinalSession> {
+	const response = await crmApi
+		.post('v1/auth/select-app', {
+			headers: {
+				Authorization: `Bearer ${preAuthToken}`,
+				'X-App-Id': appId
+			},
+			json: {
+				app_id: appId
+			}
+		})
+		.json<CrmAppSessionResponse>();
+
+	return response.data;
+}
+
+/**
+ * Request 2FA setup parameters
+ */
+export async function authSetup2fa(accessToken: string): Promise<TwoFactorSetupResponse['data']> {
+	const response = await crmApi
+		.post('v1/auth/2fa/setup', {
+			headers: {
+				Authorization: `Bearer ${accessToken}`
+			}
+		})
+		.json<TwoFactorSetupResponse>();
+
+	return response.data;
+}
+
+/**
+ * Confirm and activate 2FA
+ */
+export async function authConfirm2fa(accessToken: string, code: string): Promise<TwoFactorConfirmResponse['data']> {
+	const response = await crmApi
+		.post('v1/auth/2fa/confirm', {
+			headers: {
+				Authorization: `Bearer ${accessToken}`
+			},
+			json: { code }
+		})
+		.json<TwoFactorConfirmResponse>();
+
+	return response.data;
 }
 
 /**
