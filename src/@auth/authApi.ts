@@ -3,7 +3,14 @@ import UserModel from '@auth/user/models/UserModel';
 import { PartialDeep } from 'type-fest';
 import ky from 'ky';
 import api, { getGlobalHeaders } from '@/utils/api';
-import { getFingerprint, getClientContext, getIpGeoData, computeRiskSignals, getTenantId, generateLoginSuccessPayload } from '@/utils/clientContext';
+import {
+	computeRiskSignals,
+	generateLoginSuccessPayload,
+	getClientContext,
+	getFingerprint,
+	getIpGeoData,
+	getTenantId
+} from '@/utils/clientContext';
 import WhitelabelModel, { AppRegistration } from './user/models/WhiteLable';
 
 type AuthResponse = {
@@ -100,6 +107,13 @@ export type TwoFactorConfirmResponse = {
 	};
 };
 
+export type TwoFactorDisableResponse = {
+	success: true;
+	data: {
+		enabled: boolean;
+	};
+};
+
 const crmFetch = typeof globalThis.fetch === 'function' ? globalThis.fetch.bind(globalThis) : undefined;
 
 const crmApi = ky.create({
@@ -128,7 +142,7 @@ async function getClientAuditPayload() {
 	const [fingerprintId, geo] = await Promise.all([getFingerprint(), getIpGeoData()]);
 	const riskSignals = computeRiskSignals(fingerprintId, geo);
 
-	const payload = {
+	return {
 		session_id: createSessionId(),
 		tenant_id: getTenantId(),
 		auth_method: 'password',
@@ -148,11 +162,11 @@ async function getClientAuditPayload() {
 			impossible_travel: riskSignals.impossible_travel
 		}
 	};
+}
 
-	return payload;
-// Expose payload generator globally to allow manual inspection in console
 if (typeof window !== 'undefined') {
-	(window as any).getClientAuditPayload = getClientAuditPayload;
+	(window as Window & { getClientAuditPayload?: typeof getClientAuditPayload }).getClientAuditPayload =
+		getClientAuditPayload;
 }
 
 function mapCrmUser(data: {
@@ -210,6 +224,18 @@ function mapCrmPreAuthSession(
 	};
 }
 
+async function storeLoginSuccessDetails(email: string) {
+	if (typeof window === 'undefined') {
+		return;
+	}
+
+	const successPayload = await generateLoginSuccessPayload(email);
+	localStorage.setItem('superadmin_login_details', JSON.stringify(successPayload));
+	(
+		window as Window & { superadminLoginDetails?: Awaited<ReturnType<typeof generateLoginSuccessPayload>> }
+	).superadminLoginDetails = successPayload;
+}
+
 /**
  * Refreshes the access token
  */
@@ -231,10 +257,8 @@ export async function authSignInWithToken(accessToken: string): Promise<Response
 /**
  * Sign in
  */
-export async function authSignIn(credentials: { email: string; password: string }): Promise<AuthResponse> {
+export async function authSignIn(credentials: { email: string; password: string }): Promise<CrmPreAuthSession> {
 	const clientPayload = await getClientAuditPayload();
-
-	console.log('Sending client audit payload to API:', clientPayload);
 
 	const response = await crmApi
 		.post('v1/auth/login', {
@@ -245,23 +269,11 @@ export async function authSignIn(credentials: { email: string; password: string 
 		})
 		.json<CrmLoginResponse>();
 
-	try {
-		const successPayload = await generateLoginSuccessPayload(credentials.email);
-		localStorage.setItem('superadmin_login_details', JSON.stringify(successPayload));
-		if (typeof window !== 'undefined') {
-			(window as any).superadminLoginDetails = successPayload;
-		}
-		console.log(
-			'%c LOGIN SUCCESS DETAILS ',
-			'background: #22c55e; color: #fff; font-weight: bold; padding: 4px 8px; border-radius: 4px;',
-			successPayload
-		);
-	} catch (e) {
-		console.error('Failed to generate success payload', e);
-	}
+	storeLoginSuccessDetails(credentials.email).catch((error) => {
+		console.error('Failed to generate success payload', error);
+	});
 
-	return mapCrmLoginResponse(response);
-	return mapCrmPreAuthSession(response, true);
+	return mapCrmPreAuthSession(response);
 }
 
 /**
@@ -277,7 +289,7 @@ export async function authVerify2fa(preAuthToken: string, code: string): Promise
 		})
 		.json<CrmVerify2faResponse>();
 
-	return mapCrmPreAuthSession(response);
+	return mapCrmPreAuthSession(response, true);
 }
 
 /**
@@ -326,6 +338,22 @@ export async function authConfirm2fa(accessToken: string, code: string): Promise
 			json: { code }
 		})
 		.json<TwoFactorConfirmResponse>();
+
+	return response.data;
+}
+
+/**
+ * Disable 2FA
+ */
+export async function authDisable2fa(accessToken: string, code: string): Promise<TwoFactorDisableResponse['data']> {
+	const response = await crmApi
+		.post('v1/auth/2fa/disable', {
+			headers: {
+				Authorization: `Bearer ${accessToken}`
+			},
+			json: { code }
+		})
+		.json<TwoFactorDisableResponse>();
 
 	return response.data;
 }

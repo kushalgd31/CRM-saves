@@ -1,14 +1,36 @@
-import FingerprintJS from '@fingerprintjs/fingerprintjs';
-
 // ---------------------------------------------------------------------------
 // FingerprintJS – stable browser fingerprint
 // ---------------------------------------------------------------------------
 
-let fpPromise: ReturnType<typeof FingerprintJS.load> | null = null;
+type FingerprintAgent = {
+	get: () => Promise<{ visitorId: string }>;
+};
+
+type FingerprintModule = {
+	default?: {
+		load: () => Promise<FingerprintAgent>;
+	};
+	load?: () => Promise<FingerprintAgent>;
+};
+
+let fpPromise: Promise<FingerprintAgent> | null = null;
+
+async function loadFingerprintModule() {
+	const moduleName = '@fingerprintjs/fingerprintjs';
+	return import(/* @vite-ignore */ moduleName) as Promise<FingerprintModule>;
+}
 
 function getFpAgent() {
 	if (!fpPromise) {
-		fpPromise = FingerprintJS.load();
+		fpPromise = loadFingerprintModule().then((module) => {
+			const fingerprint = module.default || module;
+
+			if (!fingerprint.load) {
+				throw new Error('FingerprintJS load method is unavailable');
+			}
+
+			return fingerprint.load();
+		});
 	}
 
 	return fpPromise;

@@ -80,6 +80,27 @@ export default function Otp() {
 			setApps(verifiedSession.apps);
 			setUser(verifiedSession.user);
 			setRequires2fa(false);
+
+			// If no apps returned, complete sign in with the pre-auth token as access token
+			if (!verifiedSession.apps || verifiedSession.apps.length === 0) {
+				if (!verifiedSession.user) {
+					setErrorMessage('Unable to continue. The server did not return user details.');
+					return;
+				}
+
+				await completeSignIn({
+					user: verifiedSession.user,
+					accessToken: verifiedSession.preAuthToken
+				});
+				navigate('/dashboards/project', { replace: true });
+				return;
+			}
+
+			// If a single app is returned, auto-select it and complete sign-in
+			if (verifiedSession.apps.length === 1) {
+				await handleSelectApp(verifiedSession.apps[0], verifiedSession.user);
+				return;
+			}
 		} catch (error) {
 			setErrorMessage(await getErrorMessage(error, 'Invalid code. Please try again.'));
 		} finally {
@@ -87,8 +108,9 @@ export default function Otp() {
 		}
 	};
 
-	const handleSelectApp = async (app: CrmAuthApp) => {
-		if (!user) {
+	const handleSelectApp = async (app: CrmAuthApp, userArg?: User) => {
+		const currentUser = userArg || user;
+		if (!currentUser) {
 			setErrorMessage('Unable to continue. The server did not return user details.');
 			return;
 		}
@@ -99,10 +121,10 @@ export default function Otp() {
 		try {
 			const finalSession = await authSelectApp(preAuthToken, app.app_id);
 			const finalUser: User = {
-				...user,
-				role: user.crm?.isPlatformAdmin ? 'admin' : app.role_type,
+				...currentUser,
+				role: currentUser.crm?.isPlatformAdmin ? 'admin' : app.role_type,
 				crm: {
-					...user.crm,
+					...currentUser.crm,
 					selectedApp: finalSession.app || {
 						app_id: app.app_id,
 						name: app.name,

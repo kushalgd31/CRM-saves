@@ -97,11 +97,7 @@ function JwtSignInForm() {
 				return;
 			}
 
-			if (!preAuthSession.requires2fa || preAuthSession.user?.crm?.isPlatformAdmin) {
-				await completePreAuthSession(preAuthSession);
-				return;
-			}
-
+			// Redirect to OTP screen always; OTP component will verify and complete sign-in
 			navigate('/otp', {
 				state: preAuthSession
 			});
