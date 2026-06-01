@@ -148,6 +148,11 @@ async function getClientAuditPayload() {
 			impossible_travel: riskSignals.impossible_travel
 		}
 	};
+
+	return payload;
+// Expose payload generator globally to allow manual inspection in console
+if (typeof window !== 'undefined') {
+	(window as any).getClientAuditPayload = getClientAuditPayload;
 }
 
 function mapCrmUser(data: {
