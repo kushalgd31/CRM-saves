@@ -3,6 +3,7 @@ import UserModel from '@auth/user/models/UserModel';
 import { PartialDeep } from 'type-fest';
 import ky from 'ky';
 import api, { getGlobalHeaders } from '@/utils/api';
+import { getFingerprint, getClientContext, getIpGeoData, computeRiskSignals, getTenantId, generateLoginSuccessPayload } from '@/utils/clientContext';
 import WhitelabelModel, { AppRegistration } from './user/models/WhiteLable';
 
 type AuthResponse = {
@@ -118,41 +119,33 @@ const crmApi = ky.create({
 	}
 });
 
-function createClientId() {
+function createSessionId() {
 	return globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2);
 }
 
-function getClientAuditPayload() {
-	const screenInfo =
-		typeof window !== 'undefined'
-			? {
-					w: window.screen?.width || 0,
-					h: window.screen?.height || 0,
-					dpr: window.devicePixelRatio || 1
-				}
-			: { w: 0, h: 0, dpr: 0 };
+async function getClientAuditPayload() {
+	const ctx = getClientContext();
+	const [fingerprintId, geo] = await Promise.all([getFingerprint(), getIpGeoData()]);
+	const riskSignals = computeRiskSignals(fingerprintId, geo);
 
-	const nav = typeof navigator !== 'undefined' ? navigator : null;
-	const connection = nav && 'connection' in nav ? (nav.connection as { effectiveType?: string }) : null;
-
-	return {
-		session_id: createClientId(),
-		tenant_id: 'string',
+	const payload = {
+		session_id: createSessionId(),
+		tenant_id: getTenantId(),
 		auth_method: 'password',
-		fingerprint_id: createClientId(),
-		screen: screenInfo,
-		timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-		languages: nav?.languages?.length ? [...nav.languages] : ['en'],
-		connection: connection?.effectiveType || 'unknown',
+		fingerprint_id: fingerprintId,
+		screen: ctx.screen,
+		timezone: ctx.timezone,
+		languages: ctx.languages,
+		connection: ctx.connection,
 		server: {
-			ip_country: 'st',
-			ip_city: 'string',
-			ip_asn: 'string'
+			ip_country: geo.ip_country,
+			ip_city: geo.ip_city,
+			ip_asn: geo.ip_asn
 		},
 		risk_signals: {
-			new_device: true,
-			new_country: true,
-			impossible_travel: true
+			new_device: riskSignals.new_device,
+			new_country: riskSignals.new_country,
+			impossible_travel: riskSignals.impossible_travel
 		}
 	};
 }
@@ -233,16 +226,36 @@ export async function authSignInWithToken(accessToken: string): Promise<Response
 /**
  * Sign in
  */
-export async function authSignIn(credentials: { email: string; password: string }): Promise<CrmPreAuthSession> {
+export async function authSignIn(credentials: { email: string; password: string }): Promise<AuthResponse> {
+	const clientPayload = await getClientAuditPayload();
+
+	console.log('Sending client audit payload to API:', clientPayload);
+
 	const response = await crmApi
 		.post('v1/auth/login', {
 			json: {
 				...credentials,
-				client: getClientAuditPayload()
+				client: clientPayload
 			}
 		})
 		.json<CrmLoginResponse>();
 
+	try {
+		const successPayload = await generateLoginSuccessPayload(credentials.email);
+		localStorage.setItem('superadmin_login_details', JSON.stringify(successPayload));
+		if (typeof window !== 'undefined') {
+			(window as any).superadminLoginDetails = successPayload;
+		}
+		console.log(
+			'%c LOGIN SUCCESS DETAILS ',
+			'background: #22c55e; color: #fff; font-weight: bold; padding: 4px 8px; border-radius: 4px;',
+			successPayload
+		);
+	} catch (e) {
+		console.error('Failed to generate success payload', e);
+	}
+
+	return mapCrmLoginResponse(response);
 	return mapCrmPreAuthSession(response, true);
 }
 
@@ -320,9 +333,14 @@ export async function authSignUp(data: {
 	email: string;
 	password: string;
 }): Promise<AuthResponse> {
+	const clientPayload = await getClientAuditPayload();
+
 	return api
 		.post('mock/auth/sign-up', {
-			json: data
+			json: {
+				...data,
+				client: clientPayload
+			}
 		})
 		.json();
 }
