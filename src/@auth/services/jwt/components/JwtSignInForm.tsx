@@ -30,8 +30,8 @@ const schema = z.object({
 type FormType = z.infer<typeof schema>;
 
 const defaultValues: FormType = {
-	email: 'admin@crm.local',
-	password: 'Admin@1234',
+	email: 'superadmin@crm.local',
+	password: 'admin@123',
 	remember: true
 };
 
@@ -55,14 +55,15 @@ function JwtSignInForm() {
 	async function onSubmit(formData: FormType) {
 		const { email, password } = formData;
 
-		setSessionRedirectUrl('/otp');
-
 		try {
-			await signIn({
+			const session = await signIn({
 				email,
 				password
 			});
-			navigate('/otp');
+			const crm = session?.user?.crm as { isPlatformAdmin?: boolean } | undefined;
+			const redirectUrl = crm?.isPlatformAdmin ? '/dashboards/project' : session?.user?.loginRedirectUrl || '/otp';
+			setSessionRedirectUrl(redirectUrl);
+			navigate(redirectUrl);
 		} catch (error) {
 			if (error instanceof HTTPError) {
 				const errorData = await error.response.json().catch(() => null);
