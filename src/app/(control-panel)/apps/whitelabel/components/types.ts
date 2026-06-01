@@ -38,12 +38,16 @@ export type WhitelabelFormData = {
 	supportGroup: string;
 	productionDomain: string;
 	testDomain: string;
+	admin_name: string;
+	admin_email: string;
+	admin_password: string;
 };
 
 export type CreateAdminUserFormData = {
 	email: string;
 	name: string;
 	password: string;
+	confirmPassword: string;
 	permissionRoleId: string;
 	roleType: 'admin' | 'sub_admin' | 'agent';
 	department: string;

@@ -29,6 +29,9 @@ function CreateAdminUserDialog({
 	onFormDataChange,
 	onCreateUser
 }: CreateAdminUserDialogProps) {
+	const passwordsMatch = formData.password && formData.confirmPassword && formData.password === formData.confirmPassword;
+	const showPasswordMismatchError = formData.password && formData.confirmPassword && !passwordsMatch;
+
 	return (
 		<Dialog
 			open={open}
@@ -105,6 +108,26 @@ function CreateAdminUserDialog({
 									className={inputClassName}
 								/>
 							</div>
+							<div>
+								<label className={labelClassName}>
+									Confirm Password <span className="text-[#f04438]">*</span>
+								</label>
+								<input
+									type="password"
+									placeholder="Re-enter password"
+									value={formData.confirmPassword}
+									onChange={(e) => onFormDataChange({ ...formData, confirmPassword: e.target.value })}
+									className={`${inputClassName} ${showPasswordMismatchError ? 'border-[#f04438] focus:border-[#f04438] focus:ring-[#f04438]' : ''}`}
+								/>
+								{showPasswordMismatchError && (
+									<Typography className="mt-1 font-['Geist'] text-[12px] text-[#f04438]">
+										Passwords do not match
+									</Typography>
+								)}
+							</div>
+						</div>
+
+						<div className="grid grid-cols-2 gap-5">
 							<div>
 								<label className={labelClassName}>
 									Role Type <span className="text-[#f04438]">*</span>

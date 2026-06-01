@@ -22,13 +22,17 @@ const emptyFormData: WhitelabelFormData = {
 	spoc: '',
 	supportGroup: '',
 	productionDomain: '',
-	testDomain: ''
+	testDomain: '',
+	admin_name: '',
+	admin_email: '',
+	admin_password: ''
 };
 
 const emptyAdminUserFormData: CreateAdminUserFormData = {
 	email: '',
 	name: '',
 	password: '',
+	confirmPassword: '',
 	permissionRoleId: '',
 	roleType: 'admin',
 	department: '',
@@ -159,6 +163,23 @@ function WhitelabelManagementView() {
 			return;
 		}
 
+		const missingAdminInfo =
+			!formData.admin_name.trim() ||
+			!formData.admin_email.trim() ||
+			!formData.admin_password.trim();
+
+		if (missingAdminInfo) {
+			setActiveTab(2);
+			enqueueSnackbar('Please fill all required admin details.', { variant: 'warning' });
+			return;
+		}
+
+		if (formData.admin_password.length < 8) {
+			setActiveTab(2);
+			enqueueSnackbar('Admin password must be at least 8 characters.', { variant: 'warning' });
+			return;
+		}
+
 		try {
 			setIsCreating(true);
 			await createWhitelabel({
@@ -169,6 +190,9 @@ function WhitelabelManagementView() {
 				production_domain: formData.productionDomain.trim(),
 				test_domain: formData.testDomain.trim(),
 				products: selectedProducts,
+				admin_name: formData.admin_name.trim(),
+				admin_email: formData.admin_email.trim(),
+				admin_password: formData.admin_password,
 				registration_config: {}
 			});
 
@@ -224,6 +248,11 @@ function WhitelabelManagementView() {
 
 		if (adminUserFormData.password.length < 8) {
 			enqueueSnackbar('Password must be at least 8 characters.', { variant: 'warning' });
+			return;
+		}
+
+		if (adminUserFormData.password !== adminUserFormData.confirmPassword) {
+			enqueueSnackbar('Passwords do not match.', { variant: 'warning' });
 			return;
 		}
 

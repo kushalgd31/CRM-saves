@@ -66,7 +66,7 @@ function CreateWhitelabelDialog({
 					</div>
 
 					<div className="mt-5 flex h-10 rounded-xl bg-[#f1f2f5] p-1">
-						{['Basic Information', 'Products & Features'].map((tab, index) => (
+						{['Basic Information', 'Products & Features', 'Admin Details'].map((tab, index) => (
 							<button
 								key={tab}
 								type="button"
@@ -223,9 +223,51 @@ function CreateWhitelabelDialog({
 							)}
 						</div>
 					)}
-				</div>
 
-				<div className="flex items-center justify-end gap-3 border-t border-[#eaecf0] px-6 py-4">
+				{activeTab === 2 && (
+					<div className="space-y-5">
+						<div>
+							<label className="mb-1.5 block text-[13px] font-semibold text-[#344054]">
+								Admin Name <span className="text-[#f04438]">*</span>
+							</label>
+							<input
+								type="text"
+								placeholder="e.g., Jane Admin"
+								value={formData.admin_name}
+								onChange={(e) => onFormDataChange({ ...formData, admin_name: e.target.value })}
+								className="h-11 w-full rounded-lg border border-[#d0d5dd] bg-white px-3.5 text-[14px] text-[#101828] placeholder-[#98a2b3] outline-none transition-colors focus:border-[#155dfc] focus:ring-1 focus:ring-[#155dfc]"
+							/>
+						</div>
+
+						<div>
+							<label className="mb-1.5 block text-[13px] font-semibold text-[#344054]">
+								Admin Email <span className="text-[#f04438]">*</span>
+							</label>
+							<input
+								type="email"
+								placeholder="admin@example.com"
+								value={formData.admin_email}
+								onChange={(e) => onFormDataChange({ ...formData, admin_email: e.target.value })}
+								className="h-11 w-full rounded-lg border border-[#d0d5dd] bg-white px-3.5 text-[14px] text-[#101828] placeholder-[#98a2b3] outline-none transition-colors focus:border-[#155dfc] focus:ring-1 focus:ring-[#155dfc]"
+							/>
+						</div>
+
+						<div>
+							<label className="mb-1.5 block text-[13px] font-semibold text-[#344054]">
+								Admin Password <span className="text-[#f04438]">*</span>
+							</label>
+							<input
+								type="password"
+								placeholder="Enter admin password"
+								value={formData.admin_password}
+								onChange={(e) => onFormDataChange({ ...formData, admin_password: e.target.value })}
+								className="h-11 w-full rounded-lg border border-[#d0d5dd] bg-white px-3.5 text-[14px] text-[#101828] placeholder-[#98a2b3] outline-none transition-colors focus:border-[#155dfc] focus:ring-1 focus:ring-[#155dfc]"
+							/>
+						</div>
+					</div>
+				)}
+			</div>
+			<div className="flex items-center justify-end gap-3 border-t border-[#eaecf0] px-6 py-4">
 					<Button
 						variant="outlined"
 						onClick={onClose}
