@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useState, useRef, type KeyboardEvent, type ReactNode } from 'react';
 import { alpha } from '@mui/material/styles';
 import {
 	Alert,
@@ -115,10 +115,11 @@ export default function Security() {
 	const { completeSignIn, user } = useJwtAuth();
 	const [saveLabel, setSaveLabel] = useState('Save Email Settings');
 	const [showDisableCode, setShowDisableCode] = useState(false);
-	const [disableCode, setDisableCode] = useState('');
+	const [disableCode, setDisableCode] = useState<string[]>(Array(6).fill(''));
 	const [disableError, setDisableError] = useState('');
 	const [disableSuccess, setDisableSuccess] = useState('');
 	const [isDisabling, setIsDisabling] = useState(false);
+	const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
 	const [settings, setSettings] = useState<SecurityPreferences>({
 		primaryEmail: 'admin@example.com',
 		recoveryEmail: 'recovery@example.com',
@@ -146,17 +147,46 @@ export default function Security() {
 
 	const getAccessToken = () => localStorage.getItem('jwt_access_token') || localStorage.getItem('token') || '';
 
+	const handleDisableCodeChange = (index: number, value: string) => {
+		const digit = value.replace(/\D/g, '').slice(0, 1);
+		const nextCode = [...disableCode];
+		nextCode[index] = digit;
+		setDisableCode(nextCode);
+		setDisableError('');
+
+		if (digit && index < disableCode.length - 1) {
+			inputsRef.current[index + 1]?.focus();
+		}
+	};
+
+	const handleDisableCodeKeyDown = (event: KeyboardEvent<HTMLInputElement>, index: number) => {
+		if (event.key !== 'Backspace') {
+			return;
+		}
+
+		event.preventDefault();
+		const nextCode = [...disableCode];
+		const isCurrentEmpty = nextCode[index] === '';
+		const startIndex = isCurrentEmpty && index > 0 ? index - 1 : index;
+
+		nextCode.fill('', startIndex);
+		setDisableCode(nextCode);
+
+		const focusIndex = isCurrentEmpty && index > 0 ? index - 1 : index;
+		inputsRef.current[focusIndex]?.focus();
+	};
+
 	const handleDisable2fa = async () => {
 		if (!showDisableCode) {
 			setShowDisableCode(true);
+			setDisableCode(Array(6).fill(''));
 			setDisableError('');
 			setDisableSuccess('');
 			return;
 		}
 
 		const accessToken = getAccessToken();
-		const code = disableCode.trim();
-
+		const code = disableCode.join('');
 		if (!accessToken) {
 			setDisableError('Unable to disable 2FA. Please sign in again.');
 			return;
@@ -188,7 +218,8 @@ export default function Security() {
 				});
 			}
 
-			setDisableCode('');
+			setDisableCode(Array(6).fill(''));
+
 			setShowDisableCode(false);
 			setDisableSuccess('Two-Factor Authentication has been disabled.');
 		} catch (error) {
@@ -470,40 +501,49 @@ export default function Security() {
 								variant="outlined"
 								color="error"
 								size="small"
-								disabled={isDisabling}
-								onClick={handleDisable2fa}
-							>
-								{showDisableCode ? (isDisabling ? 'Disabling...' : 'Confirm Disable') : 'Disable 2FA'}
-							</Button>
-						</Stack>
+							disabled={isDisabling || (showDisableCode && !disableCode.every((digit) => digit.length === 1))}
+							onClick={handleDisable2fa}
+						>
+							{showDisableCode ? (isDisabling ? 'Disabling...' : 'Confirm Disable') : 'Disable 2FA'}
+						</Button>
+					</Stack>
 
-						{showDisableCode ? (
-							<Stack
-								spacing={1.5}
-								sx={{ mt: 2 }}
+					{showDisableCode ? (
+						<Stack
+							spacing={1.5}
+							sx={{ mt: 2 }}
+						>
+							<Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-start', flexWrap: 'wrap' }}>
+								{disableCode.map((value, index) => (
+									<input
+										type="text"
+										key={index}
+										value={value}
+										onChange={(event) => handleDisableCodeChange(index, event.target.value)}
+										onKeyDown={(event) => handleDisableCodeKeyDown(event, index)}
+										ref={(el) => { inputsRef.current[index] = el; }}
+										inputMode="numeric"
+										maxLength={1}
+										style={{
+											width: '3rem',
+											height: '3rem',
+											textAlign: 'center',
+											fontSize: '1.1rem',
+											borderRadius: '0.5rem',
+											border: '1px solid rgba(0,0,0,0.12)',
+											outline: 'none'
+										}}
+									/>
+								))}
+							</Box>
+							<Typography
+								variant="body2"
+								color="text.secondary"
 							>
-								<TextField
-									label="Authenticator code"
-									size="small"
-									value={disableCode}
-									onChange={(event) => {
-										setDisableCode(event.target.value.replace(/\D/g, '').slice(0, 6));
-										setDisableError('');
-									}}
-									inputProps={{
-										inputMode: 'numeric',
-										maxLength: 6
-									}}
-									sx={fieldSx}
-								/>
-								<Typography
-									variant="body2"
-									color="text.secondary"
-								>
-									Enter the 6-digit code from your authenticator app to disable 2FA.
-								</Typography>
-							</Stack>
-						) : null}
+								Enter the 6-digit code from your authenticator app to disable 2FA.
+							</Typography>
+						</Stack>
+					) : null}
 
 						{disableError ? (
 							<Alert

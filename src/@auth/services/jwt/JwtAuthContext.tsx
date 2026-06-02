@@ -1,12 +1,12 @@
 import { FuseAuthProviderState } from '@fuse/core/FuseAuthProvider/types/FuseAuthTypes';
 import { User } from '@auth/user';
 import { createContext } from 'react';
-import { CrmPreAuthSession } from '@auth/authApi';
+import { CrmAuthSession } from '@auth/authApi';
 import { JwtCompleteSignInPayload, JwtSignInPayload, JwtSignUpPayload } from '@auth/services/jwt/JwtAuthProvider';
 
 export type JwtAuthContextType = FuseAuthProviderState<User> & {
 	updateUser: (U: User) => Promise<Response>;
-	signIn?: (credentials: JwtSignInPayload) => Promise<CrmPreAuthSession | null>;
+	signIn?: (credentials: JwtSignInPayload) => Promise<CrmAuthSession | null>;
 	completeSignIn?: (session: JwtCompleteSignInPayload) => Promise<{ user: User; access_token: string } | null>;
 	signUp?: (U: JwtSignUpPayload) => Promise<{ user: User; access_token: string } | null>;
 	signOut?: () => void;

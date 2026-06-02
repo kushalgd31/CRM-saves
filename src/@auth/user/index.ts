@@ -21,12 +21,14 @@ export type User = FuseAuthUser & {
 		isActive?: boolean;
 		isPlatformAdmin?: boolean;
 		apps?: {
+			id?: string;
 			app_id: string;
 			name: string;
 			role_type: string;
 			membership_id?: string | null;
 		}[];
 		selectedApp?: {
+			id?: string;
 			app_id: string;
 			name: string;
 			role_type: string;

@@ -13,8 +13,7 @@ import { useNavigate } from 'react-router';
 import { setSessionRedirectUrl } from '@fuse/core/FuseAuthorization/sessionRedirectUrl';
 import useJwtAuth from '../useJwtAuth';
 import { HTTPError } from 'ky';
-import { authSelectApp, type CrmAuthApp, type CrmPreAuthSession } from '@auth/authApi';
-import { User } from '@auth/user';
+import { type CrmAuthSession } from '@auth/authApi';
 
 /**
  * Form Validation Schema
@@ -48,32 +47,29 @@ function JwtSignInForm() {
 
 	const { isValid, dirtyFields, errors, isSubmitting } = formState;
 
-	async function completePreAuthSession(preAuthSession: CrmPreAuthSession) {
-		if (!preAuthSession.user) {
-			setError('root', {
-				type: 'manual',
-				message: 'Unable to sign in. The server did not return user details.'
-			});
-			return;
-		}
+	async function completeAuthSession(authSession: CrmAuthSession) {
+	const authToken = authSession.accessToken || authSession.preAuthToken;
 
-		const primaryApp = preAuthSession.apps[0];
+	if (!authToken) {
+		setError('root', {
+			type: 'manual',
+			message: 'Unable to sign in. The server did not return an authorization token.'
+		});
+		return;
+	}
 
-		if (primaryApp) {
-			const finalSession = await authSelectApp(preAuthSession.preAuthToken, primaryApp.app_id);
-			const finalUser = createFinalUser(preAuthSession.user, primaryApp, finalSession.app);
+	if (!authSession.user) {
+		setError('root', {
+			type: 'manual',
+			message: 'Unable to sign in. The server did not return user details.'
+		});
+		return;
+	}
 
-			await completeSignIn({
-				user: finalUser,
-				accessToken: finalSession.accessToken,
-				refreshToken: finalSession.refreshToken
-			});
-		} else {
-			await completeSignIn({
-				user: preAuthSession.user,
-				accessToken: preAuthSession.preAuthToken
-			});
-		}
+	await completeSignIn({
+		user: authSession.user,
+		accessToken: authToken,
+		});
 
 		navigate('/dashboards/project', { replace: true });
 	}
@@ -84,12 +80,13 @@ function JwtSignInForm() {
 		setSessionRedirectUrl('/dashboards/project');
 
 		try {
-			const preAuthSession = await signIn({
+			const authSession = await signIn({
 				email,
 				password
 			});
+			const authToken = authSession?.accessToken || authSession?.preAuthToken;
 
-			if (!preAuthSession?.preAuthToken) {
+			if (!authToken) {
 				setError('root', {
 					type: 'manual',
 					message: 'Unable to sign in. The server did not return an authorization token.'
@@ -97,10 +94,14 @@ function JwtSignInForm() {
 				return;
 			}
 
-			// Redirect to OTP screen always; OTP component will verify and complete sign-in
-			navigate('/otp', {
-				state: preAuthSession
-			});
+			if (authSession.requires2fa) {
+				navigate('/otp', {
+					state: authSession
+				});
+				return;
+			}
+
+			await completeAuthSession(authSession);
 		} catch (error) {
 			if (error instanceof HTTPError) {
 				const errorData = await error.response.json().catch(() => null);
@@ -212,21 +213,6 @@ function JwtSignInForm() {
 			</Button>
 		</form>
 	);
-}
-
-function createFinalUser(user: User, app: CrmAuthApp, selectedApp?: User['crm']['selectedApp']): User {
-	return {
-		...user,
-		role: user.crm?.isPlatformAdmin ? 'admin' : app.role_type,
-		crm: {
-			...user.crm,
-			selectedApp: selectedApp || {
-				app_id: app.app_id,
-				name: app.name,
-				role_type: app.role_type
-			}
-		}
-	};
 }
 
 export default JwtSignInForm;

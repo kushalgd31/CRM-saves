@@ -26,6 +26,63 @@ export type JwtCompleteSignInPayload = {
 	refreshToken?: string;
 };
 
+type JwtAppContext = NonNullable<User['crm']>['selectedApp'];
+
+const appContextStorageKey = 'jwt_app_context';
+
+function getAppContextHeaders(app?: JwtAppContext) {
+	const headers: Record<string, string> = {};
+
+	if (app?.app_id) {
+		headers['X-App-Id'] = app.app_id;
+	}
+
+	if (app?.id) {
+		headers['app-uuid'] = app.id;
+	}
+
+	return headers;
+}
+
+function persistAppContext(app?: JwtAppContext) {
+	if (typeof window === 'undefined') {
+		return;
+	}
+
+	if (app?.app_id || app?.id) {
+		localStorage.setItem(
+			appContextStorageKey,
+			JSON.stringify({
+				app_id: app.app_id,
+				id: app.id
+			})
+		);
+		return;
+	}
+
+	localStorage.removeItem(appContextStorageKey);
+}
+
+function getStoredAppContextHeaders() {
+	if (typeof window === 'undefined') {
+		return {};
+	}
+
+	const storedContext = localStorage.getItem(appContextStorageKey);
+
+	if (!storedContext) {
+		return {};
+	}
+
+	try {
+		const app = JSON.parse(storedContext) as JwtAppContext;
+		return getAppContextHeaders(app);
+	} catch {
+		localStorage.removeItem(appContextStorageKey);
+		return {};
+	}
+}
+
 function JwtAuthProvider(props: FuseAuthProviderComponentProps) {
 	const { ref, children, onAuthStateChanged } = props;
 
@@ -65,6 +122,12 @@ function JwtAuthProvider(props: FuseAuthProviderComponentProps) {
 				try {
 					const response = await authSignInWithToken(accessToken);
 					const userData = (await response.json()) as User;
+					setGlobalHeaders({
+						Authorization: `Bearer ${accessToken}`,
+						...getStoredAppContextHeaders(),
+						...getAppContextHeaders(userData.crm?.selectedApp)
+					});
+					persistAppContext(userData.crm?.selectedApp);
 					return userData;
 				} catch (error) {
 					if (error instanceof HTTPError) {
@@ -88,7 +151,8 @@ function JwtAuthProvider(props: FuseAuthProviderComponentProps) {
 					});
 				} else {
 					removeTokenStorageValue();
-					removeGlobalHeaders(['Authorization']);
+					localStorage.removeItem(appContextStorageKey);
+					removeGlobalHeaders(['Authorization', 'X-App-Id', 'app-uuid']);
 					setAuthState({
 						authStatus: 'unauthenticated',
 						isAuthenticated: false,
@@ -123,7 +187,11 @@ function JwtAuthProvider(props: FuseAuthProviderComponentProps) {
 				user
 			});
 			setTokenStorageValue(accessToken);
-			setGlobalHeaders({ Authorization: `Bearer ${accessToken}` });
+			persistAppContext(user.crm?.selectedApp);
+			setGlobalHeaders({
+				Authorization: `Bearer ${accessToken}`,
+				...getAppContextHeaders(user.crm?.selectedApp)
+			});
 
 			if (refreshToken) {
 				localStorage.setItem('jwt_refresh_token', refreshToken);
@@ -168,7 +236,8 @@ function JwtAuthProvider(props: FuseAuthProviderComponentProps) {
 	const signOut: JwtAuthContextType['signOut'] = useCallback(() => {
 		removeTokenStorageValue();
 		localStorage.removeItem('jwt_refresh_token');
-		removeGlobalHeaders(['Authorization']);
+		localStorage.removeItem(appContextStorageKey);
+		removeGlobalHeaders(['Authorization', 'X-App-Id', 'app-uuid']);
 		setAuthState({
 			authStatus: 'unauthenticated',
 			isAuthenticated: false,
