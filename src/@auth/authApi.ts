@@ -161,6 +161,129 @@ function createSessionId() {
 	return globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2);
 }
 
+function getDeviceInfo() {
+	const nav = navigator as Navigator & {
+		deviceMemory?: number;
+		hardwareConcurrency?: number;
+		userAgentData?: {
+			platform?: string;
+			architecture?: string;
+			bitness?: string;
+		};
+	};
+
+	return {
+		platform: nav.platform || 'unknown',
+		os: getPlatformOS(),
+		os_version: getOSVersion(),
+		hardware_concurrency: nav.hardwareConcurrency || 0,
+		device_memory: nav.deviceMemory || 0,
+		max_touch_points: nav.maxTouchPoints || 0,
+		architecture: nav.userAgentData?.architecture || 'unknown',
+		bitness: nav.userAgentData?.bitness || 'unknown'
+	};
+}
+
+function getPlatformOS(): string {
+	const ua = navigator.userAgent.toLowerCase();
+	if (ua.indexOf('win') > -1) return 'Windows';
+	if (ua.indexOf('mac') > -1) return 'MacOS';
+	if (ua.indexOf('linux') > -1) return 'Linux';
+	if (ua.indexOf('android') > -1) return 'Android';
+	if (ua.indexOf('iphone') > -1 || ua.indexOf('ipad') > -1) return 'iOS';
+	return 'Unknown';
+}
+
+function getOSVersion(): string {
+	const ua = navigator.userAgent;
+	const osVersionMatch = ua.match(/(?:Windows NT|OS X|Android|iPhone OS|iPad OS) ([\d._]+)/);
+	return osVersionMatch ? osVersionMatch[1] : 'unknown';
+}
+
+function getBrowserInfo() {
+	const ua = navigator.userAgent;
+	const browserName = getBrowserName();
+	const browserVersion = getBrowserVersion();
+
+	return {
+		user_agent: ua,
+		name: browserName,
+		version: browserVersion,
+		cookie_enabled: navigator.cookieEnabled || false,
+		do_not_track: navigator.doNotTrack || 'unspecified',
+		canvas_hash: getCanvasHash(),
+		webgl: getWebGLInfo()
+	};
+}
+
+function getBrowserName(): string {
+	const ua = navigator.userAgent;
+	if (ua.indexOf('Chrome') > -1 && ua.indexOf('Edge') === -1) return 'Chrome';
+	if (ua.indexOf('Safari') > -1 && ua.indexOf('Chrome') === -1) return 'Safari';
+	if (ua.indexOf('Firefox') > -1) return 'Firefox';
+	if (ua.indexOf('Edge') > -1) return 'Edge';
+	if (ua.indexOf('Trident') > -1) return 'IE';
+	return 'Unknown';
+}
+
+function getBrowserVersion(): string {
+	const ua = navigator.userAgent;
+	const versionMatch = ua.match(/(Chrome|Safari|Firefox|Edge|Version|Trident)\/([\d.]+)/);
+	return versionMatch ? versionMatch[2] : 'unknown';
+}
+
+function getCanvasHash(): string {
+	try {
+		const canvas = document.createElement('canvas');
+		const ctx = canvas.getContext('2d');
+		if (!ctx) return '0'.repeat(64);
+		ctx.textBaseline = 'top';
+		ctx.font = '14px Arial';
+		ctx.fillText('Canvas FP', 2, 2);
+		const imageData = canvas.toDataURL();
+		return hashString(imageData);
+	} catch {
+		return '0'.repeat(64);
+	}
+}
+
+function hashString(str: string): string {
+	if (typeof window !== 'undefined' && window.crypto?.subtle) {
+		// Use async crypto for proper hash, but for sync fallback use simple hash
+		let hash = 0;
+		for (let i = 0; i < str.length; i++) {
+			const char = str.charCodeAt(i);
+			hash = (hash << 5) - hash + char;
+			hash = hash & hash; // Convert to 32bit integer
+		}
+		// Convert to 64 character hex string
+		return Math.abs(hash).toString(16).padStart(64, '0').substring(0, 64);
+	}
+	// Fallback simple hash
+	let hash = 5381;
+	for (let i = 0; i < str.length; i++) {
+		hash = (hash << 5) + hash + str.charCodeAt(i);
+	}
+	return Math.abs(hash).toString(16).padStart(64, '0').substring(0, 64);
+}
+
+function getWebGLInfo(): Record<string, string> {
+	try {
+		const canvas = document.createElement('canvas');
+		const gl = (canvas.getContext('webgl') as WebGLRenderingContext | null) ||
+			(canvas.getContext('experimental-webgl') as WebGLRenderingContext | null);
+		if (!gl) return { available: 'false' };
+		const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+		return {
+			available: 'true',
+			renderer: debugInfo ? String(gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL)) : 'unknown',
+			vendor: debugInfo ? String(gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL)) : 'unknown'
+		};
+	} catch {
+		return { available: 'false' };
+	}
+}
+
 async function getClientAuditPayload() {
 	const ctx = getClientContext();
 	const [fingerprintId, geo] = await Promise.all([getFingerprint(), getIpGeoData()]);
@@ -171,8 +294,13 @@ async function getClientAuditPayload() {
 		tenant_id: getTenantId(),
 		auth_method: 'password',
 		fingerprint_id: fingerprintId,
-		screen: ctx.screen,
-		timezone: ctx.timezone,
+		screen: {
+			w: window.screen.width,
+			h: window.screen.height,
+			dpr: window.devicePixelRatio
+		},
+		timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+		timezone_offset: new Date().getTimezoneOffset(),
 		languages: ctx.languages,
 		connection: ctx.connection,
 		server: {
@@ -184,7 +312,9 @@ async function getClientAuditPayload() {
 			new_device: riskSignals.new_device,
 			new_country: riskSignals.new_country,
 			impossible_travel: riskSignals.impossible_travel
-		}
+		},
+		device: getDeviceInfo(),
+		browser: getBrowserInfo()
 	};
 }
 
@@ -343,6 +473,9 @@ export async function authSignIn(credentials: { email: string; password: string 
 
 	const response = await crmApi
 		.post('v1/auth/login', {
+			headers: {
+				'X-App-Id': 'wl-testbrand111-mpw7d162'
+			},
 			json: {
 				...credentials,
 				client: clientPayload

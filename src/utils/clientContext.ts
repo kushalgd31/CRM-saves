@@ -13,6 +13,13 @@ type FingerprintModule = {
 	load?: () => Promise<FingerprintAgent>;
 };
 
+type ConnectionInfo = {
+	type?: string;
+	effectiveType?: string;
+	downlink?: number;
+	rtt?: number;
+};
+
 let fpPromise: Promise<FingerprintAgent> | null = null;
 
 async function loadFingerprintModule() {
@@ -83,7 +90,7 @@ export async function getIpGeoData(): Promise<GeoData> {
 				ip: json.ip || '127.0.0.1',
 				ip_country: json.country_code || json.country_name || 'unknown',
 				ip_city: json.city || 'unknown',
-				ip_asn: json.org || json.asn || 'unknown',
+				ip_asn: normalizeAsn(json.asn || json.org),
 				country_code: json.country_code || 'unknown',
 				lat: json.latitude ?? 0,
 				lon: json.longitude ?? 0
@@ -103,11 +110,26 @@ function fallbackGeo(): GeoData {
 		ip: '127.0.0.1',
 		ip_country: 'unknown',
 		ip_city: 'unknown',
-		ip_asn: 'unknown',
+		ip_asn: 'AS0',
 		country_code: 'unknown',
 		lat: 0,
 		lon: 0
 	};
+}
+
+function normalizeAsn(value: unknown): string {
+	if (typeof value !== 'string') {
+		return 'AS0';
+	}
+
+	const match = value.toUpperCase().match(/^(?:[A-Z]{2})?([0-9]{1,10})$/);
+	if (match) {
+		const prefix = value.toUpperCase().startsWith('AS') ? 'AS' : '';
+		return `${prefix}${match[1]}`;
+	}
+
+	const digits = value.replace(/\D/g, '');
+	return digits ? `AS${digits}` : 'AS0';
 }
 
 // ---------------------------------------------------------------------------
@@ -199,7 +221,10 @@ function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): nu
  */
 export function getClientContext() {
 	const nav = typeof navigator !== 'undefined' ? navigator : null;
-	const connection = nav && 'connection' in nav ? (nav.connection as { effectiveType?: string }) : null;
+	const connection =
+		nav && 'connection' in nav
+			? (nav.connection as ConnectionInfo)
+			: null;
 
 	return {
 		screen: {
@@ -209,7 +234,12 @@ export function getClientContext() {
 		},
 		timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
 		languages: nav?.languages?.length ? [...nav.languages] : ['en'],
-		connection: connection?.effectiveType || 'unknown'
+		connection: {
+			type: connection?.type || 'unknown',
+			effective_type: connection?.effectiveType || 'unknown',
+			downlink: typeof connection?.downlink === 'number' ? connection.downlink : 0,
+			rtt: typeof connection?.rtt === 'number' ? connection.rtt : 0
+		}
 	};
 }
 
