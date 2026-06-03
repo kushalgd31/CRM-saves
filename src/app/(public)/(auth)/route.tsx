@@ -3,7 +3,7 @@ import authRoles from '@auth/authRoles';
 import SignInPageView from './components/views/SignInPageView';
 import SignUpPageView from './components/views/SignUpPageView';
 import SignOutPageView from './components/views/SignOutPageView';
-import Otp from './components/views/Otp';
+import Otp from './components/views/OtpScreen';
 
 const route: FuseRouteItemType = {
 	children: [
