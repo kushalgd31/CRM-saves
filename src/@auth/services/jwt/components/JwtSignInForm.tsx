@@ -5,6 +5,7 @@ import _ from 'lodash';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import FormLabel from '@mui/material/FormLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Alert from '@mui/material/Alert';
 import Link from '@fuse/core/Link';
@@ -124,13 +125,13 @@ function JwtSignInForm() {
 		<form
 			name="loginForm"
 			noValidate
-			className="flex w-full flex-col justify-center"
+			className="flex w-full flex-col justify-center gap-4"
 			onSubmit={handleSubmit(onSubmit)}
 		>
 			{errors.root?.message && (
 				<Alert
 					severity="error"
-					className="mb-6"
+					className="mb-2"
 				>
 					{errors.root.message}
 				</Alert>
@@ -140,18 +141,19 @@ function JwtSignInForm() {
 				name="email"
 				control={control}
 				render={({ field }) => (
-					<TextField
-						{...field}
-						className="mb-6"
-						label="Email"
-						autoFocus
-						type="email"
-						error={!!errors.email}
-						helperText={errors?.email?.message}
-						variant="outlined"
-						required
-						fullWidth
-					/>
+					<FormControl>
+						<FormLabel htmlFor="email">Email address</FormLabel>
+						<TextField
+							{...field}
+							id="email"
+							autoFocus
+							type="email"
+							error={!!errors.email}
+							helperText={errors?.email?.message}
+							required
+							fullWidth
+						/>
+					</FormControl>
 				)}
 			/>
 
@@ -159,17 +161,18 @@ function JwtSignInForm() {
 				name="password"
 				control={control}
 				render={({ field }) => (
-					<TextField
-						{...field}
-						className="mb-6"
-						label="Password"
-						type="password"
-						error={!!errors.password}
-						helperText={errors?.password?.message}
-						variant="outlined"
-						required
-						fullWidth
-					/>
+					<FormControl>
+						<FormLabel htmlFor="password">Password</FormLabel>
+						<TextField
+							{...field}
+							id="password"
+							type="password"
+							error={!!errors.password}
+							helperText={errors?.password?.message}
+							required
+							fullWidth
+						/>
+					</FormControl>
 				)}
 			/>
 
@@ -203,7 +206,7 @@ function JwtSignInForm() {
 			<Button
 				variant="contained"
 				color="secondary"
-				className="mt-4 w-full"
+				className="w-full"
 				aria-label="Sign in"
 				disabled={_.isEmpty(dirtyFields) || !isValid || isSubmitting}
 				type="submit"
