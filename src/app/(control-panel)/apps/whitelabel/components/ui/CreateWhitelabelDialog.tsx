@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import { useEffect, useState } from 'react';
 import { ProductOption, WhitelabelFormData } from '../types';
 
 type CreateWhitelabelDialogProps = {
@@ -32,6 +33,35 @@ function CreateWhitelabelDialog({
 	onToggleProduct,
 	handleCreateWhitelabel
 }: CreateWhitelabelDialogProps) {
+	const [confirmAdminPassword, setConfirmAdminPassword] = useState('');
+	const [showConfirmPasswordError, setShowConfirmPasswordError] = useState(false);
+	const hasPasswordToConfirm = Boolean(formData.admin_password || confirmAdminPassword);
+	const adminPasswordsMatch = formData.admin_password === confirmAdminPassword;
+	const confirmPasswordError = showConfirmPasswordError && hasPasswordToConfirm && !adminPasswordsMatch;
+
+	useEffect(() => {
+		if (!open) {
+			setConfirmAdminPassword('');
+			setShowConfirmPasswordError(false);
+		}
+	}, [open]);
+
+	useEffect(() => {
+		if (showConfirmPasswordError && adminPasswordsMatch) {
+			setShowConfirmPasswordError(false);
+		}
+	}, [adminPasswordsMatch, showConfirmPasswordError]);
+
+	const handleCreateClick = () => {
+		if (hasPasswordToConfirm && !adminPasswordsMatch) {
+			setShowConfirmPasswordError(true);
+			onTabChange(2);
+			return;
+		}
+
+		handleCreateWhitelabel();
+	};
+
 	return (
 		<Dialog
 			open={open}
@@ -264,6 +294,28 @@ function CreateWhitelabelDialog({
 								className="h-11 w-full rounded-lg border border-[#d0d5dd] bg-white px-3.5 text-[14px] text-[#101828] placeholder-[#98a2b3] outline-none transition-colors focus:border-[#155dfc] focus:ring-1 focus:ring-[#155dfc]"
 							/>
 						</div>
+
+						<div>
+							<label className="mb-1.5 block text-[13px] font-semibold text-[#344054]">
+								Confirm Password <span className="text-[#f04438]">*</span>
+							</label>
+							<input
+								type="password"
+								placeholder="Re-enter admin password"
+								value={confirmAdminPassword}
+								onChange={(e) => setConfirmAdminPassword(e.target.value)}
+								className={`h-11 w-full rounded-lg border bg-white px-3.5 text-[14px] text-[#101828] placeholder-[#98a2b3] outline-none transition-colors focus:ring-1 ${
+									confirmPasswordError
+										? 'border-[#f04438] focus:border-[#f04438] focus:ring-[#f04438]'
+										: 'border-[#d0d5dd] focus:border-[#155dfc] focus:ring-[#155dfc]'
+								}`}
+							/>
+							{confirmPasswordError && (
+								<p className="mt-1.5 text-[12px] leading-4 text-[#f04438]">
+									Passwords do not match.
+								</p>
+							)}
+						</div>
 					</div>
 				)}
 			</div>
@@ -277,7 +329,7 @@ function CreateWhitelabelDialog({
 					</Button>
 					<Button
 						variant="contained"
-						onClick={handleCreateWhitelabel}
+						onClick={handleCreateClick}
 						disabled={isCreating}
 						loading={isCreating}
 						className="h-10 rounded-lg bg-[#155dfc] px-5 font-['Geist'] text-[13px] font-semibold text-white shadow-none hover:bg-[#1249d6]"
