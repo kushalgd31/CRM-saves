@@ -190,9 +190,6 @@ function WhitelabelManagementView() {
 				production_domain: formData.productionDomain.trim(),
 				test_domain: formData.testDomain.trim(),
 				products: selectedProducts,
-				admin_name: formData.admin_name.trim(),
-				admin_email: formData.admin_email.trim(),
-				admin_password: formData.admin_password,
 				registration_config: {}
 			});
 
