@@ -15,232 +15,232 @@ const navigationConfig: FuseNavItemType[] = [
 	// ─────────────────────────────────────────────
 	// DASHBOARDS GROUP  (Dashboard, KYC, Settings + Category with Withdraw, Deposit, Academy)
 	// ─────────────────────────────────────────────
-	{
-		id: 'dashboards',
-		title: 'Dashboards',
-		subtitle: 'Start from here',
-		type: 'group',
-		icon: 'lucide:layout-dashboard',
-		translate: 'DASHBOARDS',
-		children: [
-			{
-				id: 'dashboards.project',
-				title: 'Dashboard',
-				type: 'item',
-				icon: 'lucide:clipboard-check',
-				url: '/dashboards/project'
-			},
-			{
-				id: 'dashboards.transactions',
-				title: 'Transactions',
-				type: 'item',
-				icon: 'lucide:list',
-				url: '/dashboards/transactions'
-			}
-		]
-	},
-	{
-		id: 'players',
-		title: 'Players',
-		subtitle: 'Manage your players',
-		type: 'group',
-		icon: 'lucide:feed',
-		translate: 'Players',
-		children: [
-			{
-				id: 'dashboards.players',
-				title: 'Players',
-				type: 'item',
-				icon: 'lucide:users',
-				url: '/dashboards/players'
-			},
-			{
-				id: 'dashboards.profile',
-				title: 'Profile',
-				type: 'item',
-				icon: 'lucide:user-circle-2',
-				url: '/apps/profile'
-			},
-			{
-				id: 'dashboards.kyc',
-				title: 'Players KYC',
-				type: 'item',
-				icon: 'lucide:badge-check',
-				url: '/dashboards/kyc'
-			},
-			{
-				id: 'dashboards.player-commission',
-				title: 'Player Commission',
-				type: 'item',
-				icon: 'lucide:wallet-cards',
-				url: '/dashboards/player-commission'
-			}
-		]
-	},
+	// {
+	// 	id: 'dashboards',
+	// 	title: 'Dashboards',
+	// 	subtitle: 'Start from here',
+	// 	type: 'group',
+	// 	icon: 'lucide:layout-dashboard',
+	// 	translate: 'DASHBOARDS',
+	// 	children: [
+	// 		{
+	// 			id: 'dashboards.project',
+	// 			title: 'Dashboard',
+	// 			type: 'item',
+	// 			icon: 'lucide:clipboard-check',
+	// 			url: '/dashboards/project'
+	// 		},
+	// 		{
+	// 			id: 'dashboards.transactions',
+	// 			title: 'Transactions',
+	// 			type: 'item',
+	// 			icon: 'lucide:list',
+	// 			url: '/dashboards/transactions'
+	// 		}
+	// 	]
+	// },
+	// {
+	// 	id: 'players',
+	// 	title: 'Players',
+	// 	subtitle: 'Manage your players',
+	// 	type: 'group',
+	// 	icon: 'lucide:feed',
+	// 	translate: 'Players',
+	// 	children: [
+	// 		{
+	// 			id: 'dashboards.players',
+	// 			title: 'Players',
+	// 			type: 'item',
+	// 			icon: 'lucide:users',
+	// 			url: '/dashboards/players'
+	// 		},
+	// 		{
+	// 			id: 'dashboards.profile',
+	// 			title: 'Profile',
+	// 			type: 'item',
+	// 			icon: 'lucide:user-circle-2',
+	// 			url: '/apps/profile'
+	// 		},
+	// 		{
+	// 			id: 'dashboards.kyc',
+	// 			title: 'Players KYC',
+	// 			type: 'item',
+	// 			icon: 'lucide:badge-check',
+	// 			url: '/dashboards/kyc'
+	// 		},
+	// 		{
+	// 			id: 'dashboards.player-commission',
+	// 			title: 'Player Commission',
+	// 			type: 'item',
+	// 			icon: 'lucide:wallet-cards',
+	// 			url: '/dashboards/player-commission'
+	// 		}
+	// 	]
+	// },
 
-	{
-		id: 'finance',
-		title: 'Finance',
-		subtitle: 'Manage all finance here',
-		type: 'group',
-		icon: 'lucide:feed',
-		translate: 'Finance',
-		children: [
-			{
-				id: 'dashboards.withdraw',
-				title: 'Withdraw',
-				type: 'item',
-				icon: 'lucide:arrow-down-to-line',
-				url: '/dashboards/withdraw'
-			},
-			{
-				id: 'dashboards.deposit',
-				title: 'Deposit',
-				type: 'item',
-				icon: 'lucide:wallet',
-				url: '/dashboards/deposit'
-			},
-			{
-				id: 'dashboards.agent-coin-management',
-				title: 'Agent Coin Management',
-				type: 'item',
-				icon: 'lucide:coins',
-				url: '/dashboards/agent-coin-management'
-			},
-			{
-				id: 'dashboards.whitelabel-coin-management',
-				title: 'Whitelabel Coin Management',
-				type: 'item',
-				icon: 'lucide:badge-dollar-sign',
-				url: '/dashboards/whitelabel-coin-management'
-			}
-		]
-	},
-	{
-		id: 'agent-financials',
-		title: 'Agent Financials',
-		subtitle: 'Manage agent payments',
-		type: 'group',
-		icon: 'lucide:feed',
-		children: [
-			{
-				id: 'dashboards.deposit-management',
-				title: 'Deposit Management',
-				type: 'item',
-				icon: 'lucide:wallet-cards',
-				url: '/dashboards/deposit-management'
-			},
-			{
-				id: 'dashboards.withdrawal-management',
-				title: 'Withdrawal Management',
-				type: 'item',
-				icon: 'lucide:banknote-arrow-down',
-				url: '/dashboards/withdrawal-management'
-			}
-		]
-	},
-	{
-		id: 'roles',
-		title: 'Role Management',
-		subtitle: 'Create roles, define permissions',
-		type: 'group',
-		icon: 'lucide:feed',
-		translate: 'Roles',
-		children: [
-			{
-				id: 'sales',
-				title: 'Sales Team',
-				type: 'item',
-				icon: 'lucide:trending-up',
-				url: '/dashboards/sales'
-			}
-		]
-	},
-	{
-		id: 'Bonus Management',
-		title: 'Report',
-		subtitle: 'Create Bonus, view history',
-		type: 'group',
-		icon: 'lucide:feed',
-		translate: 'Bonus',
-		children: [
-			{
-				id: 'apps.bonus',
-				title: 'Bonus',
-				type: 'item',
-				icon: 'lucide:gift',
-				url: '/apps/bonus'
-			},
+	// {
+	// 	id: 'finance',
+	// 	title: 'Finance',
+	// 	subtitle: 'Manage all finance here',
+	// 	type: 'group',
+	// 	icon: 'lucide:feed',
+	// 	translate: 'Finance',
+	// 	children: [
+	// 		{
+	// 			id: 'dashboards.withdraw',
+	// 			title: 'Withdraw',
+	// 			type: 'item',
+	// 			icon: 'lucide:arrow-down-to-line',
+	// 			url: '/dashboards/withdraw'
+	// 		},
+	// 		{
+	// 			id: 'dashboards.deposit',
+	// 			title: 'Deposit',
+	// 			type: 'item',
+	// 			icon: 'lucide:wallet',
+	// 			url: '/dashboards/deposit'
+	// 		},
+	// 		{
+	// 			id: 'dashboards.agent-coin-management',
+	// 			title: 'Agent Coin Management',
+	// 			type: 'item',
+	// 			icon: 'lucide:coins',
+	// 			url: '/dashboards/agent-coin-management'
+	// 		},
+	// 		{
+	// 			id: 'dashboards.whitelabel-coin-management',
+	// 			title: 'Whitelabel Coin Management',
+	// 			type: 'item',
+	// 			icon: 'lucide:badge-dollar-sign',
+	// 			url: '/dashboards/whitelabel-coin-management'
+	// 		}
+	// 	]
+	// },
+	// {
+	// 	id: 'agent-financials',
+	// 	title: 'Agent Financials',
+	// 	subtitle: 'Manage agent payments',
+	// 	type: 'group',
+	// 	icon: 'lucide:feed',
+	// 	children: [
+	// 		{
+	// 			id: 'dashboards.deposit-management',
+	// 			title: 'Deposit Management',
+	// 			type: 'item',
+	// 			icon: 'lucide:wallet-cards',
+	// 			url: '/dashboards/deposit-management'
+	// 		},
+	// 		{
+	// 			id: 'dashboards.withdrawal-management',
+	// 			title: 'Withdrawal Management',
+	// 			type: 'item',
+	// 			icon: 'lucide:banknote-arrow-down',
+	// 			url: '/dashboards/withdrawal-management'
+	// 		}
+	// 	]
+	// },
+	// {
+	// 	id: 'roles',
+	// 	title: 'Role Management',
+	// 	subtitle: 'Create roles, define permissions',
+	// 	type: 'group',
+	// 	icon: 'lucide:feed',
+	// 	translate: 'Roles',
+	// 	children: [
+	// 		{
+	// 			id: 'sales',
+	// 			title: 'Sales Team',
+	// 			type: 'item',
+	// 			icon: 'lucide:trending-up',
+	// 			url: '/dashboards/sales'
+	// 		}
+	// 	]
+	// },
+	// {
+	// 	id: 'Bonus Management',
+	// 	title: 'Report',
+	// 	subtitle: 'Create Bonus, view history',
+	// 	type: 'group',
+	// 	icon: 'lucide:feed',
+	// 	translate: 'Bonus',
+	// 	children: [
+	// 		{
+	// 			id: 'apps.bonus',
+	// 			title: 'Bonus',
+	// 			type: 'item',
+	// 			icon: 'lucide:gift',
+	// 			url: '/apps/bonus'
+	// 		},
 			
 			
-		]
-	},
-	{
-		id: 'reports',
-		title: 'Report',
-		subtitle: 'Start from here',
-		type: 'group',
-		icon: 'lucide:feed',
-		translate: 'Reports',
-		children: [
-			{
-				id: 'reports.agent-revenue',
-				title: 'Agent Revenue',
-				type: 'item',
-				icon: 'lucide:file-text',
-				url: '/reports/agent-revenue'
-			},
-			{
-				id: 'reports.player-revenue',
-				title: 'Player Revenue',
-				type: 'item',
-				icon: 'lucide:file-text',
-				url: '/reports/player-revenue'
-			},
-			{
-				id: 'reports.game-transaction',
-				title: 'Game Transaction',
-				type: 'item',
-				icon: 'lucide:file-text',
-				url: '/reports/game-transaction'
-			},
-			{
-				id: 'reports.player',
-				title: 'Player',
-				type: 'item',
-				icon: 'lucide:file-text',
-				url: '/reports/player'
-			},
-			{
-				id: 'reports.unified-transaction',
-				title: 'Unified Transaction',
-				type: 'item',
-				icon: 'lucide:file-text',
-				url: '/reports/unified-transaction'
-			},
-			{
-				id: 'reports.player-financial',
-				title: 'Player Financial',
-				type: 'item',
-				icon: 'lucide:file-text',
-				url: '/reports/player-financial'
-			},
-			{
-				id: 'reports.player-bonus',
-				title: 'Player Bonus',
-				type: 'item',
-				icon: 'lucide:file-text',
-				url: '/reports/player-bonus'
-			},
-			{
-				id: 'reports.bet',
-				title: 'Bet',
-				type: 'item',
-				icon: 'lucide:file-text',
-				url: '/reports/bet'
-			}
-		]
-	},
+	// 	]
+	// },
+	// {
+	// 	id: 'reports',
+	// 	title: 'Report',
+	// 	subtitle: 'Start from here',
+	// 	type: 'group',
+	// 	icon: 'lucide:feed',
+	// 	translate: 'Reports',
+	// 	children: [
+	// 		{
+	// 			id: 'reports.agent-revenue',
+	// 			title: 'Agent Revenue',
+	// 			type: 'item',
+	// 			icon: 'lucide:file-text',
+	// 			url: '/reports/agent-revenue'
+	// 		},
+	// 		{
+	// 			id: 'reports.player-revenue',
+	// 			title: 'Player Revenue',
+	// 			type: 'item',
+	// 			icon: 'lucide:file-text',
+	// 			url: '/reports/player-revenue'
+	// 		},
+	// 		{
+	// 			id: 'reports.game-transaction',
+	// 			title: 'Game Transaction',
+	// 			type: 'item',
+	// 			icon: 'lucide:file-text',
+	// 			url: '/reports/game-transaction'
+	// 		},
+	// 		{
+	// 			id: 'reports.player',
+	// 			title: 'Player',
+	// 			type: 'item',
+	// 			icon: 'lucide:file-text',
+	// 			url: '/reports/player'
+	// 		},
+	// 		{
+	// 			id: 'reports.unified-transaction',
+	// 			title: 'Unified Transaction',
+	// 			type: 'item',
+	// 			icon: 'lucide:file-text',
+	// 			url: '/reports/unified-transaction'
+	// 		},
+	// 		{
+	// 			id: 'reports.player-financial',
+	// 			title: 'Player Financial',
+	// 			type: 'item',
+	// 			icon: 'lucide:file-text',
+	// 			url: '/reports/player-financial'
+	// 		},
+	// 		{
+	// 			id: 'reports.player-bonus',
+	// 			title: 'Player Bonus',
+	// 			type: 'item',
+	// 			icon: 'lucide:file-text',
+	// 			url: '/reports/player-bonus'
+	// 		},
+	// 		{
+	// 			id: 'reports.bet',
+	// 			title: 'Bet',
+	// 			type: 'item',
+	// 			icon: 'lucide:file-text',
+	// 			url: '/reports/bet'
+	// 		}
+	// 	]
+	// },
 	{
 		id: 'others',
 		title: 'Others',
@@ -256,27 +256,27 @@ const navigationConfig: FuseNavItemType[] = [
 				icon: 'lucide:layers',
 				url: '/apps/whitelabel'
 			},
-			{
-				id: 'dashboards.settings',
-				title: 'Settings',
-				type: 'item',
-				icon: 'lucide:settings',
-				url: '/settings'
-			},
-			{
-				id: 'apps.registration-config',
-				title: 'Registration Config',
-				type: 'item',
-				icon: 'lucide:user-plus',
-				url: '/apps/registration-config'
-			},
-			{
-				id: 'profile',
-				title: 'Profile',
-				type: 'item',
-				icon: 'lucide:user',
-				url: '/apps/profile'
-			},
+			// {
+			// 	id: 'dashboards.settings',
+			// 	title: 'Settings',
+			// 	type: 'item',
+			// 	icon: 'lucide:settings',
+			// 	url: '/settings'
+			// },
+			// {
+			// 	id: 'apps.registration-config',
+			// 	title: 'Registration Config',
+			// 	type: 'item',
+			// 	icon: 'lucide:user-plus',
+			// 	url: '/apps/registration-config'
+			// },
+			// {
+			// 	id: 'profile',
+			// 	title: 'Profile',
+			// 	type: 'item',
+			// 	icon: 'lucide:user',
+			// 	url: '/apps/profile'
+			// },
 			{
 				id: '2FA',
 				title: '2FA Setup',
@@ -284,13 +284,13 @@ const navigationConfig: FuseNavItemType[] = [
 				icon: 'lucide:shield-check',
 				url: '/others/2FA'
 			},
-			{
-				id: 'apps.banner-management',
-				title: 'Banner Management',
-				type: 'item',
-				icon: 'lucide:monitor',
-				url: '/apps/banner-management'
-			}
+			// {
+			// 	id: 'apps.banner-management',
+			// 	title: 'Banner Management',
+			// 	type: 'item',
+			// 	icon: 'lucide:monitor',
+			// 	url: '/apps/banner-management'
+			// }
 		]
 	}
 ];

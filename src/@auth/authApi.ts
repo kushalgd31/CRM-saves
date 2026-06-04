@@ -161,28 +161,6 @@ function createSessionId() {
 	return globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2);
 }
 
-function getDeviceInfo() {
-	const nav = navigator as Navigator & {
-		deviceMemory?: number;
-		hardwareConcurrency?: number;
-		userAgentData?: {
-			platform?: string;
-			architecture?: string;
-			bitness?: string;
-		};
-	};
-
-	return {
-		platform: nav.platform || 'unknown',
-		os: getPlatformOS(),
-		os_version: getOSVersion(),
-		hardware_concurrency: nav.hardwareConcurrency || 0,
-		device_memory: nav.deviceMemory || 0,
-		max_touch_points: nav.maxTouchPoints || 0,
-		architecture: nav.userAgentData?.architecture || 'unknown',
-		bitness: nav.userAgentData?.bitness || 'unknown'
-	};
-}
 
 function getPlatformOS(): string {
 	const ua = navigator.userAgent.toLowerCase();
@@ -194,24 +172,80 @@ function getPlatformOS(): string {
 	return 'Unknown';
 }
 
-function getOSVersion(): string {
+function detectOS(): string {
 	const ua = navigator.userAgent;
-	const osVersionMatch = ua.match(/(?:Windows NT|OS X|Android|iPhone OS|iPad OS) ([\d._]+)/);
-	return osVersionMatch ? osVersionMatch[1] : 'unknown';
+
+	if (/Windows/i.test(ua)) return "Windows";
+	if (/Android/i.test(ua)) return "Android";
+	if (/iPhone|iPad|iPod/i.test(ua)) return "iOS";
+	if (/Mac OS/i.test(ua)) return "MacOS";
+	if (/Linux/i.test(ua)) return "Linux";
+
+	return "Unknown";
 }
 
-function getBrowserInfo() {
+function detectOSVersion(): string {
 	const ua = navigator.userAgent;
-	const browserName = getBrowserName();
-	const browserVersion = getBrowserVersion();
+
+	const windows = ua.match(/Windows NT ([\d.]+)/);
+	if (windows) return windows[1];
+
+	const android = ua.match(/Android ([\d.]+)/);
+	if (android) return android[1];
+
+	const ios = ua.match(/OS (\d+_\d+_?\d*)/);
+	if (ios) return ios[1].replace(/_/g, ".");
+
+	return "unknown";
+}
+
+function getDeviceInfo() {
+	const uaData = (navigator as any).userAgentData;
 
 	return {
-		user_agent: ua,
-		name: browserName,
-		version: browserVersion,
-		cookie_enabled: navigator.cookieEnabled || false,
-		do_not_track: navigator.doNotTrack || 'unspecified',
-		canvas_hash: getCanvasHash(),
+		platform:
+			uaData?.platform ||
+			navigator.platform ||
+			"unknown",
+
+		os: detectOS(),
+
+		os_version: detectOSVersion(),
+
+		hardware_concurrency:
+			navigator.hardwareConcurrency || 1,
+
+		device_memory:
+			(navigator as any).deviceMemory || 1,
+
+		max_touch_points:
+			navigator.maxTouchPoints || 0,
+
+		architecture:
+			uaData?.architecture || "unknown",
+
+		bitness:
+			uaData?.bitness || "unknown"
+	};
+}
+
+async function getBrowserInfo() {
+	return {
+		user_agent: navigator.userAgent,
+
+		name: getBrowserName(),
+
+		version: getBrowserVersion(),
+
+		cookie_enabled: navigator.cookieEnabled,
+
+		do_not_track:
+			navigator.doNotTrack ||
+			(window as any).doNotTrack ||
+			null,
+
+		canvas_hash: await generateCanvasHash(),
+
 		webgl: getWebGLInfo()
 	};
 }
@@ -232,62 +266,109 @@ function getBrowserVersion(): string {
 	return versionMatch ? versionMatch[2] : 'unknown';
 }
 
-function getCanvasHash(): string {
-	try {
-		const canvas = document.createElement('canvas');
-		const ctx = canvas.getContext('2d');
-		if (!ctx) return '0'.repeat(64);
-		ctx.textBaseline = 'top';
-		ctx.font = '14px Arial';
-		ctx.fillText('Canvas FP', 2, 2);
-		const imageData = canvas.toDataURL();
-		return hashString(imageData);
-	} catch {
-		return '0'.repeat(64);
+async function generateCanvasHash(): Promise<string> {
+	const canvas = document.createElement("canvas");
+	const ctx = canvas.getContext("2d");
+
+	if (!ctx) {
+		return "00000000000000000000000000000000";
 	}
+
+	ctx.textBaseline = "top";
+	ctx.font = "14px Arial";
+	ctx.fillText("audit-fingerprint", 2, 2);
+
+	const data = canvas.toDataURL();
+
+	const hashBuffer = await crypto.subtle.digest(
+		"SHA-256",
+		new TextEncoder().encode(data)
+	);
+
+	return Array.from(
+		new Uint8Array(hashBuffer)
+	)
+		.map((b) => b.toString(16).padStart(2, "0"))
+		.join("");
 }
 
-function hashString(str: string): string {
-	if (typeof window !== 'undefined' && window.crypto?.subtle) {
-		// Use async crypto for proper hash, but for sync fallback use simple hash
-		let hash = 0;
-		for (let i = 0; i < str.length; i++) {
-			const char = str.charCodeAt(i);
-			hash = (hash << 5) - hash + char;
-			hash = hash & hash; // Convert to 32bit integer
-		}
-		// Convert to 64 character hex string
-		return Math.abs(hash).toString(16).padStart(64, '0').substring(0, 64);
-	}
-	// Fallback simple hash
-	let hash = 5381;
-	for (let i = 0; i < str.length; i++) {
-		hash = (hash << 5) + hash + str.charCodeAt(i);
-	}
-	return Math.abs(hash).toString(16).padStart(64, '0').substring(0, 64);
-}
+function getWebGLInfo() {
+	const canvas = document.createElement("canvas");
 
-function getWebGLInfo(): Record<string, string> {
-	try {
-		const canvas = document.createElement('canvas');
-		const gl = (canvas.getContext('webgl') as WebGLRenderingContext | null) ||
-			(canvas.getContext('experimental-webgl') as WebGLRenderingContext | null);
-		if (!gl) return { available: 'false' };
-		const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+	const gl =
+		canvas.getContext("webgl") ||
+		canvas.getContext("experimental-webgl");
+
+	if (!gl) {
 		return {
-			available: 'true',
-			renderer: debugInfo ? String(gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL)) : 'unknown',
-			vendor: debugInfo ? String(gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL)) : 'unknown'
+			vendor: "unknown",
+			renderer: "unknown"
 		};
-	} catch {
-		return { available: 'false' };
 	}
+
+	const ext = (gl as WebGLRenderingContext).getExtension(
+		"WEBGL_debug_renderer_info"
+	);
+
+	if (!ext) {
+		return {
+			vendor: "unknown",
+			renderer: "unknown"
+		};
+	}
+
+	return {
+		vendor: (gl as WebGLRenderingContext).getParameter(
+			(ext as any).UNMASKED_VENDOR_WEBGL
+		),
+		renderer: (gl as WebGLRenderingContext).getParameter(
+			(ext as any).UNMASKED_RENDERER_WEBGL
+		)
+	};
+}
+
+function getConnectionInfo() {
+	const connection =
+		(navigator as any).connection ||
+		(navigator as any).mozConnection ||
+		(navigator as any).webkitConnection;
+
+	if (!connection) {
+		return {
+			type: "unknown",
+			effective_type: "4g",
+			downlink: 0,
+			rtt: 0
+		};
+	}
+
+	return {
+		type: connection.type || "unknown",
+		effective_type:
+			connection.effectiveType || "4g",
+		downlink:
+			typeof connection.downlink === "number"
+				? connection.downlink
+				: 0,
+		rtt:
+			typeof connection.rtt === "number"
+				? connection.rtt
+				: 0
+	};
 }
 
 async function getClientAuditPayload() {
 	const ctx = getClientContext();
 	const [fingerprintId, geo] = await Promise.all([getFingerprint(), getIpGeoData()]);
 	const riskSignals = computeRiskSignals(fingerprintId, geo);
+	const [
+		device,
+		browser,
+	] = await Promise.all([
+		Promise.resolve(getDeviceInfo()),
+		getBrowserInfo(),
+	]);
+
 
 	return {
 		session_id: createSessionId(),
@@ -313,8 +394,8 @@ async function getClientAuditPayload() {
 			new_country: riskSignals.new_country,
 			impossible_travel: riskSignals.impossible_travel
 		},
-		device: getDeviceInfo(),
-		browser: getBrowserInfo()
+		device,
+		browser
 	};
 }
 
