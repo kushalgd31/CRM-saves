@@ -1,30 +1,28 @@
-import { api } from '@/utils/api';
 import type { Notification } from '../types';
+
+let notifications: Notification[] = [];
 
 export const notificationsApiService = {
 	getAll: async (): Promise<Notification[]> => {
-		return api.get('mock/notifications').json();
+		return notifications;
 	},
 
 	create: async (notification: Notification): Promise<Notification> => {
-		return api
-			.post('mock/notifications', {
-				json: notification
-			})
-			.json();
+		notifications = [notification, ...notifications];
+
+		return notification;
 	},
 
 	deleteMany: async (notificationIds: string[]): Promise<void> => {
-		await api.delete('mock/notifications', {
-			json: notificationIds
-		});
+		const ids = new Set(notificationIds);
+		notifications = notifications.filter((notification) => !ids.has(notification.id));
 	},
 
 	getById: async (notificationId: string): Promise<Notification> => {
-		return api.get(`mock/notifications/${notificationId}`).json();
+		return notifications.find((notification) => notification.id === notificationId) as Notification;
 	},
 
 	delete: async (notificationId: string): Promise<void> => {
-		await api.delete(`mock/notifications/${notificationId}`);
+		notifications = notifications.filter((notification) => notification.id !== notificationId);
 	}
 };

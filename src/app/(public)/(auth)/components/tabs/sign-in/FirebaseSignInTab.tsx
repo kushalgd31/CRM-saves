@@ -1,7 +1,5 @@
-import FirebaseSignInForm from '@auth/services/firebase/components/FirebaseSignInForm';
-
 function FirebaseSignInTab() {
-	return <FirebaseSignInForm />;
+	return null;
 }
 
 export default FirebaseSignInTab;

@@ -1,29 +1,16 @@
-// Dynamically import all *Route.tsx files from the app folder
-import { FuseRouteConfigType, FuseRoutesType } from '@fuse/utils/FuseUtils';
+import { FuseRouteItemType, FuseRoutesType } from '@fuse/utils/FuseUtils';
 import { Navigate } from 'react-router';
 import FuseLoading from '@fuse/core/FuseLoading';
 import ErrorBoundary from '@fuse/utils/ErrorBoundary';
 import { layoutConfigOnlyMain } from './layoutConfigTemplates';
 import settingsConfig from './settingsConfig';
 import App from '@/app/App';
+import authRoute from '@/app/(public)/(auth)/route';
+import publicErrorRoute from '@/app/(public)/(errors)/route';
+import twoFactorRoute from '@/app/(control-panel)/pages/2FA/route';
+import whitelabelRoute from '@/app/(control-panel)/apps/whitelabel/route';
 
-const namedRouteConfigModules: Record<string, unknown> = import.meta.glob('/src/app/**/*Route.tsx', {
-	eager: true
-});
-
-const routeConfigModules: Record<string, unknown> = import.meta.glob('/src/app/**/route.tsx', {
-	eager: true
-});
-
-const allConfigModules = { ...namedRouteConfigModules, ...routeConfigModules };
-
-const mainRoutes: FuseRouteConfigType[] = Object.keys(allConfigModules)
-	.map((modulePath) => {
-		const moduleConfigs = (allConfigModules[modulePath] as { default: FuseRouteConfigType | FuseRouteConfigType[] })
-			.default;
-		return Array.isArray(moduleConfigs) ? moduleConfigs : [moduleConfigs];
-	})
-	.flat();
+const mainRoutes: FuseRouteItemType[] = [authRoute, publicErrorRoute, whitelabelRoute, twoFactorRoute];
 
 const routes: FuseRoutesType = [
 	{
@@ -34,7 +21,7 @@ const routes: FuseRoutesType = [
 		children: [
 			{
 				path: '/',
-				element: <Navigate to="/dashboards/project" />
+				element: <Navigate to="/apps/whitelabel" />
 			},
 			...mainRoutes,
 			{

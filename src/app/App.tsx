@@ -9,14 +9,11 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import ErrorBoundary from '@fuse/utils/ErrorBoundary';
 import Authentication from '@auth/Authentication';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import MainThemeProvider from '../contexts/MainThemeProvider';
 import routes from '@/configs/routesConfig';
 import AppContext from '@/contexts/AppContext';
-import { NotificationPanelContextProvider } from '@/app/(control-panel)/apps/notifications/contexts/NotificationPanelContext/NotificationPanelContextProvider';
 import { FuseDialogContextProvider } from '@fuse/core/FuseDialog/contexts/FuseDialogContext/FuseDialogContextProvider';
 import { NavbarContextProvider } from '@/components/theme-layouts/components/navbar/contexts/NavbarContext/NavbarContextProvider';
-import { QuickPanelProvider } from '@/components/theme-layouts/components/quickPanel/contexts/QuickPanelContext/QuickPanelContextProvider';
 import RootThemeProvider from '@/contexts/RootThemeProvider';
 import { NavigationContextProvider } from '@/components/theme-layouts/components/navigation/contexts/NavigationContextProvider';
 
@@ -67,11 +64,7 @@ function App() {
 																	'bottom-0 right-0 mb-13 md:mb-17 mr-2 lg:mr-20 z-99'
 															}}
 														>
-															<NotificationPanelContextProvider>
-																<QuickPanelProvider>
-																	<FuseLayout layouts={themeLayouts} />
-																</QuickPanelProvider>
-															</NotificationPanelContextProvider>
+															<FuseLayout layouts={themeLayouts} />
 														</SnackbarProvider>
 													</FuseDialogContextProvider>
 												</NavigationContextProvider>
@@ -81,7 +74,6 @@ function App() {
 								</I18nProvider>
 							</FuseSettingsProvider>
 						</Authentication>
-						{/* <ReactQueryDevtools initialIsOpen={false} /> */}
 					</QueryClientProvider>
 				</LocalizationProvider>
 			</AppContext>

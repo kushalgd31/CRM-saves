@@ -2,7 +2,7 @@ import { User } from '@auth/user';
 import UserModel from '@auth/user/models/UserModel';
 import { PartialDeep } from 'type-fest';
 import ky from 'ky';
-import api, { getGlobalHeaders } from '@/utils/api';
+import { getGlobalHeaders } from '@/utils/api';
 import {
 	computeRiskSignals,
 	generateLoginSuccessPayload,
@@ -102,6 +102,23 @@ type CrmAppSessionResponse = {
 	};
 };
 
+type UserAgentHighEntropyValues = {
+	architecture?: string;
+	bitness?: string;
+};
+
+type UserAgentDataLike = {
+	architecture?: string;
+	bitness?: string;
+	platform?: string;
+	getHighEntropyValues?: (hints: string[]) => Promise<UserAgentHighEntropyValues>;
+};
+
+type NavigatorWithClientHints = Navigator & {
+	deviceMemory?: number;
+	userAgentData?: UserAgentDataLike;
+};
+
 export type CrmAuthSession = {
 	requires2fa: boolean;
 	accessToken?: string;
@@ -157,6 +174,46 @@ const crmApi = ky.create({
 	}
 });
 
+const storedJwtUserKey = 'jwt_user';
+
+function jsonResponse(data: unknown, init?: ResponseInit): Response {
+	return new Response(JSON.stringify(data), {
+		status: 200,
+		...init,
+		headers: {
+			'content-type': 'application/json',
+			...(init?.headers || {})
+		}
+	});
+}
+
+function getStoredJwtUser(): User | null {
+	if (typeof window === 'undefined') {
+		return null;
+	}
+
+	const storedUser = localStorage.getItem(storedJwtUserKey);
+
+	if (!storedUser) {
+		return null;
+	}
+
+	try {
+		return UserModel(JSON.parse(storedUser) as PartialDeep<User>);
+	} catch {
+		localStorage.removeItem(storedJwtUserKey);
+		return null;
+	}
+}
+
+function setStoredJwtUser(user: PartialDeep<User>) {
+	if (typeof window === 'undefined') {
+		return;
+	}
+
+	localStorage.setItem(storedJwtUserKey, JSON.stringify(UserModel(user)));
+}
+
 function createSessionId() {
 	return globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2);
 }
@@ -199,8 +256,61 @@ function detectOSVersion(): string {
 	return "unknown";
 }
 
-function getDeviceInfo() {
-	const uaData = (navigator as any).userAgentData;
+function inferArchitecture() {
+	const source = `${navigator.userAgent} ${navigator.platform}`.toLowerCase();
+
+	if (source.includes('arm64') || source.includes('aarch64')) {
+		return 'arm';
+	}
+
+	if (source.includes('x86_64') || source.includes('x64') || source.includes('win64') || source.includes('wow64')) {
+		return 'x86';
+	}
+
+	if (source.includes('i686') || source.includes('i386') || source.includes('win32')) {
+		return 'x86';
+	}
+
+	return 'unknown';
+}
+
+function inferBitness() {
+	const source = `${navigator.userAgent} ${navigator.platform}`.toLowerCase();
+
+	if (
+		source.includes('x86_64') ||
+		source.includes('x64') ||
+		source.includes('win64') ||
+		source.includes('wow64') ||
+		source.includes('arm64') ||
+		source.includes('aarch64')
+	) {
+		return '64';
+	}
+
+	if (source.includes('i686') || source.includes('i386') || source.includes('win32')) {
+		return '32';
+	}
+
+	return 'unknown';
+}
+
+async function getHighEntropyDeviceHints(uaData?: UserAgentDataLike) {
+	if (!uaData?.getHighEntropyValues) {
+		return {};
+	}
+
+	try {
+		return await uaData.getHighEntropyValues(['architecture', 'bitness']);
+	} catch {
+		return {};
+	}
+}
+
+async function getDeviceInfo() {
+	const browserNavigator = navigator as NavigatorWithClientHints;
+	const uaData = browserNavigator.userAgentData;
+	const highEntropy = await getHighEntropyDeviceHints(uaData);
 
 	return {
 		platform:
@@ -216,16 +326,16 @@ function getDeviceInfo() {
 			navigator.hardwareConcurrency || 1,
 
 		device_memory:
-			(navigator as any).deviceMemory || 1,
+			browserNavigator.deviceMemory || 1,
 
 		max_touch_points:
 			navigator.maxTouchPoints || 0,
 
 		architecture:
-			uaData?.architecture || "unknown",
+			highEntropy.architecture || uaData?.architecture || inferArchitecture(),
 
 		bitness:
-			uaData?.bitness || "unknown"
+			highEntropy.bitness || uaData?.bitness || inferBitness()
 	};
 }
 
@@ -365,7 +475,7 @@ async function getClientAuditPayload() {
 		device,
 		browser,
 	] = await Promise.all([
-		Promise.resolve(getDeviceInfo()),
+		getDeviceInfo(),
 		getBrowserInfo(),
 	]);
 
@@ -419,7 +529,7 @@ function mapCrmUser(data: {
 		email: data.user.email,
 		displayName: data.user.name || data.user.email,
 		role: data.user.is_platform_admin ? 'admin' : primaryApp?.role_type || 'staff',
-		loginRedirectUrl: '/dashboards/project',
+		loginRedirectUrl: '/apps/whitelabel',
 		settings: {},
 		shortcuts: [],
 		crm: {
@@ -532,8 +642,9 @@ async function storeLoginSuccessDetails(email: string) {
  * Refreshes the access token
  */
 export async function authRefreshToken(): Promise<Response> {
-	return api.post('mock/auth/refresh', {
-		retry: 0 // Don't retry refresh token requests
+	return jsonResponse({
+		access_token: typeof window === 'undefined' ? '' : localStorage.getItem('jwt_access_token') || '',
+		retry: 0
 	});
 }
 
@@ -541,9 +652,13 @@ export async function authRefreshToken(): Promise<Response> {
  * Sign in with token
  */
 export async function authSignInWithToken(accessToken: string): Promise<Response> {
-	return api.get('mock/auth/sign-in-with-token', {
-		headers: { Authorization: `Bearer ${accessToken}` }
-	});
+	const user = getStoredJwtUser();
+
+	if (!user || !accessToken) {
+		throw new Error('No stored JWT user session');
+	}
+
+	return jsonResponse(user);
 }
 
 /**
@@ -642,50 +757,57 @@ export async function authSignUp(data: {
 	email: string;
 	password: string;
 }): Promise<AuthResponse> {
-	const clientPayload = await getClientAuditPayload();
+	const user = UserModel({
+		displayName: data.displayName,
+		email: data.email,
+		role: 'admin'
+	});
+	const accessToken = globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2);
 
-	return api
-		.post('mock/auth/sign-up', {
-			json: {
-				...data,
-				client: clientPayload
-			}
-		})
-		.json();
+	setStoredJwtUser(user);
+
+	return {
+		user,
+		access_token: accessToken
+	};
 }
 
 /**
  * Get user by id
  */
 export async function authGetDbUser(userId: string): Promise<User> {
-	return api.get(`mock/auth/user/${userId}`).json();
+	return getStoredJwtUser() || UserModel({ id: userId });
 }
 
 /**
  * Get user by email
  */
 export async function authGetDbUserByEmail(email: string): Promise<User> {
-	return api.get(`mock/auth/user-by-email/${email}`).json();
+	return getStoredJwtUser() || UserModel({ email });
 }
 
 /**
  * Update user
  */
 export function authUpdateDbUser(user: PartialDeep<User>): Promise<Response> {
-	return api.put(`mock/auth/user/${user.id}`, {
-		json: UserModel(user)
+	const nextUser = UserModel({
+		...(getStoredJwtUser() || {}),
+		...user
 	});
+
+	setStoredJwtUser(nextUser);
+
+	return Promise.resolve(jsonResponse(nextUser));
 }
 
 /**
  * Create user
  */
 export async function authCreateDbUser(user: PartialDeep<User>): Promise<User> {
-	return api
-		.post('mock/users', {
-			json: UserModel(user)
-		})
-		.json();
+	const nextUser = UserModel(user);
+	setStoredJwtUser(nextUser);
+
+	return nextUser;
 }
 
 type CreateWhitelabelResponse = {

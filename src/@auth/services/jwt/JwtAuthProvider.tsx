@@ -29,6 +29,7 @@ export type JwtCompleteSignInPayload = {
 type JwtAppContext = NonNullable<User['crm']>['selectedApp'];
 
 const appContextStorageKey = 'jwt_app_context';
+const userStorageKey = 'jwt_user';
 
 function getAppContextHeaders(app?: JwtAppContext) {
 	const headers: Record<string, string> = {};
@@ -187,6 +188,7 @@ function JwtAuthProvider(props: FuseAuthProviderComponentProps) {
 				user
 			});
 			setTokenStorageValue(accessToken);
+			localStorage.setItem(userStorageKey, JSON.stringify(user));
 			persistAppContext(user.crm?.selectedApp);
 			setGlobalHeaders({
 				Authorization: `Bearer ${accessToken}`,
@@ -236,6 +238,7 @@ function JwtAuthProvider(props: FuseAuthProviderComponentProps) {
 	const signOut: JwtAuthContextType['signOut'] = useCallback(() => {
 		removeTokenStorageValue();
 		localStorage.removeItem('jwt_refresh_token');
+		localStorage.removeItem(userStorageKey);
 		localStorage.removeItem(appContextStorageKey);
 		removeGlobalHeaders(['Authorization', 'X-App-Id', 'app-uuid']);
 		setAuthState({

@@ -20,6 +20,41 @@ type ConnectionInfo = {
 	rtt?: number;
 };
 
+const allowedConnectionTypes = new Set([
+	'bluetooth',
+	'cellular',
+	'ethernet',
+	'none',
+	'wifi',
+	'wimax',
+	'other',
+	'unknown',
+	'2g',
+	'3g',
+	'4g',
+	'5g'
+]);
+
+function normalizeEffectiveConnectionType(effectiveType?: string): string | null {
+	if (!effectiveType) {
+		return null;
+	}
+
+	if (effectiveType === 'slow-2g') {
+		return '2g';
+	}
+
+	return allowedConnectionTypes.has(effectiveType) ? effectiveType : null;
+}
+
+function getConnectionType(connection: ConnectionInfo | null): string {
+	if (connection?.type && allowedConnectionTypes.has(connection.type)) {
+		return connection.type;
+	}
+
+	return normalizeEffectiveConnectionType(connection?.effectiveType) || 'unknown';
+}
+
 let fpPromise: Promise<FingerprintAgent> | null = null;
 
 async function loadFingerprintModule() {
@@ -235,7 +270,7 @@ export function getClientContext() {
 		timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
 		languages: nav?.languages?.length ? [...nav.languages] : ['en'],
 		connection: {
-			type: connection?.type || 'unknown',
+			type: getConnectionType(connection),
 			effective_type: connection?.effectiveType || 'unknown',
 			downlink: typeof connection?.downlink === 'number' ? connection.downlink : 0,
 			rtt: typeof connection?.rtt === 'number' ? connection.rtt : 0
